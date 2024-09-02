@@ -1,4 +1,5 @@
 import sys
+from gestorAplicacion.Cine.cine import Cine
 from interfaz import Interfaz
 class Admin:
     @staticmethod
@@ -53,8 +54,38 @@ class Interfaz:
     
     @staticmethod
     def primera_operacion():
-        pass
-    
+        print("Has elegido la opción de comprar boleta.\nPor favor elige el cine:")
+        cines = Cine.cines
+        for i in range(len(cines)):
+            print(str(i+1) + ".- " + cines[i].getNombre())
+        cine = None
+        while True:
+            opcion = int(input("Ingrese su opción: "))
+            if opcion > 0 and opcion <= len(cines):
+                cine = cines[opcion-1]
+                print("Has elegido el cine: " + cine.getNombre())
+                break
+            else:
+                print("Opción inválida. Por favor ingrese un número válido.")
+                continue
+        print("Estas son las películas que están en nuestro poder:")
+        peliculas = Cine.peliculas
+        for i in range(len(peliculas)):
+            print(str(i+1) + ".- " + peliculas[i].getNombre())
+        print("Elige la que deseas ver")
+        pelicula = None
+        while True:
+            opcion = int(input("Ingrese su opción: "))
+            if opcion > 0 and opcion <= len(peliculas):
+                pelicula = peliculas[opcion-1]
+                print("Has elegido la película: " + pelicula.getNombre())
+                break
+            else:
+                print("Opción inválida. Por favor ingrese un número válido.")
+                continue
+        
+            
+                
     @staticmethod
     def gestionar_zona_de_juegos():
         pass
