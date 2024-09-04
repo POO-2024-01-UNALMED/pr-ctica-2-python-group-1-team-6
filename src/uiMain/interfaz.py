@@ -79,31 +79,31 @@ class Interfaz:
         cls.sala25 = Sala(25, 9, 9)
 
         # Crear instancias de funciones
-        cls.funcion1 = Funcion(cls.pelicula1, "Normal", cls.sala1, 45000)
-        cls.funcion2 = Funcion(cls.pelicula2, "Normal", cls.sala2, 25000)
-        cls.funcion3 = Funcion(cls.pelicula3, "Normal", cls.sala3, 30000)
-        cls.funcion4 = Funcion(cls.pelicula4, "Normal", cls.sala4, 40000)
-        cls.funcion5 = Funcion(cls.pelicula5, "Normal", cls.sala5, 50000)
-        cls.funcion6 = Funcion(cls.pelicula6, "Normal", cls.sala6, 12000)
-        cls.funcion7 = Funcion(cls.pelicula7, "Normal", cls.sala7, 22000)
-        cls.funcion8 = Funcion(cls.pelicula8, "Normal", cls.sala8, 280)
-        cls.funcion9 = Funcion(cls.pelicula9, "Normal", cls.sala9, 350)
-        cls.funcion10 = Funcion(cls.pelicula1, "Normal", cls.sala10, 190)
-        cls.funcion11 = Funcion(cls.pelicula3, "Normal", cls.sala11, 270)
-        cls.funcion12 = Funcion(cls.pelicula7, "Normal", cls.sala12, 230)
-        cls.funcion13 = Funcion(cls.pelicula4, "Normal", cls.sala13, 410)
-        cls.funcion14 = Funcion(cls.pelicula2, "Normal", cls.sala14, 260)
-        cls.funcion15 = Funcion(cls.pelicula5, "Normal", cls.sala15, 500)
-        cls.funcion16 = Funcion(cls.pelicula8, "Normal", cls.sala16, 300)
-        cls.funcion17 = Funcion(cls.pelicula9, "Normal", cls.sala17, 340)
-        cls.funcion18 = Funcion(cls.pelicula6, "Normal", cls.sala18, 130)
-        cls.funcion19 = Funcion(cls.pelicula7, "Normal", cls.sala19, 200)
-        cls.funcion20 = Funcion(cls.pelicula9, "Normal", cls.sala20, 330)
-        cls.funcion21 = Funcion(cls.pelicula6, "Normal", cls.sala21, 140)
-        cls.funcion22 = Funcion(cls.pelicula7, "Normal", cls.sala22, 210)
-        cls.funcion23 = Funcion(cls.pelicula3, "Normal", cls.sala23, 300)
-        cls.funcion24 = Funcion(cls.pelicula4, "Normal", cls.sala24, 420)
-        cls.funcion25 = Funcion(cls.pelicula5, "Normal", cls.sala25, 480)
+        cls.funcion1 = Funcion("Normal",cls.pelicula1, cls.sala1, 45000)
+        cls.funcion2 = Funcion("Normal",cls.pelicula2,cls.sala2, 25000)
+        cls.funcion3 = Funcion("Normal",cls.pelicula3, cls.sala3, 30000)
+        cls.funcion4 = Funcion("Normal",cls.pelicula4, cls.sala4, 40000)
+        cls.funcion5 = Funcion("Normal",cls.pelicula5, cls.sala5, 50000)
+        cls.funcion6 = Funcion("Normal",cls.pelicula6, cls.sala6, 12000)
+        cls.funcion7 = Funcion("Normal",cls.pelicula7, cls.sala7, 22000)
+        cls.funcion8 = Funcion("Normal",cls.pelicula8,cls.sala8, 280)
+        cls.funcion9 = Funcion("Normal",cls.pelicula9, cls.sala9, 350)
+        cls.funcion10 = Funcion("Normal",cls.pelicula1, cls.sala10, 190)
+        cls.funcion11 = Funcion("Normal",cls.pelicula3, cls.sala11, 270)
+        cls.funcion12 = Funcion("Normal",cls.pelicula7, cls.sala12, 230)
+        cls.funcion13 = Funcion("Normal",cls.pelicula4, cls.sala13, 410)
+        cls.funcion14 = Funcion("Normal",cls.pelicula2, cls.sala14, 260)
+        cls.funcion15 = Funcion("Normal",cls.pelicula5, cls.sala15, 500)
+        cls.funcion16 = Funcion("Normal",cls.pelicula8, cls.sala16, 300)
+        cls.funcion17 = Funcion("Normal",cls.pelicula9, cls.sala17, 340)
+        cls.funcion18 = Funcion("Normal",cls.pelicula6, cls.sala18, 130)
+        cls.funcion19 = Funcion("Normal",cls.pelicula7, cls.sala19, 200)
+        cls.funcion20 = Funcion("Normal",cls.pelicula9, cls.sala20, 330)
+        cls.funcion21 = Funcion("Normal",cls.pelicula6, cls.sala21, 140)
+        cls.funcion22 = Funcion("Normal",cls.pelicula7, cls.sala22, 210)
+        cls.funcion23 = Funcion("Normal",cls.pelicula3, cls.sala23, 300)
+        cls.funcion24 = Funcion("Normal",cls.pelicula4, cls.sala24, 420)
+        cls.funcion25 = Funcion("Normal",cls.pelicula5, cls.sala25, 480)
 
         # Crear instancias de cines
         cls.cine1 = Cine("Cine A", cls.zona1)
@@ -123,20 +123,20 @@ class Interfaz:
         cls.cine1.agregarFuncion(cls.funcion1, cls.cine1.getLunes())  # Infantil: "Intensamente"
         cls.cine1.agregarFuncion(cls.funcion6, cls.cine1.getLunes())  # Infantil: "Los Minions"
         cls.cine1.agregarFuncion(cls.funcion7, cls.cine1.getLunes())  # Infantil: "Toy Story"
-        cls.cine1.agregarFuncion(cls.funcion2, cls.cine1.getLunes())  # Acción: "Spiderman" (8 am)
+        cls.cine2.agregarFuncion(cls.funcion2, cls.cine2.getLunes())  # Acción: "Spiderman" (8 am)
 
-        cls.cine1.agregarFuncion(cls.funcion4, cls.cine1.getMartes())  # +18: "Deadpool" (8 am)
-        cls.cine1.agregarFuncion(cls.funcion5, cls.cine1.getMartes())  # Drama: "Oppenheimer" (10 am)
+        cls.cine2.agregarFuncion(cls.funcion4, cls.cine2.getMartes())  # +18: "Deadpool" (8 am)
+        cls.cine2.agregarFuncion(cls.funcion5, cls.cine2.getMartes())  # Drama: "Oppenheimer" (10 am)
 
-        cls.cine1.agregarFuncion(cls.funcion3, cls.cine1.getJueves())  # Terror: "Jason Vorhees" (8 am)
-        cls.cine1.agregarFuncion(cls.funcion8, cls.cine1.getJueves())  # Terror: "El Conjuro" (10 am)
+        cls.cine2.agregarFuncion(cls.funcion3, cls.cine2.getJueves())  # Terror: "Jason Vorhees" (8 am)
+        cls.cine3.agregarFuncion(cls.funcion8, cls.cine3.getJueves())  # Terror: "El Conjuro" (10 am)
 
-        cls.cine1.agregarFuncion(cls.funcion9, cls.cine1.getViernes())  # Acción: "Inception" (8 am)
-        cls.cine1.agregarFuncion(cls.funcion5, cls.cine1.getViernes())  # Drama: "Oppenheimer" (12 pm)
-        cls.cine1.agregarFuncion(cls.funcion4, cls.cine1.getViernes())  # +18: "Deadpool" (4 pm)
+        cls.cine3.agregarFuncion(cls.funcion9, cls.cine3.getViernes())  # Acción: "Inception" (8 am)
+        cls.cine3.agregarFuncion(cls.funcion5, cls.cine3.getViernes())  # Drama: "Oppenheimer" (12 pm)
+        cls.cine3.agregarFuncion(cls.funcion4, cls.cine3.getViernes())  # +18: "Deadpool" (4 pm)
 
-        cls.cine1.agregarFuncion(cls.funcion9, cls.cine1.getSabado())  # Acción: "Inception" (8 am)
-        cls.cine1.agregarFuncion(cls.funcion3, cls.cine1.getSabado())  # Terror: "Jason Vorhees" (11 am)
+        cls.cine4.agregarFuncion(cls.funcion9, cls.cine4.getSabado())  # Acción: "Inception" (8 am)
+        cls.cine4.agregarFuncion(cls.funcion3, cls.cine4.getSabado())  # Terror: "Jason Vorhees" (11 am)
 
         # Asignación de máquinas a zonas de juegos
         cls.zona1.agregarMaquina(cls.arcade1)
@@ -146,6 +146,41 @@ class Interfaz:
         cls.zona2.agregarMaquina(cls.boxing1)
         cls.zona2.agregarMaquina(cls.mesaDeDiscos2)
         cls.zona3.agregarMaquina(cls.basket1)
+
+        for i in range(0, 13):
+             cls.arcade1.usar()
+        for i in range(0, 11):
+            cls.danceDance1.usar()
+        for i in range(0, 11):
+            cls.basket1.usar()
+        
+        cls.funcion1.getPelicula().setCalificacionPromedio(4.0)
+        cls.funcion2.getPelicula().setCalificacionPromedio(3.0)
+        cls.funcion3.getPelicula().setCalificacionPromedio(2.0)
+        cls.funcion4.getPelicula().setCalificacionPromedio(1.5)
+        cls.funcion5.getPelicula().setCalificacionPromedio(4.5)
+        cls.funcion6.getPelicula().setCalificacionPromedio(5.0)
+        cls.funcion7.getPelicula().setCalificacionPromedio(3.5)
+        cls.funcion8.getPelicula().setCalificacionPromedio(2.5)
+        cls.funcion9.getPelicula().setCalificacionPromedio(4.0)
+        cls.funcion10.getPelicula().setCalificacionPromedio(3.0)
+        cls.funcion11.getPelicula().setCalificacionPromedio(2.8)
+        cls.funcion12.getPelicula().setCalificacionPromedio(3.9)
+        cls.funcion13.getPelicula().setCalificacionPromedio(1.8)
+        cls.funcion14.getPelicula().setCalificacionPromedio(3.4)
+        cls.funcion15.getPelicula().setCalificacionPromedio(4.2)
+        cls.funcion16.getPelicula().setCalificacionPromedio(2.9)
+        cls.funcion17.getPelicula().setCalificacionPromedio(4.1)
+        cls.funcion18.getPelicula().setCalificacionPromedio(4.3)
+        cls.funcion19.getPelicula().setCalificacionPromedio(3.8)
+        cls.funcion20.getPelicula().setCalificacionPromedio(3.1)
+        cls.funcion21.getPelicula().setCalificacionPromedio(4.4)
+        cls.funcion22.getPelicula().setCalificacionPromedio(4.6)
+        cls.funcion23.getPelicula().setCalificacionPromedio(2.7)
+        cls.funcion24.getPelicula().setCalificacionPromedio(2.6)
+        cls.funcion25.getPelicula().setCalificacionPromedio(4.5)
+                
+        
 
 
     @staticmethod
@@ -276,34 +311,34 @@ class Interfaz:
         # Paso 1: Ver las calificaciones
         print("Calificaciones de las películas en los cines:")
         for cine in Cine.cines:
-            print("Cine:", cine.get_nombre())
-            calificaciones = cine.obtener_calificaciones_peliculas()
+            print("Cine:", cine.getNombre())
+            calificaciones = cine.obtenerCalificacionesPeliculas()
             for calificacion in calificaciones:
                 print(calificacion)
 
         # Paso 2: Selección de cine y película por parte del usuario
         print("Seleccione el cine de la película que desea intercambiar:")
         for i, cine in enumerate(Cine.cines):
-            print(f"{i + 1}. {cine.get_nombre()}")
+            print(f"{i + 1}. {cine.getNombre()}")
         cine_seleccionado = int(input()) - 1
         cine_origen = Cine.cines[cine_seleccionado]
 
         # Mostrar películas en el cine seleccionado
         print("Seleccione la película que desea intercambiar:")
-        peliculas = cine_origen.peliculas_activas()
+        peliculas = cine_origen.peliculasActivas()
         for i, pelicula in enumerate(peliculas):
-            print(f"{i + 1}. {pelicula.get_titulo()}")
+            print(f"{i + 1}. {pelicula.getTitulo()}")
         pelicula_seleccionada = int(input()) - 1
         pelicula_a_intercambiar = peliculas[pelicula_seleccionada]
 
         # Paso 3: Recomendar una película para intercambio basada en la selección
-        print(Pelicula.recomendar_intercambio(pelicula_a_intercambiar))
+        print(Pelicula.recomendarIntercambio(pelicula_a_intercambiar))
 
         # Paso 4: Selección del nuevo cine para el intercambio
         print("Seleccione el nuevo cine (omitido el cine actual):")
         for i, cine in enumerate(Cine.cines):
             if i != cine_seleccionado:
-                print(f"{i + 1}. {cine.get_nombre()}")
+                print(f"{i + 1}. {cine.getNombre()}")
         nuevo_cine_seleccionado = int(input()) - 1
         if nuevo_cine_seleccionado >= cine_seleccionado:
             nuevo_cine_seleccionado += 1  # Ajustar el índice si el cine seleccionado es mayor
@@ -311,9 +346,9 @@ class Interfaz:
 
         # Mostrar películas en el nuevo cine seleccionado
         print("Seleccione la película con la que desea intercambiar:")
-        peliculas_nuevo_cine = nuevo_cine.peliculas_activas()
+        peliculas_nuevo_cine = nuevo_cine.peliculasActivas()
         for i, pelicula in enumerate(peliculas_nuevo_cine):
-            print(f"{i + 1}. {pelicula.get_titulo()}")
+            print(f"{i + 1}. {pelicula.getTitulo()}")
         pelicula_intercambio_seleccionada = int(input()) - 1
 
         # Manejar la opción de no intercambiar
@@ -324,11 +359,11 @@ class Interfaz:
         pelicula_intercambio = peliculas_nuevo_cine[pelicula_intercambio_seleccionada]
 
         # Confirmar el intercambio
-        print(f"¿Desea realizar el intercambio entre {pelicula_a_intercambiar.get_titulo()} y {pelicula_intercambio.get_titulo()}? (1. Sí / 2. No)")
+        print(f"¿Desea realizar el intercambio entre {pelicula_a_intercambiar.getTitulo()} y {pelicula_intercambio.getTitulo()}? (1. Sí / 2. No)")
         realizar_intercambio = int(input())
 
         if realizar_intercambio == 1 and pelicula_a_intercambiar and pelicula_intercambio and pelicula_a_intercambiar != pelicula_intercambio:
-            resultado_intercambio = Funcion.realizar_intercambio(pelicula_a_intercambiar, pelicula_intercambio)
+            resultado_intercambio = Funcion.realizarIntercambio(pelicula_a_intercambiar, pelicula_intercambio)
             print(resultado_intercambio)
         else:
             print("No se realizó el intercambio.")
@@ -343,7 +378,7 @@ class Interfaz:
         if tipo_incentivo == 1:
             # Aplicar rebaja en el precio de la entrada
             print("Seleccione la función para la película a la que desea aplicar el nuevo precio:")
-            funciones = pelicula_intercambio.get_funciones()
+            funciones = pelicula_intercambio.getFunciones()
             for i, funcion in enumerate(funciones):
                 print(f"{i + 1}. {funcion}")  # Asumiendo que la función tiene un método __str__ para mostrar información relevante
             funcion_seleccionada = int(input()) - 1
@@ -351,7 +386,7 @@ class Interfaz:
             if 0 <= funcion_seleccionada < len(funciones):
                 funcion = funciones[funcion_seleccionada]
                 nuevo_precio = float(input("Introduzca el nuevo precio para la entrada: "))
-                funcion.set_precio(nuevo_precio)
+                funcion.setPrecio(nuevo_precio)
                 print(f"El precio de entrada ha sido rebajado a {nuevo_precio}")
             else:
                 print("Selección de función inválida.")
@@ -360,21 +395,21 @@ class Interfaz:
             # Aplicar bono
             print("Seleccione el cine para aplicar el bono:")
             for i, cine in enumerate(Cine.cines):
-                print(f"{i + 1}. {cine.get_nombre()}")
+                print(f"{i + 1}. {cine.getNombre()}")
             cine_seleccionado = int(input()) - 1
             cine = Cine.cines[cine_seleccionado]
 
             # Seleccionar la película en la que se desea aplicar el bono
             print("Seleccione la película a la que desea aplicar el bono:")
-            peliculas = cine.peliculas_activas()
+            peliculas = cine.peliculasActivas()
             for i, pelicula in enumerate(peliculas):
-                print(f"{i + 1}. {pelicula.get_titulo()}")
+                print(f"{i + 1}. {pelicula.getTitulo()}")
             pelicula_seleccionada = int(input()) - 1
             pelicula = peliculas[pelicula_seleccionada]
 
             # Activar el bono en la película seleccionada
-            pelicula.activar_bono()
-            print(f"El bono ha sido activado para la película {pelicula.get_titulo()}")
+            pelicula.activarBono()
+            print(f"El bono ha sido activado para la película {pelicula.getTitulo()}")
 
         elif tipo_incentivo == 3:
             print("No se aplicarán incentivos.")
@@ -384,30 +419,31 @@ class Interfaz:
     def comprar_boleta_juegos():
     # Paso 1: Identificación del cliente
         id_cliente = int(input("Ingrese su número de identificación: "))
-        cliente = Cliente.buscar_cliente_por_id(id_cliente)
+        cliente = Cliente.buscarClientePorId(id_cliente)
 
         if cliente is None:
             respuesta = int(input("Cliente no encontrado. ¿Desea crear uno nuevo? (1)Sí/(2)No: "))
-        if respuesta == 1:
-            nombre = input("Ingresa tu nombre: ")  # Captura el nombre completo
-            saldo_inicial = float(input("Ingresa tu saldo inicial: "))  # Captura el saldo inicial
-            cliente = Cliente(nombre, saldo_inicial, id_cliente)  # Crea el nuevo cliente
-            print("Cliente creado exitosamente.")
-        elif respuesta == 2:
-            return
-        else:
-            print("Selección inválida. Por favor, seleccione un número válido.")
-            return  # Sale del método si la selección es inválida
+            if respuesta == 1:
+                nombre = input("Ingresa tu nombre: ")  # Captura el nombre completo
+                saldo_inicial = float(input("Ingresa tu saldo inicial: "))  # Captura el saldo inicial
+                cliente = Cliente(nombre, saldo_inicial, id_cliente)  # Crea el nuevo cliente
+                print("Cliente creado exitosamente.")
+
+            elif respuesta == 2:
+                return
+            else:
+                print("Selección inválida. Por favor, seleccione un número válido.")
+                return  # Sale del método si la selección es inválida
 
         # Paso 2: Selección del cine
         print("Seleccione el cine:")
         for i, cine in enumerate(Cine.cines):
-         print(f"{i + 1}. {cine.get_nombre()}")  # Lista los cines disponibles
+         print(f"{i + 1}. {cine.getNombre()}")  # Lista los cines disponibles
         cine_seleccionado_index = int(input()) - 1
         cine_seleccionado = Cine.cines[cine_seleccionado_index]
 
     # Paso 3: Selección de la máquina en la zona de juegos
-        zona_de_juegos_seleccionada = cine_seleccionado.get_zona_de_juegos()  # Obtener la zona de juegos del cine
+        zona_de_juegos_seleccionada = cine_seleccionado.getZonaDeJuegos()  # Obtener la zona de juegos del cine
         maquinas_disponibles = zona_de_juegos_seleccionada.get_maquinas()
 
         print("Seleccione la máquina para comprar la boleta:")
@@ -422,8 +458,8 @@ class Interfaz:
             return
 
     # Paso 4: Realizar la compra
-        if cliente.get_saldo() >= maquina_seleccionada.get_precio_uso():
-            cliente.set_saldo(cliente.get_saldo() - maquina_seleccionada.get_precio_uso())  # Descuenta el precio de la máquina del saldo del cliente
+        if cliente.getSaldo() >= maquina_seleccionada.get_precio_uso():
+            cliente.setSaldo(cliente.getSaldo() - maquina_seleccionada.get_precio_uso())  # Descuenta el precio de la máquina del saldo del cliente
             maquina_seleccionada.usar()  # Registra el uso de la máquina
             print("Compra realizada exitosamente.")
 
@@ -432,11 +468,11 @@ class Interfaz:
 
         # Paso 6: Imprimir recibo
             print("Recibo:")
-            print(f"Cliente: {cliente.get_identificacion()}")
-            print(f"Tipo de cliente: {cliente.get_tipo()}")
+            print(f"Cliente: {cliente.getIdentificacion()}")
+            print(f"Tipo de cliente: {cliente.getTipo()}")
             print(f"Máquina: {maquina_seleccionada.get_nombre()}")
             print(f"Precio pagado: {maquina_seleccionada.get_precio_uso()}")
-            print(f"Saldo restante: {cliente.get_saldo()}")
+            print(f"Saldo restante: {cliente.getSaldo()}")
         else:
             print("Saldo insuficiente.")
     
@@ -479,7 +515,18 @@ class Interfaz:
                 print("4. Boxing")
                 print("5. Basket")
                 tipo_maquina = int(input("Selecciona una opción: "))
-                tipo = Interfaz.obtener_tipo_maquina(tipo_maquina)
+                if tipo_maquina==1:
+                    tipo="Arcade"
+                elif tipo_maquina==2:
+                    tipo="Dance Dance"
+                elif tipo_maquina==3:
+                    tipo="Mesa de discos"
+                elif tipo_maquina==4:
+                    tipo="Boxing"
+                elif tipo_maquina==5:
+                    tipo="Basket"
+                else:
+                    Interfaz.error()
 
                 materiales_necesarios = int(input("Ingresa la cantidad de materiales necesarios para la Máquina: "))
                 precio_maquina = float(input("Ingresa el precio de la Máquina: "))
@@ -510,11 +557,22 @@ class Interfaz:
                 print("4. +18")
                 print("5. Drama")
                 genero_pelicula = int(input("Selecciona una opción: "))
-                genero = Interfaz.obtener_genero_pelicula(genero_pelicula)
+                if genero_pelicula==1:
+                    genero="Accion"
+                elif genero_pelicula==2:
+                    genero="Infantil"
+                elif genero_pelicula==3:
+                    genero="Terror"
+                elif genero_pelicula==4:
+                    genero="+18"
+                elif genero_pelicula==5:
+                    genero="Drama"
+                else:
+                    Interfaz.error()
 
                 duracion_input = input("Ingresa la duración de la Película (en horas y minutos, formato HH:MM): ")
                 try:
-                    duracion = datetime.datetime.strptime(duracion_input, "%H:%M").time()
+                    duracion = datetime.strptime(duracion_input, "%H:%M").time()
                 except ValueError:
                     print("Formato de tiempo inválido. Usa el formato HH:MM.")
                     continue  # Volver al menú si la duración es inválida
@@ -536,7 +594,12 @@ class Interfaz:
                 print("1. Normal")
                 print("2. VIP")
                 eleccion_tipo = int(input("Selecciona una opción: "))
-                tipo_funcion = Interfaz.obtener_tipo_funcion(eleccion_tipo)
+                if eleccion_tipo==1:
+                    tipo_funcion="Normal"
+                elif eleccion_tipo==2:
+                    tipo_funcion="VIP"
+                else:
+                    Interfaz.error()
                 funcion = Funcion(tipo_funcion)
                 print(f"Función creada: {funcion}")
                 continuar = Interfaz.verificar_continuar()
@@ -559,7 +622,211 @@ class Interfaz:
             print("Selección inválida.")
             return False
     def asignacion():
-        print("uwu")
+        continuar = True
+
+        while continuar:
+        # Mostrar el menú de opciones
+            print("Menú de Asignaciones:")
+            print("1. Asignar una zona de juegos a un cine")
+            print("2. Agregar una función a un cine")
+            print("3. Agregar una máquina a una zona de juegos")
+            print("4. Asignar una película a una función")
+            print("5. Asignar una sala a una función")
+            print("6. Salir")
+
+            opcion = int(input("Elige una opción: "))
+        
+            # Evaluar la opción seleccionada por el usuario
+            if opcion == 1:
+                # Asignar una zona de juegos a un cine
+                if not ZonaDeJuegos.zonas_de_juegos:
+                    print("No hay zonas de juegos disponibles.")
+                    continue
+                if not Cine.cines:
+                    print("No hay cines disponibles.")
+                    continue
+
+                # Mostrar lista de zonas de juegos disponibles
+                print("Selecciona la zona de juegos a asignar:")
+                for i, zona in enumerate(ZonaDeJuegos.zonas_de_juegos):
+                    print(f"{i}. {zona.get_nombre()}")
+
+                zonaSeleccionada = int(input())
+
+                # Mostrar lista de cines disponibles
+                print("Selecciona el cine al que deseas asignar la zona de juegos:")
+                for i, cine in enumerate(Cine.cines):
+                    print(f"{i}. {cine.getNombre()}")
+
+                cineSeleccionado = int(input())
+
+                # Asignar la zona de juegos seleccionada al cine
+                Cine.cines[cineSeleccionado].setZonaDeJuegos(ZonaDeJuegos.zonas_de_juegos[zonaSeleccionada])
+                ZonaDeJuegos.zonas_de_juegos[zonaSeleccionada].setCine(Cine.cines[cineSeleccionado])
+                print(f"Zona de juegos asignada correctamente al cine {Cine.cines[cineSeleccionado].getNombre()}")
+
+            elif opcion == 2:
+                # Agregar una función a un cine
+                if not Funcion.allFunciones:
+                    print("No hay funciones disponibles.")
+                    continue
+                if not Cine.cines:
+                    print("No hay cines disponibles.")
+                    continue
+
+                # Seleccionar la función que se desea agregar
+                print("Selecciona la función para reemplazar en un cine:")
+                for i, funcion in enumerate(Funcion.allFunciones):
+                    if funcion.getPelicula():
+                        print(f"{i}. {funcion.getPelicula().getTitulo()}  {funcion.getHoraInicio()}  {funcion.getTipo()}")
+                    else:
+                        print(f"{i}. Función sin película asignada  {funcion.getHoraInicio()}  {funcion.getTipo()}")
+
+                funcionSeleccionada = int(input())
+
+                # Seleccionar el cine
+                print("Selecciona el cine donde deseas reemplazar la función:")
+                for i, cine in enumerate(Cine.cines):
+                    print(f"{i}. {cine.getNombre()}")
+
+                cineSeleccionado1 = int(input())
+
+                # Seleccionar el día de la semana
+                print("Selecciona el día de la semana para reemplazar la función:")
+                print("1. Lunes")
+                print("2. Martes")
+                print("3. Jueves")
+                print("4. Viernes")
+                print("5. Sábado")
+                diaSeleccionado = int(input())
+
+                diaSeleccionadoLista = None
+                if diaSeleccionado == 1:
+                    diaSeleccionadoLista = Cine.cines[cineSeleccionado1].getLunes()
+                elif diaSeleccionado == 2:
+                    diaSeleccionadoLista = Cine.cines[cineSeleccionado1].getMartes()
+                elif diaSeleccionado == 3:
+                    diaSeleccionadoLista = Cine.cines[cineSeleccionado1].getJueves()
+                elif diaSeleccionado == 4:
+                    diaSeleccionadoLista = Cine.cines[cineSeleccionado1].getViernes()
+                elif diaSeleccionado == 5:
+                    diaSeleccionadoLista = Cine.cines[cineSeleccionado1].getSabado()
+                else:
+                    print("Día inválido.")
+                    continue
+
+                if diaSeleccionadoLista:
+                    # Mostrar funciones actuales del día seleccionado
+                    print("Selecciona la posición de la función que deseas reemplazar:")
+                    for i, funcion in enumerate(diaSeleccionadoLista):
+                        if funcion and funcion.getPelicula():
+                            print(f"{i}. {funcion.getPelicula().getTitulo()}  {funcion.getHoraInicio()}")
+                        else:
+                            print(f"{i}. Función vacía")
+
+                    posicionSeleccionada = int(input())
+
+                    # Reemplazar la función en la posición seleccionada
+                    if 0 <= posicionSeleccionada < len(diaSeleccionadoLista):
+                        diaSeleccionadoLista[posicionSeleccionada] = Funcion.allFunciones[funcionSeleccionada]
+                        print(f"Función reemplazada correctamente en el cine {Cine.cines[cineSeleccionado1].getNombre()} en el día seleccionado.")
+                    else:
+                        print("Posición inválida.")
+
+            elif opcion == 3:
+                # Agregar una máquina a una zona de juegos
+                if not Maquina.all_maquinas:
+                    print("No hay máquinas disponibles.")
+                    continue
+                if not ZonaDeJuegos.zonas_de_juegos:
+                    print("No hay zonas de juegos disponibles.")
+                    continue
+
+                # Mostrar lista de máquinas disponibles
+                print("Selecciona la máquina a agregar:")
+                for i, maquina in enumerate(Maquina.all_maquinas):
+                    print(f"{i}. {maquina.get_nombre()}")
+
+                maquinaSeleccionada = int(input())
+
+                # Mostrar lista de zonas de juegos disponibles
+                print("Selecciona la zona de juegos a la que deseas agregar la máquina:")
+                for i, zona in enumerate(ZonaDeJuegos.zonas_de_juegos):
+                    print(f"{i}. {zona.get_nombre()}")
+
+                zonaSeleccionada = int(input())
+
+                # Agregar la máquina seleccionada a la zona de juegos
+                ZonaDeJuegos.zonas_de_juegos[zonaSeleccionada].get_maquinas().append(Maquina.all_maquinas[maquinaSeleccionada])
+                print(f"Máquina agregada correctamente a la zona de juegos {ZonaDeJuegos.zonas_de_juegos[zonaSeleccionada].get_nombre()}")
+
+            elif opcion == 4:
+                # Asignar una película a una función
+                if not Pelicula.totalPeliculas:
+                    print("No hay películas disponibles.")
+                    continue
+                if not Funcion.allFunciones:
+                    print("No hay funciones disponibles.")
+                    continue
+
+                # Mostrar lista de películas disponibles
+                print("Selecciona la película a asignar:")
+                for i, pelicula in enumerate(Pelicula.totalPeliculas):
+                    print(f"{i}. {pelicula.getTitulo()}")
+
+                peliculaSeleccionada = int(input())
+
+                # Mostrar lista de funciones disponibles
+                print("Selecciona la función a la que deseas asignar la película:")
+                for i, funcion in enumerate(Funcion.allFunciones):
+                    if funcion.getPelicula():
+                        print(f"{i}. {funcion.getPelicula().getTitulo()}  {funcion.getHoraInicio()}  {funcion.getTipo()}")
+                    else:
+                        print(f"{i}. Función sin película asignada  {funcion.getHoraInicio()}  {funcion.getTipo()}")
+
+                funcionSeleccionada1 = int(input())
+
+                # Asignar la película seleccionada a la función
+                Funcion.allFunciones[funcionSeleccionada1].setPelicula(Pelicula.totalPeliculas[peliculaSeleccionada])
+                print("Película asignada correctamente a la función.")
+
+            elif opcion == 5:
+                # Asignar una sala a una función
+                if not Sala.allSalas:
+                    print("No hay salas disponibles.")
+                    continue
+                if not Funcion.allFunciones:
+                    print("No hay funciones disponibles.")
+                    continue
+
+                # Mostrar lista de salas disponibles
+                print("Selecciona la sala a asignar:")
+                for i, sala in enumerate(Sala.allSalas):
+                    print(f"{i}. {sala.getNumero()}")
+
+                salaSeleccionada = int(input())
+
+                # Mostrar lista de funciones disponibles
+                print("Selecciona la función a la que deseas asignar la sala:")
+                for i, funcion in enumerate(Funcion.allFunciones):
+                    if funcion.getSala():
+                        print(f"{i}. {funcion.getSala().getNumero()}  {funcion.getHoraInicio()}  {funcion.getTipo()}")
+                    else:
+                        print(f"{i}. Función sin sala asignada  {funcion.getHoraInicio()}  {funcion.getTipo()}")
+
+                funcionSeleccionada2 = int(input())
+
+                # Asignar la sala seleccionada a la función
+                Funcion.allFunciones[funcionSeleccionada2].setSala(Sala.allSalas[salaSeleccionada])
+                print("Sala asignada correctamente a la función.")
+
+            elif opcion == 6:
+                # Salir del menú
+                continuar = False
+                print("Saliendo del menú de asignaciones.")
+
+            else:
+                print("Opción inválida. Inténtalo de nuevo.")
     def primeraOperacion():
         print("uwux2")
 

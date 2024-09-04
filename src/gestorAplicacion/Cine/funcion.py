@@ -9,8 +9,7 @@ class Funcion:
     # Lista estática para almacenar todas las funciones
     allFunciones: List['Funcion'] = []
 
-    def __init__(self, pelicula, tipo: str, sala, precio: float):
-
+    def __init__(self, tipo, pelicula=None, sala=None, precio=0):
         self.pelicula = pelicula
         self.tipo = tipo
         self.sala = sala
@@ -25,7 +24,6 @@ class Funcion:
             self.pelicula.getFunciones().append(self)
 
     def setPelicula(self, nuevaPelicula):
-        from pelicula import Pelicula  # Importación diferida
 
         if self.pelicula == nuevaPelicula:
             return
@@ -47,7 +45,6 @@ class Funcion:
         self.tipo = tipo
 
     def getSala(self) :
-        from sala import Sala  # Importación diferida
         return self.sala
 
     def setSala(self, sala):
@@ -73,8 +70,6 @@ class Funcion:
 
     @staticmethod
     def realizarIntercambio(peliculaAIntercambiar, peliculaRecomendada) -> str:
-        from pelicula import Pelicula  # Importación diferida
-
         funcionDestino = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaRecomendada), None)
 
         if funcionDestino is None:
@@ -131,7 +126,7 @@ class Funcion:
 
     @staticmethod
     def encontrarCine(funcion: 'Funcion'):
-        from cine import Cine  # Importación diferida
+        from src.gestorAplicacion.Cine.cine import Cine
 
         for cine in Cine.cines:
             for f in cine.getLunes():
@@ -153,8 +148,6 @@ class Funcion:
 
     @staticmethod
     def encontrarDia(funcion: 'Funcion', cine) -> str:
-        from cine import Cine  # Importación diferida
-
         for i, f in enumerate(cine.getLunes()):
             if f and f == funcion:
                 return "Lunes"

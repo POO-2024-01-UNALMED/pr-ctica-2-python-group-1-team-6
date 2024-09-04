@@ -75,8 +75,7 @@ class Cine:
             raise ValueError("El arreglo debe tener exactamente 7 elementos.")
 
     def hayPelicula(self, pelicula) -> bool:
-        from pelicula import Pelicula  # Importación diferida
-        from funcion import Funcion  # Importación diferida
+        from src.gestorAplicacion.Cine.funcion import Funcion  
         
         # Verifica si una película está en las funciones de cualquier día
         def contiene_pelicula(dia: List[Optional['Funcion']]) -> bool:
@@ -95,7 +94,7 @@ class Cine:
         )
 
     def enseñarFunciones(self) -> str:
-        from funcion import Funcion  # Importación diferida
+        from src.gestorAplicacion.Cine.funcion import Funcion
         
         # Muestra las funciones de cada día
         def procesar_dia(dia: List[Optional['Funcion']], nombre_dia: str) -> str:
@@ -120,9 +119,6 @@ class Cine:
         )
 
     def peliculasActivas(self):
-        from pelicula import Pelicula  # Importación diferida
-        from funcion import Funcion  # Importación diferida
-        
         # Obtiene la lista de películas activas en el cine
         peliculas = set()
         for dia in [self.lunes, self.martes, self.jueves, self.viernes, self.sabado]:
@@ -132,8 +128,7 @@ class Cine:
         return list(peliculas)
 
     def obtenerFunciones(self, pelicula):
-        from pelicula import Pelicula  # Importación diferida
-        from funcion import Funcion  # Importación diferida
+        from src.gestorAplicacion.Cine.funcion import Funcion
         
         # Obtiene las funciones disponibles para una película
         def funciones_dia(dia: List[Optional['Funcion']]) -> List['Funcion']:
@@ -153,7 +148,7 @@ class Cine:
         )
 
     def ajustarFunciones(self):
-        from funcion import Funcion  # Importación diferida
+        from src.gestorAplicacion.Cine.funcion import Funcion
         
         # Ajusta la información de cada función en el cine
         def ajustar_dia(dia: List[Optional['Funcion']], nombre_dia: str):
@@ -169,8 +164,7 @@ class Cine:
         ajustar_dia(self.sabado, "Sábado")
 
     def obtenerCalificacionesPeliculas(self) -> List[str]:
-        from pelicula import Pelicula  # Importación diferida
-        from funcion import Funcion  # Importación diferida
+        from src.gestorAplicacion.Cine.funcion import Funcion
         
         # Obtiene las calificaciones de las películas en las funciones del cine
         def calificaciones_dia(dia: List[Optional['Funcion']], nombre_dia: str) -> List[str]:

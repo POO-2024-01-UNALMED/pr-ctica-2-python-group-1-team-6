@@ -62,7 +62,7 @@ class ZonaDeJuegos(Establecimiento):
 
     def informe_maquinas(self):
         # Genera un informe con el estado de todas las máquinas en la zona de juegos
-        informe = f"Informe de la Zona de Juegos: {self.get_nombre()} {self.get_cine().get_nombre()}\n"
+        informe = f"Informe de la Zona de Juegos: {self.get_nombre()} {self.getCine().getNombre()}\n"
         informe += f"Horario: {self.horario}\n"
         for maquina in self.maquinas:
             estado = "Disponible" if maquina.esta_disponible() else "No Disponible"
@@ -72,7 +72,7 @@ class ZonaDeJuegos(Establecimiento):
     def mover_maquina(self, zona_destino, indice_maquina):
         # Mueve una máquina a otra zona de juegos
         maquina = self.maquinas.pop(indice_maquina)
-        zona_destino.agregar_maquina(maquina)
+        zona_destino.agregarMaquina(maquina)
         return f"La máquina {maquina.get_nombre()} ha sido movida a {zona_destino.get_nombre()}"
 
     def recomendar_movimiento(self, maquina_reparada):

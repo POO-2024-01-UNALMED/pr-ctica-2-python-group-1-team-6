@@ -68,7 +68,7 @@ class Pelicula:
 
     @staticmethod
     def recomendarIntercambio(peliculaSeleccionada: 'Pelicula') -> str:
-        from funcion import Funcion
+        from src.gestorAplicacion.Cine.funcion import Funcion
         funcionesPosibles = []
 
         funcionesSeleccionadas = peliculaSeleccionada.funciones

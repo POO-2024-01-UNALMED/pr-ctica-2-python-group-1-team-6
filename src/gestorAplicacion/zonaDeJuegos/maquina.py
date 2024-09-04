@@ -84,17 +84,17 @@ class Maquina:
     def asignar_bono(self, cliente):
         # Asigna un bono al cliente basado en su tipo si el bono está activo
         if self.bono_activo:
-            if cliente.get_tipo() == "Generico":
-                cliente.set_saldo(cliente.get_saldo() + 5)  # Bono para cliente genérico
-            elif cliente.get_tipo() == "Preferencial":
-                cliente.set_saldo(cliente.get_saldo() + 12)  # Bono para cliente preferencial
-            elif cliente.get_tipo() == "VIP":
-                cliente.set_saldo(cliente.get_saldo() + 20)  # Bono para cliente VIP
-        return f"Bono {cliente.get_tipo()} asignado a {cliente.get_nombre()}"
+            if cliente.getTipo() == "Generico":
+                cliente.setSaldo(cliente.getSaldo() + 15)  # Bono para cliente genérico
+            elif cliente.getTipo() == "Preferencial":
+                cliente.setSaldo(cliente.getSaldo() + 20)  # Bono para cliente preferencial
+            elif cliente.getTipo() == "VIP":
+                cliente.setSaldo(cliente.getSaldo() + 30)  # Bono para cliente VIP
+        return f"Bono {cliente.getTipo()} asignado a {cliente.getNombre()}"
     
     @staticmethod
     def obtener_dos_maquinas_menos_venden():
-        from zonaDeJuegos import ZonaDeJuegos
+        from src.gestorAplicacion.zonaDeJuegos.establecimiento import ZonaDeJuegos
         # Devuelve las dos máquinas que menos dinero han recaudado
         todas_las_maquinas = []
         
@@ -106,4 +106,4 @@ class Maquina:
         return todas_las_maquinas[:2]  # Devuelve las dos primeras máquinas de la lista ordenada
     
     def __str__(self):
-        return f"Maquina: {self.nombre} Tipo: {self.tipo}, Recaudado: {self.dinero_recaudado}"
+        return f"Maquina: {self.nombre} Tipo: {self.tipo}, Recaudado: {self.dinero_recaudado} perteneciente a la zona {self.zona_de_juegos}"

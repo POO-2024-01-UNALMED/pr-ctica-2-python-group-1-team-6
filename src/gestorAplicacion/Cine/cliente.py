@@ -4,7 +4,7 @@ from typing import Optional, List
 class Cliente:
     allClientes: List['Cliente'] = []  # Lista estática de todos los clientes
 
-    def __init__(self, nombre: str, saldo: float, tipo: str, identificacion: int):
+    def __init__(self, nombre: str, saldo: float, identificacion: int, tipo: str = "Generico"):
         self.nombre = nombre
         self.saldo = saldo
         self.tipo = tipo
@@ -15,8 +15,6 @@ class Cliente:
         self.tipoTarjeta = ""
         Cliente.allClientes.append(self)
 
-    def __init__(self, nombre: str, saldo: float, identificacion: int):
-        self.__init__(nombre, saldo, "Generico", identificacion)
 
     def getSaldo(self) -> float:
         return self.saldo
