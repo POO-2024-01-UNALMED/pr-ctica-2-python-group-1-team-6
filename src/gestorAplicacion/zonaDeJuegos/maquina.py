@@ -1,4 +1,6 @@
-from zonaDeJuegos import ZonaDeJuegos
+import sys
+sys.path.append("gestorAplicacion/zonaDeJuegos")
+
 
 class Maquina:
     
@@ -92,6 +94,7 @@ class Maquina:
     
     @staticmethod
     def obtener_dos_maquinas_menos_venden():
+        from zonaDeJuegos import ZonaDeJuegos
         # Devuelve las dos máquinas que menos dinero han recaudado
         todas_las_maquinas = []
         

@@ -1,14 +1,15 @@
+import sys
 from datetime import time
 from typing import List
-from funcion import Funcion
-from cine import Cine
-from cliente import Cliente
+
+sys.path.append("gestorAplicacion/Cine")
 
 class Pelicula:
     # Lista estática para almacenar todas las películas
     totalPeliculas: List['Pelicula'] = []
 
     def __init__(self, titulo: str, genero: str, duracion: time):
+        from src.gestorAplicacion.Cine.cine import Cine
         self.titulo = titulo
         self.genero = genero
         self.duracion = duracion
@@ -67,6 +68,7 @@ class Pelicula:
 
     @staticmethod
     def recomendarIntercambio(peliculaSeleccionada: 'Pelicula') -> str:
+        from funcion import Funcion
         funcionesPosibles = []
 
         funcionesSeleccionadas = peliculaSeleccionada.funciones
@@ -132,13 +134,13 @@ class Pelicula:
     def activarBono(self):
         self.bonoActivo = True
 
-    def getFunciones(self) -> List['Funcion']:
+    def getFunciones(self) :
         return self.funciones
 
-    def setFunciones(self, nuevasFunciones: List['Funcion']):
+    def setFunciones(self, nuevasFunciones):
         self.funciones = nuevasFunciones
 
-    def asignarBono(self, cliente: 'Cliente') -> str:
+    def asignarBono(self, cliente) -> str:
         if self.bonoActivo:
             if cliente.getTipo() == "Generico":
                 cliente.setSaldo(cliente.getSaldo() + 5)
@@ -147,3 +149,4 @@ class Pelicula:
             elif cliente.getTipo() == "VIP":
                 cliente.setSaldo(cliente.getSaldo() + 20)
         return f"Bono {cliente.getTipo()} asignado a {cliente.getNombre()}"
+

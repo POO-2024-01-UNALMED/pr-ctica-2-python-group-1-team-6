@@ -1,14 +1,14 @@
-from typing import List, Optional, Union
-from zonaDeJuegos.zonaDeJuegos import ZonaDeJuegos
-from funcion import Funcion
-from pelicula import Pelicula
+import sys
+from typing import List, Optional
+
+sys.path.append("gestorAplicacion/Cine")  # Ajusta el path según sea necesario
 
 class Cine:
-    peliculas: List['Pelicula'] = []  # Lista estática de películas
+    peliculas: List = []  # Lista estática de películas
     cines: List['Cine'] = []  # Lista estática de cines
     LIMITE_TARJETAS = 10  # Constante de límite de tarjetas
 
-    def __init__(self, nombre: str, zonaDeJuegos: Optional['ZonaDeJuegos'] = None):
+    def __init__(self, nombre: str, zonaDeJuegos = None):
         self.nombre = nombre
         self.zonaDeJuegos = zonaDeJuegos
         if zonaDeJuegos is not None:
@@ -17,11 +17,11 @@ class Cine:
             Cine.cines.append(self)
         
         # Inicializar funciones para cada día
-        self.lunes: List[Optional['Funcion']] = [None] * 7
-        self.martes: List[Optional['Funcion']] = [None] * 7
-        self.jueves: List[Optional['Funcion']] = [None] * 7
-        self.viernes: List[Optional['Funcion']] = [None] * 7
-        self.sabado: List[Optional['Funcion']] = [None] * 7
+        self.lunes: List = [None] * 7
+        self.martes: List = [None] * 7
+        self.jueves: List = [None] * 7
+        self.viernes: List = [None] * 7
+        self.sabado: List = [None] * 7
 
     def getNombre(self) -> str:
         return self.nombre
@@ -29,52 +29,55 @@ class Cine:
     def setNombre(self, nombre: str):
         self.nombre = nombre
 
-    def getLunes(self) -> List[Optional['Funcion']]:
+    def getLunes(self):
         return self.lunes
 
-    def setLunes(self, lunes: List[Optional['Funcion']]):
+    def setLunes(self, lunes):
         if len(lunes) == 7:
             self.lunes = lunes
         else:
             raise ValueError("El arreglo debe tener exactamente 7 elementos.")
 
-    def getMartes(self) -> List[Optional['Funcion']]:
+    def getMartes(self) :
         return self.martes
 
-    def setMartes(self, martes: List[Optional['Funcion']]):
+    def setMartes(self, martes):
         if len(martes) == 7:
             self.martes = martes
         else:
             raise ValueError("El arreglo debe tener exactamente 7 elementos.")
 
-    def getJueves(self) -> List[Optional['Funcion']]:
+    def getJueves(self):
         return self.jueves
 
-    def setJueves(self, jueves: List[Optional['Funcion']]):
+    def setJueves(self, jueves):
         if len(jueves) == 7:
             self.jueves = jueves
         else:
             raise ValueError("El arreglo debe tener exactamente 7 elementos.")
 
-    def getViernes(self) -> List[Optional['Funcion']]:
+    def getViernes(self) :
         return self.viernes
 
-    def setViernes(self, viernes: List[Optional['Funcion']]):
+    def setViernes(self, viernes):
         if len(viernes) == 7:
             self.viernes = viernes
         else:
             raise ValueError("El arreglo debe tener exactamente 7 elementos.")
 
-    def getSabado(self) -> List[Optional['Funcion']]:
+    def getSabado(self):
         return self.sabado
 
-    def setSabado(self, sabado: List[Optional['Funcion']]):
+    def setSabado(self, sabado):
         if len(sabado) == 7:
             self.sabado = sabado
         else:
             raise ValueError("El arreglo debe tener exactamente 7 elementos.")
 
-    def hayPelicula(self, pelicula: 'Pelicula') -> bool:
+    def hayPelicula(self, pelicula) -> bool:
+        from pelicula import Pelicula  # Importación diferida
+        from funcion import Funcion  # Importación diferida
+        
         # Verifica si una película está en las funciones de cualquier día
         def contiene_pelicula(dia: List[Optional['Funcion']]) -> bool:
             return any(
@@ -92,6 +95,8 @@ class Cine:
         )
 
     def enseñarFunciones(self) -> str:
+        from funcion import Funcion  # Importación diferida
+        
         # Muestra las funciones de cada día
         def procesar_dia(dia: List[Optional['Funcion']], nombre_dia: str) -> str:
             peliculas_mostradas = []
@@ -114,7 +119,10 @@ class Cine:
             procesar_dia(self.sabado, "Sábado")
         )
 
-    def peliculasActivas(self) -> List['Pelicula']:
+    def peliculasActivas(self):
+        from pelicula import Pelicula  # Importación diferida
+        from funcion import Funcion  # Importación diferida
+        
         # Obtiene la lista de películas activas en el cine
         peliculas = set()
         for dia in [self.lunes, self.martes, self.jueves, self.viernes, self.sabado]:
@@ -123,7 +131,10 @@ class Cine:
                     peliculas.add(funcion.getPelicula())
         return list(peliculas)
 
-    def obtenerFunciones(self, pelicula: 'Pelicula') -> List['Funcion']:
+    def obtenerFunciones(self, pelicula):
+        from pelicula import Pelicula  # Importación diferida
+        from funcion import Funcion  # Importación diferida
+        
         # Obtiene las funciones disponibles para una película
         def funciones_dia(dia: List[Optional['Funcion']]) -> List['Funcion']:
             return [
@@ -142,6 +153,8 @@ class Cine:
         )
 
     def ajustarFunciones(self):
+        from funcion import Funcion  # Importación diferida
+        
         # Ajusta la información de cada función en el cine
         def ajustar_dia(dia: List[Optional['Funcion']], nombre_dia: str):
             for funcion in dia:
@@ -156,6 +169,9 @@ class Cine:
         ajustar_dia(self.sabado, "Sábado")
 
     def obtenerCalificacionesPeliculas(self) -> List[str]:
+        from pelicula import Pelicula  # Importación diferida
+        from funcion import Funcion  # Importación diferida
+        
         # Obtiene las calificaciones de las películas en las funciones del cine
         def calificaciones_dia(dia: List[Optional['Funcion']], nombre_dia: str) -> List[str]:
             return [
@@ -171,40 +187,45 @@ class Cine:
             calificaciones_dia(self.sabado, "Sábado")
         )
 
-    def getZonaDeJuegos(self) -> Optional['ZonaDeJuegos']:
+    def getZonaDeJuegos(self):
         return self.zonaDeJuegos
 
-    def setZonaDeJuegos(self, zonaDeJuegos: Optional['ZonaDeJuegos']):
+    def setZonaDeJuegos(self, zonaDeJuegos):
         self.zonaDeJuegos = zonaDeJuegos
 
-    def agregarFuncion(self, nuevaFuncion: 'Funcion', funciones: List[Optional['Funcion']]):
+    def agregarFuncion(self, nuevaFuncion, funciones):
+        
         # Agrega una nueva función a la lista de funciones
         nuevaPelicula = nuevaFuncion.getPelicula()
         posicionApropiada = self.encontrarPosicionApropiada(nuevaPelicula, funciones)
 
         if posicionApropiada == -1:
             # No hay posiciones adecuadas disponibles
-            print("Error: No hay posiciones adecuadas disponibles.")
+            
             return
 
         if funciones[posicionApropiada] is not None:
             # Reorganizar las funciones para hacer espacio
             if not self.reorganizarFunciones(funciones, posicionApropiada):
-                # Si no es posible reorganizar las funciones, no se puede agregar la nueva
-                print("Error: No se pudo reorganizar las funciones.")
+                
                 return
 
-        # Agregar la nueva función a la posición adecuada
         funciones[posicionApropiada] = nuevaFuncion
+        nuevaFuncion.definirMomentoDelDia()
+        
 
-    def encontrarPosicionApropiada(self, pelicula: 'Pelicula', funciones: List[Optional['Funcion']]) -> int:
-        # Buscar una posición apropiada para la película
+    def encontrarPosicionApropiada(self, nuevaPelicula, funciones) -> int:
+        
+        # Encuentra la posición adecuada para la nueva función
         for i, funcion in enumerate(funciones):
             if funcion is None:
                 return i
-        return -1  # No hay posición adecuada
+            peliculaExistente = funcion.getPelicula()
+            if peliculaExistente.getGenero() != nuevaPelicula.getGenero():
+                return i
+        return -1
 
-    def reorganizarFunciones(self, funciones: List[Optional['Funcion']], posicion: int) -> bool:
+    def reorganizarFunciones(self, funciones, posicion: int) -> bool:
         # Reorganiza las funciones para hacer espacio
         for i in range(len(funciones) - 1, posicion, -1):
             funciones[i] = funciones[i - 1]

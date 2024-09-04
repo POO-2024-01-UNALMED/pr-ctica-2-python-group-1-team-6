@@ -11,22 +11,22 @@ class Sala:
         if self not in Sala.allSalas:
             Sala.allSalas.append(self)
     
-    def get_numero(self):
+    def getNumero(self):
         return self.numero
     
-    def set_numero(self, numero):
+    def setNumero(self, numero):
         self.numero = numero
     
-    def get_cine(self):
+    def getCine(self):
         return self.cine
     
-    def set_cine(self, cine):
+    def setCine(self, cine):
         self.cine = cine
     
-    def get_sillas(self):
+    def getSillas(self):
         return self.sillas
     
-    def set_sillas(self, sillas):
+    def setSillas(self, sillas):
         self.sillas = sillas
     
     def hay_asientos_libres(self):

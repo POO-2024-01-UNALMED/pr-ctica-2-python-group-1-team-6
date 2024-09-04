@@ -1,14 +1,16 @@
+import sys
 from typing import List, Optional
 from datetime import datetime, timedelta
-from pelicula import Pelicula
-from sala import Sala
-from cine import Cine
+
+# Ajusta el sys.path para facilitar las importaciones
+sys.path.append("gestorAplicacion/Cine")
 
 class Funcion:
     # Lista estática para almacenar todas las funciones
     allFunciones: List['Funcion'] = []
 
-    def __init__(self, pelicula: Optional['Pelicula'], tipo: str, sala: Optional['Sala'], precio: float):
+    def __init__(self, pelicula, tipo: str, sala, precio: float):
+
         self.pelicula = pelicula
         self.tipo = tipo
         self.sala = sala
@@ -16,39 +18,39 @@ class Funcion:
         self.dia = ""
         self.momentoDelDia = ""
 
-        # Agrega la función a la lista de todas las funciones si no está ya presente
         if self not in Funcion.allFunciones:
             Funcion.allFunciones.append(self)
 
-        # Añade esta función a la lista de funciones de la película, si la película no es None
         if self.pelicula:
             self.pelicula.getFunciones().append(self)
 
-    def setPelicula(self, nuevaPelicula: Optional['Pelicula']):
-        if self.pelicula == nuevaPelicula:
-            return  # Si la película es la misma, no hacer nada
+    def setPelicula(self, nuevaPelicula):
+        from pelicula import Pelicula  # Importación diferida
 
-        # Si hay una película anterior, quitar esta función de la lista de funciones de la película anterior
+        if self.pelicula == nuevaPelicula:
+            return
+
         if self.pelicula:
             self.pelicula.getFunciones().remove(self)
 
-        # Establecer la nueva película
         self.pelicula = nuevaPelicula
 
-        # Añadir esta función a la lista de funciones de la nueva película si no está ya presente
         if nuevaPelicula and self not in nuevaPelicula.getFunciones():
             nuevaPelicula.getFunciones().append(self)
 
+    def getPelicula(self):
+        return self.pelicula
     def getTipo(self) -> str:
         return self.tipo
 
     def setTipo(self, tipo: str):
         self.tipo = tipo
 
-    def getSala(self) -> Optional['Sala']:
+    def getSala(self) :
+        from sala import Sala  # Importación diferida
         return self.sala
 
-    def setSala(self, sala: Optional['Sala']):
+    def setSala(self, sala):
         self.sala = sala
 
     def getDia(self) -> str:
@@ -70,20 +72,19 @@ class Funcion:
         self.precio = precio
 
     @staticmethod
-    def realizarIntercambio(peliculaAIntercambiar: 'Pelicula', peliculaRecomendada: 'Pelicula') -> str:
-        # Buscar la función que muestra la película recomendada
+    def realizarIntercambio(peliculaAIntercambiar, peliculaRecomendada) -> str:
+        from pelicula import Pelicula  # Importación diferida
+
         funcionDestino = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaRecomendada), None)
 
         if funcionDestino is None:
             return "No se encontró una función con la película recomendada."
 
-        # Buscar una función que muestra la película a intercambiar
         funcionOrigen = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaAIntercambiar), None)
 
         if funcionOrigen is None:
             return "No se encontró una función con la película a intercambiar."
 
-        # Realizar el intercambio de películas
         funcionOrigen.setPelicula(peliculaRecomendada)
         funcionDestino.setPelicula(peliculaAIntercambiar)
 
@@ -91,9 +92,9 @@ class Funcion:
 
     @staticmethod
     def obtenerIndiceEnDia(funcionBuscada: 'Funcion') -> int:
-        # Recorre todos los cines
+        from src.gestorAplicacion.Cine.cine import Cine
+
         for cine in Cine.cines:
-            # Recorre todos los días de la semana para el cine actual
             for i, f in enumerate(cine.getLunes()):
                 if f and f == funcionBuscada:
                     return i
@@ -109,7 +110,7 @@ class Funcion:
             for i, f in enumerate(cine.getSabado()):
                 if f and f == funcionBuscada:
                     return i
-        return -1  # Retorna -1 si no se encontró la función en ninguna lista de días
+        return -1
 
     def getHoraInicio(self) -> str:
         indice = Funcion.obtenerIndiceEnDia(self)
@@ -120,7 +121,7 @@ class Funcion:
         inicio = self.getHoraInicio()
         medioDia = datetime.strptime("12:00", "%H:%M")
         horaReal = datetime.strptime(inicio, "%H:%M")
-        
+
         if medioDia > horaReal:
             self.setMomentoDelDia("am")
         else:
@@ -129,7 +130,9 @@ class Funcion:
         return horaReal
 
     @staticmethod
-    def encontrarCine(funcion: 'Funcion') -> Optional['Cine']:
+    def encontrarCine(funcion: 'Funcion'):
+        from cine import Cine  # Importación diferida
+
         for cine in Cine.cines:
             for f in cine.getLunes():
                 if f and f == funcion:
@@ -146,10 +149,12 @@ class Funcion:
             for f in cine.getSabado():
                 if f and f == funcion:
                     return cine
-        return None  # Si no se encuentra el cine
+        return None
 
     @staticmethod
-    def encontrarDia(funcion: 'Funcion', cine: 'Cine') -> str:
+    def encontrarDia(funcion: 'Funcion', cine) -> str:
+        from cine import Cine  # Importación diferida
+
         for i, f in enumerate(cine.getLunes()):
             if f and f == funcion:
                 return "Lunes"
@@ -165,4 +170,5 @@ class Funcion:
         for i, f in enumerate(cine.getSabado()):
             if f and f == funcion:
                 return "Sábado"
-        return "Día no encontrado"  # Si no se encuentra el día
+        return "Día no encontrado"
+

@@ -1,6 +1,5 @@
 from typing import Optional, List
-from pelicula import Pelicula
-from cine import Cine
+
 
 class Cliente:
     allClientes: List['Cliente'] = []  # Lista estática de todos los clientes
@@ -55,7 +54,8 @@ class Cliente:
     def setTipoTarjeta(self, tarjeta: str):
         self.tipoTarjeta = tarjeta
 
-    def calificarPelicula(self, pelicula: 'Pelicula', calificacion: float):
+    def calificarPelicula(self, pelicula, calificacion: float):
+        from pelicula import Pelicula
         if calificacion < 0 or calificacion > 5:
             raise ValueError("La calificación debe estar entre 0 y 5.")
         pelicula.actualizarCalificacion(calificacion)
@@ -72,7 +72,8 @@ class Cliente:
             raise ValueError("El descuento debe estar entre 0 y 100.")
         return precio - ((precio / 100) * descuento)
 
-    def comprarBoleta(self, cine: 'Cine', pelicula: 'Pelicula') -> bool:
+    def comprarBoleta(self, cine, pelicula) -> bool:
+        from cine import Cine
         return cine.hayPelicula(pelicula)
 
     def pagarConSaldo(self, monto: float) -> bool:
