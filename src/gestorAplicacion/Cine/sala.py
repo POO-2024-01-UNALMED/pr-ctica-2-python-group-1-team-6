@@ -29,14 +29,14 @@ class Sala:
     def setSillas(self, sillas):
         self.sillas = sillas
     
-    def hay_asientos_libres(self):
+    def hayAsientosLibres(self):
         # Verifica si hay al menos un asiento libre.
         for fila in self.sillas:
             if any(fila):
                 return True
         return False
     
-    def estado_silleteria(self):
+    def estadoSilleteria(self):
         # Retorna una representación textual del estado de la silla en la sala.
         sala = ""
         columnas = "    " + "   ".join(str(i + 1) for i in range(len(self.sillas[0]))) + "\n"
@@ -44,7 +44,7 @@ class Sala:
             sala += f"{j + 1}  " + " ".join("[ ]" if asiento else "[*]" for asiento in fila) + "\n"
         return columnas + sala
     
-    def reservar_silla(self, fila, columna):
+    def reservarSilla(self, fila, columna):
         # Intenta reservar un asiento en la fila y columna especificadas.
         if 0 <= fila < len(self.sillas) and 0 <= columna < len(self.sillas[fila]):
             if self.sillas[fila][columna]:
@@ -52,7 +52,7 @@ class Sala:
                 return True
         return False
     
-    def esta_disponible(self, fila, columna):
+    def estaDisponible(self, fila, columna):
         # Verifica si el asiento en la fila y columna especificadas está disponible.
         if 0 <= fila < len(self.sillas) and 0 <= columna < len(self.sillas[fila]):
             return self.sillas[fila][columna]

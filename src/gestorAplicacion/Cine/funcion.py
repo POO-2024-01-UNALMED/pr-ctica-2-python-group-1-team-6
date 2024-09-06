@@ -130,19 +130,19 @@ class Funcion:
 
         for cine in Cine.cines:
             for f in cine.getLunes():
-                if f and f == funcion:
+                if f == funcion:
                     return cine
             for f in cine.getMartes():
-                if f and f == funcion:
+                if f == funcion:
                     return cine
             for f in cine.getJueves():
-                if f and f == funcion:
+                if f == funcion:
                     return cine
             for f in cine.getViernes():
-                if f and f == funcion:
+                if f == funcion:
                     return cine
             for f in cine.getSabado():
-                if f and f == funcion:
+                if f == funcion:
                     return cine
         return None
 
@@ -164,4 +164,5 @@ class Funcion:
             if f and f == funcion:
                 return "Sábado"
         return "Día no encontrado"
+
 

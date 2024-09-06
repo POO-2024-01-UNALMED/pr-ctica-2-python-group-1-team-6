@@ -20,6 +20,7 @@ class Admin:
             print("1.- Comprar boletos para un cine")
             print("2.- Gestionar Zona de Juegos")
             print("3.- Gestionar Peliculas")
+            print("5. Calificar Pelicula")
             print("6. Comprar boleta para jugar maquinitas")
             print("7. Menu de Creacion")
             print("8. Asignaciones")
@@ -31,11 +32,13 @@ class Admin:
             if opcion == 1:
                 Interfaz.primeraOperacion()
             elif opcion == 2:
-                Interfaz.gestionar_zona_de_juegos()
+                Interfaz.gestionarZonaDeJuegos()
             elif opcion == 3:
-                Interfaz.gestionar_peliculas()
+                Interfaz.gestionarPeliculas()
+            elif opcion ==5:
+                Interfaz.calificarPelicula()
             elif opcion == 6:
-                Interfaz.comprar_boleta_juegos()
+                Interfaz.comprarBoletaJuegos()
             elif opcion == 7:
                 Interfaz.creacion()
             elif opcion == 8:

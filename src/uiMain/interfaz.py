@@ -138,6 +138,16 @@ class Interfaz:
         cls.cine4.agregarFuncion(cls.funcion9, cls.cine4.getSabado())  # Acción: "Inception" (8 am)
         cls.cine4.agregarFuncion(cls.funcion3, cls.cine4.getSabado())  # Terror: "Jason Vorhees" (11 am)
 
+        print(Funcion.obtenerIndiceEnDia(cls.funcion1))
+        print(Funcion.obtenerIndiceEnDia(cls.funcion6))
+        print(Funcion.obtenerIndiceEnDia(cls.funcion7))
+        print(Funcion.obtenerIndiceEnDia(cls.funcion2))
+        print(Funcion.obtenerIndiceEnDia(cls.funcion4))
+        print(Funcion.obtenerIndiceEnDia(cls.funcion5))
+        print(Funcion.obtenerIndiceEnDia(cls.funcion3))
+        print(Funcion.obtenerIndiceEnDia(cls.funcion8))
+        print(Funcion.obtenerIndiceEnDia(cls.funcion9))
+        
         # Asignación de máquinas a zonas de juegos
         cls.zona1.agregarMaquina(cls.arcade1)
         cls.zona1.agregarMaquina(cls.danceDance1)
@@ -189,125 +199,125 @@ class Interfaz:
 
 # Gestiona la zona de juegos
     @staticmethod
-    def gestionar_zona_de_juegos():
+    def gestionarZonaDeJuegos():
     # Simula la entrada del usuario
         entrada = input
 
     # Actualización de dinero recaudado en todas las zonas
-        for zona in ZonaDeJuegos.zonas_de_juegos:
-            zona.actualizar_dinero_recaudado()
+        for zona in ZonaDeJuegos.zonasDeJuegos:
+            zona.actualizarDineroRecaudado()
 
     # Mostrar informe de máquinas dañadas en cada zona
         print("Informe de máquinas dañadas:")
-        for zona in ZonaDeJuegos.zonas_de_juegos:
-            print(zona.informe_maquinas())
+        for zona in ZonaDeJuegos.zonasDeJuegos:
+            print(zona.informeMaquinas())
 
     # Selección de zona y máquina para reparar
         print("Seleccione el número de la zona de la máquina que desea reparar: ")
-        for i, zona in enumerate(ZonaDeJuegos.zonas_de_juegos):
-            print(f"{i + 1}. {zona.get_nombre()}")
-        zona_seleccionada = int(entrada()) - 1
+        for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
+            print(f"{i + 1}. {zona.getNombre()}")
+        zonaSeleccionada = int(entrada()) - 1
 
-        zona_actual = ZonaDeJuegos.zonas_de_juegos[zona_seleccionada]
-        maquinas_dañadas = zona_actual.get_maquinas_dañadas()
-        if not maquinas_dañadas:
+        zonaActual = ZonaDeJuegos.zonasDeJuegos[zonaSeleccionada]
+        maquinasDañadas = zonaActual.getMaquinasDañadas()
+        if not maquinasDañadas:
             print("No hay máquinas dañadas en la zona seleccionada.")
             return
 
         print("Seleccione el número de la máquina que desea reparar:")
-        for i, maquina in enumerate(maquinas_dañadas):
-            print(f"{i + 1}. {maquina.get_nombre()}")
-        seleccion_maquina = int(entrada()) - 1
+        for i, maquina in enumerate(maquinasDañadas):
+            print(f"{i + 1}. {maquina.getNombre()}")
+        seleccionMaquina = int(entrada()) - 1
 
     # Realizar reparación
-        print(Interfaz.bodega.realizar_mantenimiento(zona_actual, seleccion_maquina))
+        print(Interfaz.bodega.realizarMantenimiento(zonaActual, seleccionMaquina))
 
     # Recomendación de movimiento
-        maquina_reparada = maquinas_dañadas[seleccion_maquina]
-        print(zona_actual.recomendar_movimiento(maquina_reparada))
+        maquinaReparada = maquinasDañadas[seleccionMaquina]
+        print(zonaActual.recomendarMovimiento(maquinaReparada))
 
     # Selección de zona de destino para mover la máquina reparada
         print("Seleccione la zona a la que desea mover la máquina:")
-        for i, zona in enumerate(ZonaDeJuegos.zonas_de_juegos):
-            print(f"{i + 1}. {zona.get_nombre()}")
-        seleccion_zona = int(entrada()) - 1
+        for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
+            print(f"{i + 1}. {zona.getNombre()}")
+        seleccionZona = int(entrada()) - 1
 
-        zona_destino = ZonaDeJuegos.zonas_de_juegos[seleccion_zona]
-        if zona_actual != zona_destino:
-            print(zona_actual.mover_maquina(zona_destino, seleccion_maquina))
+        zonaDestino = ZonaDeJuegos.zonasDeJuegos[seleccionZona]
+        if zonaActual != zonaDestino:
+            print(zonaActual.moverMaquina(zonaDestino, seleccionMaquina))
         else:
-            print(f"La máquina permanecerá en {zona_actual.get_nombre()}")
+            print(f"La máquina permanecerá en {zonaActual.getNombre()}")
 
     # Aplicar incentivos
         print("¿Desea aplicar algún incentivo en una zona de juegos?")
         print("1. Sí")
         print("2. No")
-        opcion_incentivo = int(entrada())
+        opcionIncentivo = int(entrada())
 
-        if opcion_incentivo == 1:
+        if opcionIncentivo == 1:
             print("Seleccione el tipo de incentivo:")
             print("1. Rebajar el precio de una máquina")
             print("2. Regalar un bono por el uso de una máquina")
-            tipo_incentivo = int(entrada())
+            tipoIncentivo = int(entrada())
 
-        if tipo_incentivo == 1:
-            dos_menos_venden = Maquina.obtener_dos_maquinas_menos_venden()
+        if tipoIncentivo == 1:
+            dosMenosVenden = Maquina.obtenerDosMaquinasMenosVenden()
 
-            if not dos_menos_venden:
+            if not dosMenosVenden:
                 print("No hay máquinas disponibles para recomendar.")
             else:
                 print("Recomendación de cambio de precio:")
-                for maquina in dos_menos_venden:
+                for maquina in dosMenosVenden:
                     print(maquina)
 
             print("Seleccione la zona donde aplicar la rebaja:")
-            for i, zona in enumerate(ZonaDeJuegos.zonas_de_juegos):
-                print(f"{i + 1}. {zona.get_nombre()}")
-            seleccion_zona_rebaja = int(entrada()) - 1
+            for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
+                print(f"{i + 1}. {zona.getNombre()}")
+            seleccionZonaRebaja = int(entrada()) - 1
 
-            zona_rebaja = ZonaDeJuegos.zonas_de_juegos[seleccion_zona_rebaja]
+            zonaRebaja = ZonaDeJuegos.zonasDeJuegos[seleccionZonaRebaja]
 
             print("Seleccione la máquina para rebajar su precio:")
-            maquinas_en_zona = zona_rebaja.get_maquinas()
-            for i, maquina in enumerate(maquinas_en_zona):
-                print(f"{i + 1}. {maquina.get_nombre()}")
-            seleccion_maquina_rebaja = int(entrada()) - 1
+            maquinasEnZona = zonaRebaja.getMaquinas()
+            for i, maquina in enumerate(maquinasEnZona):
+                print(f"{i + 1}. {maquina.getNombre()}")
+            seleccionMaquinaRebaja = int(entrada()) - 1
 
-            maquina_rebajada = maquinas_en_zona[seleccion_maquina_rebaja]
-            nuevo_precio = float(input(f"Introduzca el nuevo precio para la máquina {maquina_rebajada.get_nombre()}: "))
-            maquina_rebajada.set_precio_uso(nuevo_precio)
+            maquinaRebajada = maquinasEnZona[seleccionMaquinaRebaja]
+            nuevoPrecio = float(input(f"Introduzca el nuevo precio para la máquina {maquinaRebajada.getNombre()}: "))
+            maquinaRebajada.setPrecioUso(nuevoPrecio)
 
-            print(f"El precio de la máquina {maquina_rebajada.get_nombre()} ha sido rebajado a {nuevo_precio}")
+            print(f"El precio de la máquina {maquinaRebajada.getNombre()} ha sido rebajado a {nuevoPrecio}")
 
-        elif tipo_incentivo == 2:
+        elif tipoIncentivo == 2:
             print("Seleccione la zona de juegos:")
-            for i, zona in enumerate(ZonaDeJuegos.zonas_de_juegos):
-                print(f"{i + 1}. {zona.get_nombre()}")
-            zona_seleccionada1 = int(entrada()) - 1
+            for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
+                print(f"{i + 1}. {zona.getNombre()}")
+            zonaSeleccionada1 = int(entrada()) - 1
 
-            zona = ZonaDeJuegos.zonas_de_juegos[zona_seleccionada1]
+            zona = ZonaDeJuegos.zonasDeJuegos[zonaSeleccionada1]
 
             print("Seleccione la máquina a la que desea aplicar el bono:")
-            for i, maquina in enumerate(zona.get_maquinas()):
-                print(f"{i + 1}. {maquina.get_nombre()}")
-            maquina_seleccionada = int(entrada()) - 1
+            for i, maquina in enumerate(zona.getMaquinas()):
+                print(f"{i + 1}. {maquina.getNombre()}")
+            maquinaSeleccionada = int(entrada()) - 1
 
-            maquina = zona.get_maquinas()[maquina_seleccionada]
-            maquina.activar_bono()
+            maquina = zona.getMaquinas()[maquinaSeleccionada]
+            maquina.activarBono()
 
-            print(f"El bono ha sido activado para la máquina {maquina.get_nombre()}")
+            print(f"El bono ha sido activado para la máquina {maquina.getNombre()}")
 
         else:
             print("No se aplicarán incentivos.")
 
     # Actualización final de dinero recaudado
-        for zona in ZonaDeJuegos.zonas_de_juegos:
-            zona.actualizar_dinero_recaudado()
-            print(f"Dinero recaudado por {zona.get_nombre()}: {zona.get_dinero_recaudado()}")
+        for zona in ZonaDeJuegos.zonasDeJuegos:
+            zona.actualizarDineroRecaudado()
+            print(f"Dinero recaudado por {zona.getNombre()}: {zona.getDineroRecaudado()}")
     
 
     @staticmethod
-    def gestionar_peliculas():
+    def gestionarPeliculas():
         # Paso 1: Ver las calificaciones
         print("Calificaciones de las películas en los cines:")
         for cine in Cine.cines:
@@ -320,51 +330,49 @@ class Interfaz:
         print("Seleccione el cine de la película que desea intercambiar:")
         for i, cine in enumerate(Cine.cines):
             print(f"{i + 1}. {cine.getNombre()}")
-        cine_seleccionado = int(input()) - 1
-        cine_origen = Cine.cines[cine_seleccionado]
+        cineSeleccionado = int(input()) - 1
+        cineOrigen = Cine.cines[cineSeleccionado]
 
         # Mostrar películas en el cine seleccionado
         print("Seleccione la película que desea intercambiar:")
-        peliculas = cine_origen.peliculasActivas()
+        peliculas = cineOrigen.peliculasActivas()
         for i, pelicula in enumerate(peliculas):
             print(f"{i + 1}. {pelicula.getTitulo()}")
-        pelicula_seleccionada = int(input()) - 1
-        pelicula_a_intercambiar = peliculas[pelicula_seleccionada]
+        peliculaSeleccionada = int(input()) - 1
+        peliculaAIntercambiar = peliculas[peliculaSeleccionada]
 
         # Paso 3: Recomendar una película para intercambio basada en la selección
-        print(Pelicula.recomendarIntercambio(pelicula_a_intercambiar))
+        print(Pelicula.recomendarIntercambio(peliculaAIntercambiar))
 
         # Paso 4: Selección del nuevo cine para el intercambio
         print("Seleccione el nuevo cine (omitido el cine actual):")
         for i, cine in enumerate(Cine.cines):
-            if i != cine_seleccionado:
+            if i != cineSeleccionado:
                 print(f"{i + 1}. {cine.getNombre()}")
-        nuevo_cine_seleccionado = int(input()) - 1
-        if nuevo_cine_seleccionado >= cine_seleccionado:
-            nuevo_cine_seleccionado += 1  # Ajustar el índice si el cine seleccionado es mayor
-        nuevo_cine = Cine.cines[nuevo_cine_seleccionado]
+        nuevoCineSeleccionado = int(input()) - 1
+        nuevoCine = Cine.cines[nuevoCineSeleccionado]
 
         # Mostrar películas en el nuevo cine seleccionado
         print("Seleccione la película con la que desea intercambiar:")
-        peliculas_nuevo_cine = nuevo_cine.peliculasActivas()
-        for i, pelicula in enumerate(peliculas_nuevo_cine):
+        peliculasNuevoCine = nuevoCine.peliculasActivas()
+        for i, pelicula in enumerate(peliculasNuevoCine):
             print(f"{i + 1}. {pelicula.getTitulo()}")
-        pelicula_intercambio_seleccionada = int(input()) - 1
+        peliculaIntercambioSeleccionada = int(input()) - 1
 
         # Manejar la opción de no intercambiar
-        if pelicula_intercambio_seleccionada == -1:
+        if peliculaIntercambioSeleccionada == -1:
             print("No se realizará el intercambio.")
             return
 
-        pelicula_intercambio = peliculas_nuevo_cine[pelicula_intercambio_seleccionada]
+        peliculaIntercambio = peliculasNuevoCine[peliculaIntercambioSeleccionada]
 
         # Confirmar el intercambio
-        print(f"¿Desea realizar el intercambio entre {pelicula_a_intercambiar.getTitulo()} y {pelicula_intercambio.getTitulo()}? (1. Sí / 2. No)")
-        realizar_intercambio = int(input())
+        print(f"¿Desea realizar el intercambio entre {peliculaAIntercambiar.getTitulo()} y {peliculaIntercambio.getTitulo()}? (1. Sí / 2. No)")
+        realizarIntercambio = int(input())
 
-        if realizar_intercambio == 1 and pelicula_a_intercambiar and pelicula_intercambio and pelicula_a_intercambiar != pelicula_intercambio:
-            resultado_intercambio = Funcion.realizarIntercambio(pelicula_a_intercambiar, pelicula_intercambio)
-            print(resultado_intercambio)
+        if realizarIntercambio == 1 and peliculaAIntercambiar and peliculaIntercambio and peliculaAIntercambiar != peliculaIntercambio:
+            resultadoIntercambio = Funcion.realizarIntercambio(peliculaAIntercambiar, peliculaIntercambio)
+            print(resultadoIntercambio)
         else:
             print("No se realizó el intercambio.")
 
@@ -373,60 +381,60 @@ class Interfaz:
         print("1. Rebajar el precio de la entrada")
         print("2. Regalar un bono")
         print("3. No aplicar incentivos")
-        tipo_incentivo = int(input())
+        tipoIncentivo = int(input())
 
-        if tipo_incentivo == 1:
+        if tipoIncentivo == 1:
             # Aplicar rebaja en el precio de la entrada
             print("Seleccione la función para la película a la que desea aplicar el nuevo precio:")
-            funciones = pelicula_intercambio.getFunciones()
+            funciones = peliculaIntercambio.getFunciones()
             for i, funcion in enumerate(funciones):
                 print(f"{i + 1}. {funcion}")  # Asumiendo que la función tiene un método __str__ para mostrar información relevante
-            funcion_seleccionada = int(input()) - 1
+            funcionSeleccionada = int(input()) - 1
 
-            if 0 <= funcion_seleccionada < len(funciones):
-                funcion = funciones[funcion_seleccionada]
-                nuevo_precio = float(input("Introduzca el nuevo precio para la entrada: "))
-                funcion.setPrecio(nuevo_precio)
-                print(f"El precio de entrada ha sido rebajado a {nuevo_precio}")
+            if 0 <= funcionSeleccionada < len(funciones):
+                funcion = funciones[funcionSeleccionada]
+                nuevoPrecio = float(input("Introduzca el nuevo precio para la entrada: "))
+                funcion.setPrecio(nuevoPrecio)
+                print(f"El precio de entrada ha sido rebajado a {nuevoPrecio}")
             else:
                 print("Selección de función inválida.")
 
-        elif tipo_incentivo == 2:
+        elif tipoIncentivo == 2:
             # Aplicar bono
             print("Seleccione el cine para aplicar el bono:")
             for i, cine in enumerate(Cine.cines):
                 print(f"{i + 1}. {cine.getNombre()}")
-            cine_seleccionado = int(input()) - 1
-            cine = Cine.cines[cine_seleccionado]
+            cineSeleccionado = int(input()) - 1
+            cine = Cine.cines[cineSeleccionado]
 
             # Seleccionar la película en la que se desea aplicar el bono
             print("Seleccione la película a la que desea aplicar el bono:")
             peliculas = cine.peliculasActivas()
             for i, pelicula in enumerate(peliculas):
                 print(f"{i + 1}. {pelicula.getTitulo()}")
-            pelicula_seleccionada = int(input()) - 1
-            pelicula = peliculas[pelicula_seleccionada]
+            peliculaSeleccionada = int(input()) - 1
+            pelicula = peliculas[peliculaSeleccionada]
 
             # Activar el bono en la película seleccionada
             pelicula.activarBono()
             print(f"El bono ha sido activado para la película {pelicula.getTitulo()}")
 
-        elif tipo_incentivo == 3:
+        elif tipoIncentivo == 3:
             print("No se aplicarán incentivos.")
         else:
             print("Opción no válida.")
     @staticmethod
-    def comprar_boleta_juegos():
+    def comprarBoletaJuegos():
     # Paso 1: Identificación del cliente
-        id_cliente = int(input("Ingrese su número de identificación: "))
-        cliente = Cliente.buscarClientePorId(id_cliente)
+        idCliente = int(input("Ingrese su número de identificación: "))
+        cliente = Cliente.buscarClientePorId(idCliente)
 
         if cliente is None:
             respuesta = int(input("Cliente no encontrado. ¿Desea crear uno nuevo? (1)Sí/(2)No: "))
             if respuesta == 1:
                 nombre = input("Ingresa tu nombre: ")  # Captura el nombre completo
-                saldo_inicial = float(input("Ingresa tu saldo inicial: "))  # Captura el saldo inicial
-                cliente = Cliente(nombre, saldo_inicial, id_cliente)  # Crea el nuevo cliente
+                saldoInicial = float(input("Ingresa tu saldo inicial: "))  # Captura el saldo inicial
+                cliente = Cliente(nombre, saldoInicial, idCliente)  # Crea el nuevo cliente
                 print("Cliente creado exitosamente.")
 
             elif respuesta == 2:
@@ -439,39 +447,39 @@ class Interfaz:
         print("Seleccione el cine:")
         for i, cine in enumerate(Cine.cines):
          print(f"{i + 1}. {cine.getNombre()}")  # Lista los cines disponibles
-        cine_seleccionado_index = int(input()) - 1
-        cine_seleccionado = Cine.cines[cine_seleccionado_index]
+        cineSeleccionadoIndex = int(input()) - 1
+        cineSeleccionado = Cine.cines[cineSeleccionadoIndex]
 
     # Paso 3: Selección de la máquina en la zona de juegos
-        zona_de_juegos_seleccionada = cine_seleccionado.getZonaDeJuegos()  # Obtener la zona de juegos del cine
-        maquinas_disponibles = zona_de_juegos_seleccionada.get_maquinas()
+        zonaDeJuegosSeleccionada = cineSeleccionado.getZonaDeJuegos()  # Obtener la zona de juegos del cine
+        maquinasDisponibles = zonaDeJuegosSeleccionada.getMaquinas()
 
         print("Seleccione la máquina para comprar la boleta:")
-        for i, maquina in enumerate(maquinas_disponibles):
-            print(f"{i + 1}. {maquina.get_nombre()} - Precio: {maquina.get_precio_uso()}")  # Lista las máquinas disponibles
-        maquina_seleccionada_index = int(input()) - 1
-        maquina_seleccionada = maquinas_disponibles[maquina_seleccionada_index]
+        for i, maquina in enumerate(maquinasDisponibles):
+            print(f"{i + 1}. {maquina.getNombre()} - Precio: {maquina.getPrecioUso()}")  # Lista las máquinas disponibles
+        maquinaSeleccionadaIndex = int(input()) - 1
+        maquinaSeleccionada = maquinasDisponibles[maquinaSeleccionadaIndex]
 
     # Verificar si la máquina requiere mantenimiento
-        if maquina_seleccionada.necesita_mantenimiento():
-            print(f"La máquina {maquina_seleccionada.get_nombre()} no está disponible debido a que requiere mantenimiento.")
+        if maquinaSeleccionada.necesitaMantenimiento():
+            print(f"La máquina {maquinaSeleccionada.getNombre()} no está disponible debido a que requiere mantenimiento.")
             return
 
     # Paso 4: Realizar la compra
-        if cliente.getSaldo() >= maquina_seleccionada.get_precio_uso():
-            cliente.setSaldo(cliente.getSaldo() - maquina_seleccionada.get_precio_uso())  # Descuenta el precio de la máquina del saldo del cliente
-            maquina_seleccionada.usar()  # Registra el uso de la máquina
+        if cliente.getSaldo() >= maquinaSeleccionada.getPrecioUso():
+            cliente.setSaldo(cliente.getSaldo() - maquinaSeleccionada.getPrecioUso())  # Descuenta el precio de la máquina del saldo del cliente
+            maquinaSeleccionada.usar()  # Registra el uso de la máquina
             print("Compra realizada exitosamente.")
 
         # Paso 5: Asignar bono si está activo
-            print(maquina_seleccionada.asignar_bono(cliente))  # Asigna un bono si es aplicable
+            print(maquinaSeleccionada.asignarBono(cliente))  # Asigna un bono si es aplicable
 
         # Paso 6: Imprimir recibo
             print("Recibo:")
             print(f"Cliente: {cliente.getIdentificacion()}")
             print(f"Tipo de cliente: {cliente.getTipo()}")
-            print(f"Máquina: {maquina_seleccionada.get_nombre()}")
-            print(f"Precio pagado: {maquina_seleccionada.get_precio_uso()}")
+            print(f"Máquina: {maquinaSeleccionada.getNombre()}")
+            print(f"Precio pagado: {maquinaSeleccionada.getPrecioUso()}")
             print(f"Saldo restante: {cliente.getSaldo()}")
         else:
             print("Saldo insuficiente.")
@@ -493,116 +501,116 @@ class Interfaz:
             opcion = int(input("Selecciona una opción: "))
 
             if opcion == 1:
-                nombre_zona = input("Ingresa el nombre de la Zona de Juegos: ")
+                nombreZona = input("Ingresa el nombre de la Zona de Juegos: ")
                 horario = input("Ingresa el horario de la Zona de Juegos: ")
-                zona = ZonaDeJuegos(nombre_zona, horario)
+                zona = ZonaDeJuegos(nombreZona, horario)
                 print(f"Zona de Juegos creada: {zona}")
-                continuar = Interfaz.verificar_continuar()
+                continuar = Interfaz.verificarContinuar()
 
             elif opcion == 2:
-                nombre_bodega = input("Ingresa el nombre de la Bodega: ")
+                nombreBodega = input("Ingresa el nombre de la Bodega: ")
                 materiales = int(input("Ingrese la cantidad inicial de materiales: "))
-                bodega = Bodega(nombre_bodega, materiales)
+                bodega = Bodega(nombreBodega, materiales)
                 print(f"Bodega creada: {bodega}")
-                continuar = Interfaz.verificar_continuar()
+                continuar = Interfaz.verificarContinuar()
 
             elif opcion == 3:
-                nombre_maquina = input("Ingresa el nombre de la Máquina: ")
+                nombreMaquina = input("Ingresa el nombre de la Máquina: ")
                 print("Ingresa el tipo de la Máquina")
                 print("1. Arcade")
                 print("2. Dance Dance")
                 print("3. Mesa de discos")
                 print("4. Boxing")
                 print("5. Basket")
-                tipo_maquina = int(input("Selecciona una opción: "))
-                if tipo_maquina==1:
+                tipoMaquina = int(input("Selecciona una opción: "))
+                if tipoMaquina==1:
                     tipo="Arcade"
-                elif tipo_maquina==2:
+                elif tipoMaquina==2:
                     tipo="Dance Dance"
-                elif tipo_maquina==3:
+                elif tipoMaquina==3:
                     tipo="Mesa de discos"
-                elif tipo_maquina==4:
+                elif tipoMaquina==4:
                     tipo="Boxing"
-                elif tipo_maquina==5:
+                elif tipoMaquina==5:
                     tipo="Basket"
                 else:
                     Interfaz.error()
 
-                materiales_necesarios = int(input("Ingresa la cantidad de materiales necesarios para la Máquina: "))
-                precio_maquina = float(input("Ingresa el precio de la Máquina: "))
-                maquina = Maquina(nombre_maquina, tipo, materiales_necesarios, precio_maquina)
+                materialesNecesarios = int(input("Ingresa la cantidad de materiales necesarios para la Máquina: "))
+                precioMaquina = float(input("Ingresa el precio de la Máquina: "))
+                maquina = Maquina(nombreMaquina, tipo, materialesNecesarios, precioMaquina)
                 print(f"Máquina creada: {maquina}")
-                continuar = Interfaz.verificar_continuar()
+                continuar = Interfaz.verificarContinuar()
 
             elif opcion == 4:
-                nombre_cliente = input("Ingresa el nombre del Cliente: ")
+                nombreCliente = input("Ingresa el nombre del Cliente: ")
                 saldo = float(input("Ingresa el saldo inicial del Cliente: "))
-                id_cliente = int(input("Ingresa el número de identificación del Cliente: "))
-                cliente = Cliente(nombre_cliente, saldo, id_cliente)
+                idCliente = int(input("Ingresa el número de identificación del Cliente: "))
+                cliente = Cliente(nombreCliente, saldo, idCliente)
                 print(f"Cliente creado: {cliente}")
-                continuar = Interfaz.verificar_continuar()
+                continuar = Interfaz.verificarContinuar()
 
             elif opcion == 5:
-                nombre_cine = input("Ingresa el nombre del Cine: ")
-                cine = Cine(nombre_cine)
+                nombreCine = input("Ingresa el nombre del Cine: ")
+                cine = Cine(nombreCine)
                 print(f"Cine creado: {cine}")
-                continuar = Interfaz.verificar_continuar()
+                continuar = Interfaz.verificarContinuar()
 
             elif opcion == 6:
-                titulo_pelicula = input("Ingresa el título de la Película: ")
+                tituloPelicula = input("Ingresa el título de la Película: ")
                 print("Ingresa el género de la Película")
                 print("1. Acción")
                 print("2. Infantil")
                 print("3. Terror")
                 print("4. +18")
                 print("5. Drama")
-                genero_pelicula = int(input("Selecciona una opción: "))
-                if genero_pelicula==1:
+                generoPelicula = int(input("Selecciona una opción: "))
+                if generoPelicula==1:
                     genero="Accion"
-                elif genero_pelicula==2:
+                elif generoPelicula==2:
                     genero="Infantil"
-                elif genero_pelicula==3:
+                elif generoPelicula==3:
                     genero="Terror"
-                elif genero_pelicula==4:
+                elif generoPelicula==4:
                     genero="+18"
-                elif genero_pelicula==5:
+                elif generoPelicula==5:
                     genero="Drama"
                 else:
                     Interfaz.error()
 
-                duracion_input = input("Ingresa la duración de la Película (en horas y minutos, formato HH:MM): ")
+                duracionInput = input("Ingresa la duración de la Película (en horas y minutos, formato HH:MM): ")
                 try:
-                    duracion = datetime.strptime(duracion_input, "%H:%M").time()
+                    duracion = datetime.strptime(duracionInput, "%H:%M").time()
                 except ValueError:
                     print("Formato de tiempo inválido. Usa el formato HH:MM.")
                     continue  # Volver al menú si la duración es inválida
 
-                pelicula = Pelicula(titulo_pelicula, genero, duracion)
+                pelicula = Pelicula(tituloPelicula, genero, duracion)
                 print(f"Película creada exitosamente: {pelicula.titulo}, Género: {pelicula.genero}, Duración: {pelicula.duracion}")
-                continuar = Interfaz.verificar_continuar()
+                continuar = Interfaz.verificarContinuar()
 
             elif opcion == 7:
-                numero_sala = int(input("Ingresa el número de la Sala: "))
+                numeroSala = int(input("Ingresa el número de la Sala: "))
                 filas = int(input("Ingresa el número de filas de la Sala: "))
                 columnas = int(input("Ingresa el número de columnas de la Sala: "))
-                sala = Sala(numero_sala, filas, columnas)
+                sala = Sala(numeroSala, filas, columnas)
                 print(f"Sala creada: {sala}")
-                continuar = Interfaz.verificar_continuar()
+                continuar = Interfaz.verificarContinuar()
 
             elif opcion == 8:
                 print("Ingresa el tipo de Función:")
                 print("1. Normal")
                 print("2. VIP")
-                eleccion_tipo = int(input("Selecciona una opción: "))
-                if eleccion_tipo==1:
-                    tipo_funcion="Normal"
-                elif eleccion_tipo==2:
-                    tipo_funcion="VIP"
+                eleccionTipo = int(input("Selecciona una opción: "))
+                if eleccionTipo==1:
+                    tipoFuncion="Normal"
+                elif eleccionTipo==2:
+                    tipoFuncion="VIP"
                 else:
                     Interfaz.error()
-                funcion = Funcion(tipo_funcion)
+                funcion = Funcion(tipoFuncion)
                 print(f"Función creada: {funcion}")
-                continuar = Interfaz.verificar_continuar()
+                continuar = Interfaz.verificarContinuar()
 
             elif opcion == 9:
                 continuar = False
@@ -612,7 +620,7 @@ class Interfaz:
                 print("Opción inválida. Inténtalo de nuevo.")
     
     @staticmethod
-    def verificar_continuar():
+    def verificarContinuar():
         respuesta = int(input("¿Desea hacer otra creación? 1. Sí | 2. No: "))
         if respuesta == 2:
             return False
@@ -621,6 +629,9 @@ class Interfaz:
         else:
             print("Selección inválida.")
             return False
+    
+    
+    @staticmethod
     def asignacion():
         continuar = True
 
@@ -639,7 +650,7 @@ class Interfaz:
             # Evaluar la opción seleccionada por el usuario
             if opcion == 1:
                 # Asignar una zona de juegos a un cine
-                if not ZonaDeJuegos.zonas_de_juegos:
+                if not ZonaDeJuegos.zonasDeJuegos:
                     print("No hay zonas de juegos disponibles.")
                     continue
                 if not Cine.cines:
@@ -648,8 +659,8 @@ class Interfaz:
 
                 # Mostrar lista de zonas de juegos disponibles
                 print("Selecciona la zona de juegos a asignar:")
-                for i, zona in enumerate(ZonaDeJuegos.zonas_de_juegos):
-                    print(f"{i}. {zona.get_nombre()}")
+                for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
+                    print(f"{i}. {zona.getNombre()}")
 
                 zonaSeleccionada = int(input())
 
@@ -661,8 +672,8 @@ class Interfaz:
                 cineSeleccionado = int(input())
 
                 # Asignar la zona de juegos seleccionada al cine
-                Cine.cines[cineSeleccionado].setZonaDeJuegos(ZonaDeJuegos.zonas_de_juegos[zonaSeleccionada])
-                ZonaDeJuegos.zonas_de_juegos[zonaSeleccionada].setCine(Cine.cines[cineSeleccionado])
+                Cine.cines[cineSeleccionado].setZonaDeJuegos(ZonaDeJuegos.zonasDeJuegos[zonaSeleccionada])
+                ZonaDeJuegos.zonasDeJuegos[zonaSeleccionada].setCine(Cine.cines[cineSeleccionado])
                 print(f"Zona de juegos asignada correctamente al cine {Cine.cines[cineSeleccionado].getNombre()}")
 
             elif opcion == 2:
@@ -735,30 +746,30 @@ class Interfaz:
 
             elif opcion == 3:
                 # Agregar una máquina a una zona de juegos
-                if not Maquina.all_maquinas:
+                if not Maquina.allMaquinas:
                     print("No hay máquinas disponibles.")
                     continue
-                if not ZonaDeJuegos.zonas_de_juegos:
+                if not ZonaDeJuegos.zonasDeJuegos:
                     print("No hay zonas de juegos disponibles.")
                     continue
 
                 # Mostrar lista de máquinas disponibles
                 print("Selecciona la máquina a agregar:")
-                for i, maquina in enumerate(Maquina.all_maquinas):
-                    print(f"{i}. {maquina.get_nombre()}")
+                for i, maquina in enumerate(Maquina.allMaquinas):
+                    print(f"{i}. {maquina.getNombre()}")
 
                 maquinaSeleccionada = int(input())
 
                 # Mostrar lista de zonas de juegos disponibles
                 print("Selecciona la zona de juegos a la que deseas agregar la máquina:")
-                for i, zona in enumerate(ZonaDeJuegos.zonas_de_juegos):
-                    print(f"{i}. {zona.get_nombre()}")
+                for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
+                    print(f"{i}. {zona.getNombre()}")
 
                 zonaSeleccionada = int(input())
 
                 # Agregar la máquina seleccionada a la zona de juegos
-                ZonaDeJuegos.zonas_de_juegos[zonaSeleccionada].get_maquinas().append(Maquina.all_maquinas[maquinaSeleccionada])
-                print(f"Máquina agregada correctamente a la zona de juegos {ZonaDeJuegos.zonas_de_juegos[zonaSeleccionada].get_nombre()}")
+                ZonaDeJuegos.zonasDeJuegos[zonaSeleccionada].getMaquinas().append(Maquina.allMaquinas[maquinaSeleccionada])
+                print(f"Máquina agregada correctamente a la zona de juegos {ZonaDeJuegos.zonasDeJuegos[zonaSeleccionada].getNombre()}")
 
             elif opcion == 4:
                 # Asignar una película a una función
@@ -827,6 +838,51 @@ class Interfaz:
 
             else:
                 print("Opción inválida. Inténtalo de nuevo.")
+    
+    
+    @staticmethod
+    def calificarPelicula():
+        peliculas=[]
+        for cine in Cine.cines:
+            peliculas.extend(cine.peliculasActivas())
+        if not peliculas:
+            print("No hay películas activas en este momento.")
+            return
+        
+        def objetosRepetidos(objetos):
+            objetosUnicos = []
+            for obj in objetos:
+                if not any(obj.getTitulo() == unico.getTitulo() for unico in objetosUnicos):
+                    objetosUnicos.append(obj)
+            return objetosUnicos
+        
+        peliculas=objetosRepetidos(peliculas)
+        
+        # Mostrar lista de películas con índice
+        for i, pelicula in enumerate(peliculas):
+            print(f"{i + 1}. {pelicula.getTitulo()} - Calificación actual: {pelicula.getCalificacionPromedio():.2f}")
+    
+        # Solicitar selección de película
+        seleccion = int(input("Seleccione el número de la película que desea calificar: "))
+        if seleccion < 1 or seleccion > len(peliculas):
+            print("Selección inválida.")
+            return
+    
+        peliculaSeleccionada = peliculas[seleccion - 1]
+    
+        # Solicitar calificación
+        calificacion = int(input(f"Ingrese una calificación para {peliculaSeleccionada.getTitulo()} (1-5): "))
+        if calificacion < 1 or calificacion > 5:
+            print("Calificación inválida.")
+            return
+    
+        # Actualizar calificación
+        peliculaSeleccionada.actualizarCalificacion(calificacion)
+    
+        # Confirmar y mostrar resultado
+        print("Calificación guardada correctamente.")
+        print(f"Nueva calificación promedio de {peliculaSeleccionada.getTitulo()}: {peliculaSeleccionada.getCalificacionPromedio():.2f}")
+
     def primeraOperacion():
         print("uwux2")
 

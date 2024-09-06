@@ -88,12 +88,14 @@ class Pelicula:
                 if posicionSeleccionadaEnDia == posicionIntercambioEnDia:
                     continue
 
-                cumpleCriteriosHorario = Pelicula.cumpleCriteriosHorario(peliculaIntercambio, posicionIntercambioEnDia)
-                if not cumpleCriteriosHorario:
+                # Verificar si la película seleccionada cumple con los criterios de horario en la función candidata
+                cumpleCriteriosHorarioParaSeleccionada = Pelicula.cumpleCriteriosHorario(peliculaSeleccionada, posicionIntercambioEnDia)
+                if not cumpleCriteriosHorarioParaSeleccionada:
                     continue
 
-                cumpleCriteriosHorarioDestino = Pelicula.cumpleCriteriosHorario(peliculaIntercambio, posicionSeleccionadaEnDia)
-                if not cumpleCriteriosHorarioDestino:
+            # Verificar si la película candidata cumple con los criterios de horario en la función original
+                cumpleCriteriosHorarioParaIntercambio = Pelicula.cumpleCriteriosHorario(peliculaIntercambio, posicionSeleccionadaEnDia)
+                if not cumpleCriteriosHorarioParaIntercambio:
                     continue
 
                 funcionesPosibles.append(funcionIntercambio)
