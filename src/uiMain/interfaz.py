@@ -269,6 +269,72 @@ class Interfaz:
             print("No se aplicarán incentivos.")
         else:
             print("Opción no válida.")
+    
+    @staticmethod
+    def gestionarCartelera():
+        print("Elige el cine al que deseas modificar su cartelera semanal:\n")
+        listaVacios = None
+        cine = None
+        while True:
+            for i in range(len(Cine.cines)):
+                print(f"{i+1} {Cine.cines[i].getNombre()}.")
+            eleccion = int(input("->:"))
+            cine = Cine.cines[eleccion-1]
+            listaVacios = cine.hallarEspaciosSinFuncion()
+            if(listaVacios == -1):
+                print("Este cine no tiene huecos para agregar funciones, selecciona otro")
+                continue
+            else:
+                break
+        print("Esta es la programación semanal que actualmente se tiene en el cine escogido:")
+        #Falta
+
+        peliculasListas = []
+        while True:
+            print("Estos son los espacios libres en el cine escogido::")
+            horaPeli = None
+            espacio = None
+            diaPeli = None                
+            for j in range(len(listaVacios)):
+                horaDelDia = "am"
+                if listaVacios[j][2] >= time(12,0):
+                    horaDelDia = "pm"
+
+                print(f"{j+1}. Día {listaVacios[j][1]}, a las {listaVacios[j][2].strftime('%H:%M') + horaDelDia}")
+            if len(listaVacios) == 1:
+                espacio = listaVacios[0]
+                print("Como solo hay una alternativa, la tomamos de inmediato")
+            else:
+                print("Elige el espacio que deseas modificar:")
+                eleccion = int(input("->:"))
+                espacio = listaVacios[eleccion]
+            peliculasParaElegir = Pelicula.ObtenerPeliculasElegibles(espacio[2], espacio[1], cine)
+            if len(peliculasParaElegir)==1:
+                horaPeli = listaVacios[0][2]
+                diaPeli = listaVacios[0][1]
+                print(f"Como solo hay una alternativa, lo tomamos de inmediato: {peliculasParaElegir[0].getTitulo()}")
+                peliculasListas += [[peliculasParaElegir[0],diaPeli, horaPeli] ]
+                break
+            else:
+                print("Elige la película para rellenar el espacio:\n")
+                for i in range(len(peliculasParaElegir)):
+                    print(f"{str(i+1)}. {peliculasParaElegir[i].getTitulo()}, calificación: {str(peliculasParaElegir[i].getCalificacionPromedio())}")
+                eleccion = int(input("->:"))
+                diaPeli = espacio[1]
+                horaPeli = espacio[2]
+                peliculasListas += [[peliculasParaElegir[eleccion-1], diaPeli, horaPeli]]
+                listaVacios.remove(espacio)
+            if len(listaVacios) == 0:
+                break
+            else:
+                print("¿Quiéres continuar llenando espacios? (S/N)")
+                decision = input("->:")
+                if (decision == "S"):
+                    continue
+                elif (decision == "N"):
+                    print("Saliendo")
+                    break
+    
     @staticmethod
     def comprarBoletaJuegos():
     # Paso 1: Identificación del cliente

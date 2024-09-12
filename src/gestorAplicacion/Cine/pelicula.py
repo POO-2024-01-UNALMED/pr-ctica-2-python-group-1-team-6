@@ -3,6 +3,8 @@ from datetime import time
 from typing import List
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
+from cine import Cine
+
 
 
 sys.path.append("gestorAplicacion/Cine")
@@ -157,6 +159,59 @@ class Pelicula:
             elif cliente.getTipo() == "VIP":
                 cliente.setSaldo(cliente.getSaldo() + 20)
         return f"Bono {cliente.getTipo()} asignado a {cliente.getNombre()}"
+
+    #Este método recibe un horario, dia y cine con los cuales determina las películas que pueden ser elegidas para programar una función, tiene en cuenta el género de la película según el horario, la duración y el orden de acuerdo a su calificación
+    @classmethod
+    def ObtenerPeliculasElegibles(cls, horario, dia, cine):
+        #Listas a analizar
+        peliculasTotales = Pelicula.totalPeliculas
+        peliculasElegibles = []
+        peliculasDelDia=cine.obtenerPeliculasDelDia(dia)
+        categoriasPermitidas = []
+        calificaciones = []
+        duracion = None
+
+        if horario == time(20,0):
+            duracion = False
+        else:
+            duracion = True
+
+        if horario >= time(8,0) and horario <= time(16,0):
+            categoriasPermitidas.append("Acción")
+            categoriasPermitidas.append("Infantil")
+        else:
+            categoriasPermitidas.append("Terror")
+            categoriasPermitidas.append("+18")
+
+        for pelicula in peliculasTotales:
+            if pelicula in peliculasDelDia:
+                continue
+            if pelicula.getGenero() in categoriasPermitidas:
+                if duracion:
+                    duracionPelicula = pelicula.getDuracion()
+                    if duracionPelicula > time(4,0,0):
+                        continue
+                    else:
+                        peliculasElegibles.append(pelicula)
+                        calificaciones.append(pelicula.getCalificacionPromedio())
+                else:
+                    peliculasElegibles.append(pelicula)
+                    calificaciones.append(pelicula.getCalificacionPromedio())
+
+        iteracion  = 0
+        for calificacion in calificaciones:
+            calificacionMayor = max(calificaciones)
+            for pelicula in peliculasElegibles:
+                if pelicula.getCalificacionPrimedio() == calificacionMayor and len(calificaciones) != 1:
+                    if peliculasElegibles[iteracion] != pelicula:
+                        peliculaAuxiliar = peliculasElegibles[iteracion]
+                        index = peliculasElegibles.index(pelicula)
+                        peliculasElegibles[iteracion] = pelicula
+                        peliculasElegibles[index] = peliculaAuxiliar
+                        calificaciones.remove(calificacionMayor)
+                        iteracion += 1
+                        break
+        return peliculasElegibles
     
     @staticmethod
     def serializarPeliculas(file_name):
@@ -167,4 +222,5 @@ class Pelicula:
         objetos = Deserializador.deserializar(file_name)
         if objetos is not None:
             Pelicula.totalPeliculas = objetos
+
 
