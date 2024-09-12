@@ -1,5 +1,7 @@
 import sys
 sys.path.append("gestorAplicacion/zonaDeJuegos")
+from src.baseDatos.serializador import Serializador
+from src.baseDatos.deserializador import Deserializador
 
 
 class Maquina:
@@ -43,11 +45,8 @@ class Maquina:
     
     def usar(self):
         # Incrementa los usos y el dinero recaudado si la máquina está disponible
-        if self.disponible:
-            self.usos += 1
-            self.dineroRecaudado += self.precioUso
-        elif self.necesitaMantenimiento():
-            self.disponible = False
+        self.usos += 1
+        self.dineroRecaudado += self.precioUso
     
     def setPrecioUso(self, precio):
         self.precioUso = precio  # Establece el precio por uso
@@ -57,8 +56,8 @@ class Maquina:
     
     def reparar(self):
         # Resetea el contador de usos y vuelve la máquina disponible
-        self.usos = 0
-        self.disponible = True
+        self.setUsos(0)
+        self.disponible=True
     
     def getDineroRecaudado(self):
         return self.dineroRecaudado  # Devuelve el dinero recaudado por la máquina
@@ -83,7 +82,7 @@ class Maquina:
     
     def asignarBono(self, cliente):
         # Asigna un bono al cliente basado en su tipo si el bono está activo
-        if self.bono_activo:
+        if self.bonoActivo:
             if cliente.getTipo() == "Generico":
                 cliente.setSaldo(cliente.getSaldo() + 15)  # Bono para cliente genérico
             elif cliente.getTipo() == "Preferencial":
@@ -104,6 +103,17 @@ class Maquina:
         todas_las_maquinas.sort(key=lambda maquina: maquina.getDineroRecaudado())
         
         return todas_las_maquinas[:2]  # Devuelve las dos primeras máquinas de la lista ordenada
+    
+    @staticmethod
+    def serializarMaquinas(file_name):
+        Serializador.serializar(Maquina.allMaquinas, file_name)
+
+    @staticmethod
+    def deserializarMaquinas(file_name):
+        objetos = Deserializador.deserializar(file_name)
+        if objetos is not None:
+            Maquina.allMaquinas = objetos
+
     
     def __str__(self):
         return f"Maquina: {self.nombre} Tipo: {self.tipo}, Recaudado: {self.dineroRecaudado} perteneciente a la zona {self.zonaDeJuegos}"

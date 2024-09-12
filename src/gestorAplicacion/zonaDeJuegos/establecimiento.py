@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from src.baseDatos.serializador import Serializador
+from src.baseDatos.deserializador import Deserializador
 
 class Establecimiento(ABC):
     def __init__(self, nombre):
@@ -65,7 +67,10 @@ class ZonaDeJuegos(Establecimiento):
         informe = f"Informe de la Zona de Juegos: {self.getNombre()} {self.getCine().getNombre()}\n"
         informe += f"Horario: {self.horario}\n"
         for maquina in self.maquinas:
-            estado = "Disponible" if maquina.estaDisponible() else "No Disponible"
+            if maquina.necesitaMantenimiento():
+                estado="No Disponible"
+            elif maquina.necesitaMantenimiento()==False:
+                estado="Disponible"
             informe += f"{maquina.getNombre()} - {estado}\n"
         return informe
 
@@ -76,6 +81,7 @@ class ZonaDeJuegos(Establecimiento):
         return f"La máquina {maquina.getNombre()} ha sido movida a {zonaDestino.getNombre()}"
 
     def recomendarMovimiento(self, maquinaReparada):
+        from src.gestorAplicacion.Cine.cine import Cine
         # Recomienda si se debe mover una máquina reparada a otra zona
         porcentajeDependencia = (maquinaReparada.getDineroRecaudado() / self.getDineroRecaudado()) * 100
 
@@ -85,9 +91,13 @@ class ZonaDeJuegos(Establecimiento):
 
         # Busca zonas candidatas para mover la máquina
         zonasCandidatas = [
-            zona for zona in ZonaDeJuegos.zonasDeJuegos
-            if self != zona and zona.getDineroRecaudado() < self.getDineroRecaudado() and
-            not zona.tieneMaquinaDelTipo(maquinaReparada.getTipo())
+        cine.zonaDeJuegos for cine in Cine.cines
+        # Filtra zonas diferentes a la actual
+        if self != cine.zonaDeJuegos and 
+        # Filtra zonas que recaudan menos dinero que la zona actual
+        cine.zonaDeJuegos.getDineroRecaudado() < self.getDineroRecaudado() and 
+        # Filtra zonas que no tienen una máquina del mismo tipo que la máquina reparada
+        not cine.zonaDeJuegos.tieneMaquinaDelTipo(maquinaReparada.getTipo())
         ]
 
         # Si hay zonas candidatas, recomienda la mejor opción
@@ -125,10 +135,22 @@ class ZonaDeJuegos(Establecimiento):
     def aplicarPromocion(self):
         # Implementación específica de la promoción en ZonaDeJuegos
         return f"Aplicando promoción en la zona de juegos {self.getNombre()}."
+    
+    @staticmethod
+    def serializarZonasDeJuegos(file_name):
+        Serializador.serializar(ZonaDeJuegos.zonasDeJuegos, file_name)
+
+    @staticmethod
+    def deserializarZonasDeJuegos(file_name):
+        objetos = Deserializador.deserializar(file_name)
+        if objetos is not None:
+            ZonaDeJuegos.zonasDeJuegos = objetos
+
 
     def __str__(self):
         # Representación en cadena de la zona de juegos
         return f"ZonaDeJuegos: {self.nombre}, Horario: {self.horario}, Máquinas: {len(self.maquinas)}"
+
 
 class Bodega(Establecimiento):
     # Lista estática para almacenar todas las instancias de Bodega
@@ -172,6 +194,17 @@ class Bodega(Establecimiento):
     def aplicarPromocion(self):
         # Implementación específica de la promoción en Bodega
         return f"Aplicando promoción en la bodega {self.getNombre()}."
+    
+    @staticmethod
+    def serializarBodegas(file_name):
+        Serializador.serializar(Bodega.allBodegas, file_name)
+
+    @staticmethod
+    def deserializarBodegas(file_name):
+        objetos = Deserializador.deserializar(file_name)
+        if objetos is not None:
+            Bodega.allBodegas = objetos
+
 
     def __str__(self):
         # Representación en cadena de la bodega

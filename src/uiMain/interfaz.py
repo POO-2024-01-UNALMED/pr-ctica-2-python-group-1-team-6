@@ -19,180 +19,6 @@ from datetime import time,datetime
 
 class Interfaz:
 
-    
-    def crearObjetos(cls):
-        print("1")
-        # Crear instancias de máquinas
-        cls.arcade1 = Maquina("Arcade1", "Arcade", 10, 20)
-        cls.arcade2 = Maquina("Arcade2", "Arcade", 10, 20)
-        cls.danceDance1 = Maquina("Dance Dance1", "Dance Dance", 12, 20)
-        cls.mesaDeDiscos1 = Maquina("Mesa de discos1", "Mesa de discos", 12, 20)
-        cls.mesaDeDiscos2 = Maquina("Mesa de discos2", "Mesa de discos", 12, 20)
-        cls.boxing1 = Maquina("Boxing1", "Boxing", 8, 20)
-        cls.basket1 = Maquina("Basket1", "Basket", 11, 20)
-
-        # Crear instancias de zonas de juegos
-        cls.zona1 = ZonaDeJuegos("Zona 1", "08:00 AM - 07:00 PM")
-        cls.zona2 = ZonaDeJuegos("Zona 2", "09:00 AM - 08:00 PM")
-        cls.zona3 = ZonaDeJuegos("Zona 3", "08:00 AM - 08:00 PM")
-        cls.zona4 = ZonaDeJuegos("Zona 4", "10:00 AM - 07:00 PM")
-
-        # Crear una instancia de bodega
-        cls.bodega = Bodega("Bodega Central", 100)
-
-        # Crear instancias de películas
-        cls.pelicula1 = Pelicula("Intensamente", "Infantil", time(1, 35))
-        cls.pelicula2 = Pelicula("Spiderman", "Acción", time(2, 10))
-        cls.pelicula3 = Pelicula("Jason Vorhees", "Terror", time(1, 45))
-        cls.pelicula4 = Pelicula("Deadpool", "+18", time(1, 50))
-        cls.pelicula5 = Pelicula("Oppenheimer", "Drama", time(3, 0))
-        cls.pelicula6 = Pelicula("Los Minions", "Infantil", time(1, 30))
-        cls.pelicula7 = Pelicula("Toy Story", "Infantil", time(1, 40))
-        cls.pelicula8 = Pelicula("El Conjuro", "Terror", time(1, 52))
-        cls.pelicula9 = Pelicula("Inception", "Acción", time(2, 28))
-
-        # Crear instancias de salas
-        cls.sala1 = Sala(1, 6, 5)
-        cls.sala2 = Sala(2, 8, 6)
-        cls.sala3 = Sala(3, 9, 8)
-        cls.sala4 = Sala(4, 7, 6)
-        cls.sala5 = Sala(5, 9, 7)
-        cls.sala6 = Sala(6, 5, 5)
-        cls.sala7 = Sala(7, 8, 5)
-        cls.sala8 = Sala(8, 9, 9)
-        cls.sala9 = Sala(9, 7, 8)
-        cls.sala10 = Sala(10, 9, 8)
-        cls.sala11 = Sala(11, 6, 6)
-        cls.sala12 = Sala(12, 8, 7)
-        cls.sala13 = Sala(13, 8, 9)
-        cls.sala14 = Sala(14, 7, 7)
-        cls.sala15 = Sala(15, 9, 9)
-        cls.sala16 = Sala(16, 9, 8)
-        cls.sala17 = Sala(17, 8, 6)
-        cls.sala18 = Sala(18, 5, 5)
-        cls.sala19 = Sala(19, 7, 6)
-        cls.sala20 = Sala(20, 8, 8)
-        cls.sala21 = Sala(21, 6, 6)
-        cls.sala22 = Sala(22, 8, 7)
-        cls.sala23 = Sala(23, 8, 9)
-        cls.sala24 = Sala(24, 9, 8)
-        cls.sala25 = Sala(25, 9, 9)
-
-        # Crear instancias de funciones
-        cls.funcion1 = Funcion("Normal",cls.pelicula1, cls.sala1, 45000)
-        cls.funcion2 = Funcion("Normal",cls.pelicula2,cls.sala2, 25000)
-        cls.funcion3 = Funcion("Normal",cls.pelicula3, cls.sala3, 30000)
-        cls.funcion4 = Funcion("Normal",cls.pelicula4, cls.sala4, 40000)
-        cls.funcion5 = Funcion("Normal",cls.pelicula5, cls.sala5, 50000)
-        cls.funcion6 = Funcion("Normal",cls.pelicula6, cls.sala6, 12000)
-        cls.funcion7 = Funcion("Normal",cls.pelicula7, cls.sala7, 22000)
-        cls.funcion8 = Funcion("Normal",cls.pelicula8,cls.sala8, 280)
-        cls.funcion9 = Funcion("Normal",cls.pelicula9, cls.sala9, 350)
-        cls.funcion10 = Funcion("Normal",cls.pelicula1, cls.sala10, 190)
-        cls.funcion11 = Funcion("Normal",cls.pelicula3, cls.sala11, 270)
-        cls.funcion12 = Funcion("Normal",cls.pelicula7, cls.sala12, 230)
-        cls.funcion13 = Funcion("Normal",cls.pelicula4, cls.sala13, 410)
-        cls.funcion14 = Funcion("Normal",cls.pelicula2, cls.sala14, 260)
-        cls.funcion15 = Funcion("Normal",cls.pelicula5, cls.sala15, 500)
-        cls.funcion16 = Funcion("Normal",cls.pelicula8, cls.sala16, 300)
-        cls.funcion17 = Funcion("Normal",cls.pelicula9, cls.sala17, 340)
-        cls.funcion18 = Funcion("Normal",cls.pelicula6, cls.sala18, 130)
-        cls.funcion19 = Funcion("Normal",cls.pelicula7, cls.sala19, 200)
-        cls.funcion20 = Funcion("Normal",cls.pelicula9, cls.sala20, 330)
-        cls.funcion21 = Funcion("Normal",cls.pelicula6, cls.sala21, 140)
-        cls.funcion22 = Funcion("Normal",cls.pelicula7, cls.sala22, 210)
-        cls.funcion23 = Funcion("Normal",cls.pelicula3, cls.sala23, 300)
-        cls.funcion24 = Funcion("Normal",cls.pelicula4, cls.sala24, 420)
-        cls.funcion25 = Funcion("Normal",cls.pelicula5, cls.sala25, 480)
-
-        # Crear instancias de cines
-        cls.cine1 = Cine("Cine A", cls.zona1)
-        cls.cine2 = Cine("Cine B", cls.zona2)
-        cls.cine3 = Cine("Cine C", cls.zona3)
-        cls.cine4 = Cine("Cine D", cls.zona4)
-        
-    
-    def asignarObjetos(cls):
-        print("2")
-        # Asignación de salas a cines
-        cls.sala1.setCine(cls.cine1)
-        cls.sala2.setCine(cls.cine2)
-        cls.sala3.setCine(cls.cine3)
-
-        # Asignación de funciones a días específicos en cine1
-        cls.cine1.agregarFuncion(cls.funcion1, cls.cine1.getLunes())  # Infantil: "Intensamente"
-        cls.cine1.agregarFuncion(cls.funcion6, cls.cine1.getLunes())  # Infantil: "Los Minions"
-        cls.cine1.agregarFuncion(cls.funcion7, cls.cine1.getLunes())  # Infantil: "Toy Story"
-        cls.cine2.agregarFuncion(cls.funcion2, cls.cine2.getLunes())  # Acción: "Spiderman" (8 am)
-
-        cls.cine2.agregarFuncion(cls.funcion4, cls.cine2.getMartes())  # +18: "Deadpool" (8 am)
-        cls.cine2.agregarFuncion(cls.funcion5, cls.cine2.getMartes())  # Drama: "Oppenheimer" (10 am)
-
-        cls.cine2.agregarFuncion(cls.funcion3, cls.cine2.getJueves())  # Terror: "Jason Vorhees" (8 am)
-        cls.cine3.agregarFuncion(cls.funcion8, cls.cine3.getJueves())  # Terror: "El Conjuro" (10 am)
-
-        cls.cine3.agregarFuncion(cls.funcion9, cls.cine3.getViernes())  # Acción: "Inception" (8 am)
-        cls.cine3.agregarFuncion(cls.funcion5, cls.cine3.getViernes())  # Drama: "Oppenheimer" (12 pm)
-        cls.cine3.agregarFuncion(cls.funcion4, cls.cine3.getViernes())  # +18: "Deadpool" (4 pm)
-
-        cls.cine4.agregarFuncion(cls.funcion9, cls.cine4.getSabado())  # Acción: "Inception" (8 am)
-        cls.cine4.agregarFuncion(cls.funcion3, cls.cine4.getSabado())  # Terror: "Jason Vorhees" (11 am)
-
-        print(Funcion.obtenerIndiceEnDia(cls.funcion1))
-        print(Funcion.obtenerIndiceEnDia(cls.funcion6))
-        print(Funcion.obtenerIndiceEnDia(cls.funcion7))
-        print(Funcion.obtenerIndiceEnDia(cls.funcion2))
-        print(Funcion.obtenerIndiceEnDia(cls.funcion4))
-        print(Funcion.obtenerIndiceEnDia(cls.funcion5))
-        print(Funcion.obtenerIndiceEnDia(cls.funcion3))
-        print(Funcion.obtenerIndiceEnDia(cls.funcion8))
-        print(Funcion.obtenerIndiceEnDia(cls.funcion9))
-        
-        # Asignación de máquinas a zonas de juegos
-        cls.zona1.agregarMaquina(cls.arcade1)
-        cls.zona1.agregarMaquina(cls.danceDance1)
-        cls.zona1.agregarMaquina(cls.mesaDeDiscos1)
-        cls.zona2.agregarMaquina(cls.arcade2)
-        cls.zona2.agregarMaquina(cls.boxing1)
-        cls.zona2.agregarMaquina(cls.mesaDeDiscos2)
-        cls.zona3.agregarMaquina(cls.basket1)
-
-        for i in range(0, 13):
-             cls.arcade1.usar()
-        for i in range(0, 11):
-            cls.danceDance1.usar()
-        for i in range(0, 11):
-            cls.basket1.usar()
-        
-        cls.funcion1.getPelicula().setCalificacionPromedio(4.0)
-        cls.funcion2.getPelicula().setCalificacionPromedio(3.0)
-        cls.funcion3.getPelicula().setCalificacionPromedio(2.0)
-        cls.funcion4.getPelicula().setCalificacionPromedio(1.5)
-        cls.funcion5.getPelicula().setCalificacionPromedio(4.5)
-        cls.funcion6.getPelicula().setCalificacionPromedio(5.0)
-        cls.funcion7.getPelicula().setCalificacionPromedio(3.5)
-        cls.funcion8.getPelicula().setCalificacionPromedio(2.5)
-        cls.funcion9.getPelicula().setCalificacionPromedio(4.0)
-        cls.funcion10.getPelicula().setCalificacionPromedio(3.0)
-        cls.funcion11.getPelicula().setCalificacionPromedio(2.8)
-        cls.funcion12.getPelicula().setCalificacionPromedio(3.9)
-        cls.funcion13.getPelicula().setCalificacionPromedio(1.8)
-        cls.funcion14.getPelicula().setCalificacionPromedio(3.4)
-        cls.funcion15.getPelicula().setCalificacionPromedio(4.2)
-        cls.funcion16.getPelicula().setCalificacionPromedio(2.9)
-        cls.funcion17.getPelicula().setCalificacionPromedio(4.1)
-        cls.funcion18.getPelicula().setCalificacionPromedio(4.3)
-        cls.funcion19.getPelicula().setCalificacionPromedio(3.8)
-        cls.funcion20.getPelicula().setCalificacionPromedio(3.1)
-        cls.funcion21.getPelicula().setCalificacionPromedio(4.4)
-        cls.funcion22.getPelicula().setCalificacionPromedio(4.6)
-        cls.funcion23.getPelicula().setCalificacionPromedio(2.7)
-        cls.funcion24.getPelicula().setCalificacionPromedio(2.6)
-        cls.funcion25.getPelicula().setCalificacionPromedio(4.5)
-                
-        
-
-
     @staticmethod
     def error():
      print("Error")
@@ -200,55 +26,61 @@ class Interfaz:
 # Gestiona la zona de juegos
     @staticmethod
     def gestionarZonaDeJuegos():
-    # Simula la entrada del usuario
+        # Simula la entrada del usuario
         entrada = input
 
-    # Actualización de dinero recaudado en todas las zonas
-        for zona in ZonaDeJuegos.zonasDeJuegos:
-            zona.actualizarDineroRecaudado()
+        # Actualización de dinero recaudado en todas las zonas de juegos a través de los cines
+        for cine in Cine.cines:
+            if cine.zonaDeJuegos:  # Verificar si la zonaDeJuegos no es None
+                cine.zonaDeJuegos.actualizarDineroRecaudado()
 
-    # Mostrar informe de máquinas dañadas en cada zona
+        # Mostrar informe de máquinas dañadas en cada zona de juegos a través de los cines
         print("Informe de máquinas dañadas:")
-        for zona in ZonaDeJuegos.zonasDeJuegos:
-            print(zona.informeMaquinas())
+        for cine in Cine.cines:
+            if cine.zonaDeJuegos:  # Verificar si la zonaDeJuegos no es None
+                print(cine.zonaDeJuegos.informeMaquinas())
 
-    # Selección de zona y máquina para reparar
+        # Selección de zona de juegos y máquina para reparar
         print("Seleccione el número de la zona de la máquina que desea reparar: ")
-        for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
-            print(f"{i + 1}. {zona.getNombre()}")
+        zonasDisponibles = [cine for cine in Cine.cines if cine.zonaDeJuegos]
+        for i, cine in enumerate(zonasDisponibles):
+            print(f"{i + 1}. {cine.zonaDeJuegos.getNombre()}")
         zonaSeleccionada = int(entrada()) - 1
 
-        zonaActual = ZonaDeJuegos.zonasDeJuegos[zonaSeleccionada]
+        # Obtener la zona de juegos seleccionada a través del cine correspondiente
+        zonaActual = zonasDisponibles[zonaSeleccionada].zonaDeJuegos
         maquinasDañadas = zonaActual.getMaquinasDañadas()
         if not maquinasDañadas:
             print("No hay máquinas dañadas en la zona seleccionada.")
             return
 
+        # Seleccionar la máquina a reparar dentro de la zona seleccionada
         print("Seleccione el número de la máquina que desea reparar:")
         for i, maquina in enumerate(maquinasDañadas):
             print(f"{i + 1}. {maquina.getNombre()}")
         seleccionMaquina = int(entrada()) - 1
 
-    # Realizar reparación
-        print(Interfaz.bodega.realizarMantenimiento(zonaActual, seleccionMaquina))
+        # Realizar la reparación usando el método de la bodega
+        print(Bodega.allBodegas[0].realizarMantenimiento(zonaActual, seleccionMaquina))
 
-    # Recomendación de movimiento
+        # Recomendación de movimiento para la máquina reparada
         maquinaReparada = maquinasDañadas[seleccionMaquina]
         print(zonaActual.recomendarMovimiento(maquinaReparada))
 
-    # Selección de zona de destino para mover la máquina reparada
+        # Selección de la zona de destino para mover la máquina reparada
         print("Seleccione la zona a la que desea mover la máquina:")
-        for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
-            print(f"{i + 1}. {zona.getNombre()}")
+        for i, cine in enumerate(zonasDisponibles):
+            print(f"{i + 1}. {cine.zonaDeJuegos.getNombre()}")
         seleccionZona = int(entrada()) - 1
 
-        zonaDestino = ZonaDeJuegos.zonasDeJuegos[seleccionZona]
+        # Obtener la zona de juegos de destino a través del cine correspondiente
+        zonaDestino = zonasDisponibles[seleccionZona].zonaDeJuegos
         if zonaActual != zonaDestino:
             print(zonaActual.moverMaquina(zonaDestino, seleccionMaquina))
         else:
             print(f"La máquina permanecerá en {zonaActual.getNombre()}")
 
-    # Aplicar incentivos
+        # Aplicar incentivos a las zonas de juegos si el usuario lo desea
         print("¿Desea aplicar algún incentivo en una zona de juegos?")
         print("1. Sí")
         print("2. No")
@@ -260,60 +92,69 @@ class Interfaz:
             print("2. Regalar un bono por el uso de una máquina")
             tipoIncentivo = int(entrada())
 
-        if tipoIncentivo == 1:
-            dosMenosVenden = Maquina.obtenerDosMaquinasMenosVenden()
+            if tipoIncentivo == 1:
+                # Obtener las dos máquinas que menos venden para recomendar un cambio de precio
+                dosMenosVenden = Maquina.obtenerDosMaquinasMenosVenden()
 
-            if not dosMenosVenden:
-                print("No hay máquinas disponibles para recomendar.")
-            else:
-                print("Recomendación de cambio de precio:")
-                for maquina in dosMenosVenden:
-                    print(maquina)
+                if not dosMenosVenden:
+                    print("No hay máquinas disponibles para recomendar.")
+                else:
+                    print("Recomendación de cambio de precio:")
+                    for maquina in dosMenosVenden:
+                        print(maquina)
 
-            print("Seleccione la zona donde aplicar la rebaja:")
-            for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
-                print(f"{i + 1}. {zona.getNombre()}")
-            seleccionZonaRebaja = int(entrada()) - 1
+                # Seleccionar la zona donde aplicar la rebaja
+                print("Seleccione la zona donde aplicar la rebaja:")
+                for i, cine in enumerate(zonasDisponibles):
+                    print(f"{i + 1}. {cine.zonaDeJuegos.getNombre()}")
+                seleccionZonaRebaja = int(entrada()) - 1
 
-            zonaRebaja = ZonaDeJuegos.zonasDeJuegos[seleccionZonaRebaja]
+                zonaRebaja = zonasDisponibles[seleccionZonaRebaja].zonaDeJuegos
 
-            print("Seleccione la máquina para rebajar su precio:")
-            maquinasEnZona = zonaRebaja.getMaquinas()
-            for i, maquina in enumerate(maquinasEnZona):
-                print(f"{i + 1}. {maquina.getNombre()}")
-            seleccionMaquinaRebaja = int(entrada()) - 1
+                # Seleccionar la máquina específica en la zona para rebajar su precio
+                print("Seleccione la máquina para rebajar su precio:")
+                maquinasEnZona = zonaRebaja.getMaquinas()
+                for i, maquina in enumerate(maquinasEnZona):
+                    print(f"{i + 1}. {maquina.getNombre()}")
+                seleccionMaquinaRebaja = int(entrada()) - 1
 
-            maquinaRebajada = maquinasEnZona[seleccionMaquinaRebaja]
-            nuevoPrecio = float(input(f"Introduzca el nuevo precio para la máquina {maquinaRebajada.getNombre()}: "))
-            maquinaRebajada.setPrecioUso(nuevoPrecio)
+                maquinaRebajada = maquinasEnZona[seleccionMaquinaRebaja]
+                nuevoPrecio = float(input(f"Introduzca el nuevo precio para la máquina {maquinaRebajada.getNombre()}: "))
+                maquinaRebajada.setPrecioUso(nuevoPrecio)
 
-            print(f"El precio de la máquina {maquinaRebajada.getNombre()} ha sido rebajado a {nuevoPrecio}")
+                print(f"El precio de la máquina {maquinaRebajada.getNombre()} ha sido rebajado a {nuevoPrecio}")
 
-        elif tipoIncentivo == 2:
-            print("Seleccione la zona de juegos:")
-            for i, zona in enumerate(ZonaDeJuegos.zonasDeJuegos):
-                print(f"{i + 1}. {zona.getNombre()}")
-            zonaSeleccionada1 = int(entrada()) - 1
+            elif tipoIncentivo == 2:
+                # Seleccionar la zona de juegos para aplicar el bono
+                print("Seleccione la zona de juegos:")
+                for i, cine in enumerate(zonasDisponibles):
+                    print(f"{i + 1}. {cine.zonaDeJuegos.getNombre()}")
+                zonaSeleccionada1 = int(entrada()) - 1
 
-            zona = ZonaDeJuegos.zonasDeJuegos[zonaSeleccionada1]
+                zona = zonasDisponibles[zonaSeleccionada1].zonaDeJuegos
 
-            print("Seleccione la máquina a la que desea aplicar el bono:")
-            for i, maquina in enumerate(zona.getMaquinas()):
-                print(f"{i + 1}. {maquina.getNombre()}")
-            maquinaSeleccionada = int(entrada()) - 1
+                # Seleccionar la máquina específica en la zona para aplicar el bono
+                print("Seleccione la máquina a la que desea aplicar el bono:")
+                for i, maquina in enumerate(zona.getMaquinas()):
+                    print(f"{i + 1}. {maquina.getNombre()}")
+                maquinaSeleccionada = int(entrada()) - 1
 
-            maquina = zona.getMaquinas()[maquinaSeleccionada]
-            maquina.activarBono()
+                maquina = zona.getMaquinas()[maquinaSeleccionada]
+                maquina.activarBono()
 
-            print(f"El bono ha sido activado para la máquina {maquina.getNombre()}")
+                print(f"El bono ha sido activado para la máquina {maquina.getNombre()}")
 
         else:
             print("No se aplicarán incentivos.")
 
-    # Actualización final de dinero recaudado
-        for zona in ZonaDeJuegos.zonasDeJuegos:
-            zona.actualizarDineroRecaudado()
-            print(f"Dinero recaudado por {zona.getNombre()}: {zona.getDineroRecaudado()}")
+        # Actualización final de dinero recaudado en todas las zonas de juegos a través de los cines
+        for cine in Cine.cines:
+            if cine.zonaDeJuegos:  # Verificar si la zonaDeJuegos no es None
+                cine.zonaDeJuegos.actualizarDineroRecaudado()
+                print(f"Dinero recaudado por {cine.zonaDeJuegos.getNombre()}: {cine.zonaDeJuegos.getDineroRecaudado()}")
+
+
+    
     
 
     @staticmethod
@@ -349,8 +190,13 @@ class Interfaz:
         for i, cine in enumerate(Cine.cines):
             if i != cineSeleccionado:
                 print(f"{i + 1}. {cine.getNombre()}")
+        print("0.Salir")
         nuevoCineSeleccionado = int(input()) - 1
+        if nuevoCineSeleccionado==-1:
+            return
         nuevoCine = Cine.cines[nuevoCineSeleccionado]
+
+        
 
         # Mostrar películas en el nuevo cine seleccionado
         print("Seleccione la película con la que desea intercambiar:")
@@ -871,7 +717,7 @@ class Interfaz:
         peliculaSeleccionada = peliculas[seleccion - 1]
     
         # Solicitar calificación
-        calificacion = int(input(f"Ingrese una calificación para {peliculaSeleccionada.getTitulo()} (1-5): "))
+        calificacion = float(input(f"Ingrese una calificación para {peliculaSeleccionada.getTitulo()} (1-5): "))
         if calificacion < 1 or calificacion > 5:
             print("Calificación inválida.")
             return
@@ -883,8 +729,32 @@ class Interfaz:
         print("Calificación guardada correctamente.")
         print(f"Nueva calificación promedio de {peliculaSeleccionada.getTitulo()}: {peliculaSeleccionada.getCalificacionPromedio():.2f}")
 
+    @staticmethod
+    def serializarTodo():
+        Cine.serializarCines('src/baseDatos/temp/cine.pkl')
+        Cliente.serializarClientes('src/baseDatos/temp/cliente.pkl')
+        Funcion.serializarFunciones('src/baseDatos/temp/funcion.pkl')
+        Pelicula.serializarPeliculas('src/baseDatos/temp/pelicula.pkl')
+        Sala.serializarSalas('src/baseDatos/temp/sala.pkl')
+        ZonaDeJuegos.serializarZonasDeJuegos('src/baseDatos/temp/zonaDeJuegos.pkl')
+        Bodega.serializarBodegas('src/baseDatos/temp/bodega.pkl')
+        Maquina.serializarMaquinas('src/baseDatos/temp/maquina.pkl')
+    
+    @staticmethod
+    def deserializarTodo():
+        Cine.deserializarCines('src/baseDatos/temp/cine.pkl')
+        Cliente.deserializarClientes('src/baseDatos/temp/cliente.pkl')
+        Funcion.deserializarFunciones('src/baseDatos/temp/funcion.pkl')
+        Pelicula.deserializarPeliculas('src/baseDatos/temp/pelicula.pkl')
+        Sala.deserializarSalas('src/baseDatos/temp/sala.pkl')
+        ZonaDeJuegos.deserializarZonasDeJuegos('src/baseDatos/temp/zonaDeJuegos.pkl')
+        Bodega.deserializarBodegas('src/baseDatos/temp/bodega.pkl')
+        Maquina.deserializarMaquinas('src/baseDatos/temp/maquina.pkl')
+        
+
     def primeraOperacion():
-        print("uwux2")
+        print('ufu')
+
 
         
 

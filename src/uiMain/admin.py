@@ -45,12 +45,12 @@ class Admin:
                 Interfaz.asignacion()
             elif opcion == 9:
                 print("Hasta la próxima")
+                Interfaz.serializarTodo()
                 sys.exit(0)
             else:
                 print("El número ingresado debe estar entre 1 y 9")
 
 if __name__ == "__main__":
-    Interfaz.crearObjetos(Interfaz)
-    Interfaz.asignarObjetos(Interfaz)
+    Interfaz.deserializarTodo()
     
     Admin.main()

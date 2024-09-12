@@ -1,3 +1,6 @@
+from src.baseDatos.serializador import Serializador
+from src.baseDatos.deserializador import Deserializador
+
 class Sala:
     allSalas = []
 
@@ -60,3 +63,14 @@ class Sala:
     
     def __str__(self):
         return f"Sala: {self.numero}, Capacidad: {self.capacidad}"
+    
+    @staticmethod
+    def serializarSalas(file_name):
+        Serializador.serializar(Sala.allSalas, file_name)
+
+    @staticmethod
+    def deserializarSalas(file_name):
+        objetos = Deserializador.deserializar(file_name)
+        if objetos is not None:
+            Sala.allSalas = objetos
+

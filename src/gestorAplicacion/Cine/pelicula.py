@@ -1,6 +1,9 @@
 import sys
 from datetime import time
 from typing import List
+from src.baseDatos.serializador import Serializador
+from src.baseDatos.deserializador import Deserializador
+
 
 sys.path.append("gestorAplicacion/Cine")
 
@@ -69,6 +72,7 @@ class Pelicula:
     @staticmethod
     def recomendarIntercambio(peliculaSeleccionada: 'Pelicula') -> str:
         from src.gestorAplicacion.Cine.funcion import Funcion
+        from src.gestorAplicacion.Cine.cine import Cine
         funcionesPosibles = []
 
         funcionesSeleccionadas = peliculaSeleccionada.funciones
@@ -76,29 +80,32 @@ class Pelicula:
         for funcionSeleccionada in funcionesSeleccionadas:
             posicionSeleccionadaEnDia = Funcion.obtenerIndiceEnDia(funcionSeleccionada)
 
-            for funcionIntercambio in Funcion.allFunciones:
-                peliculaIntercambio = funcionIntercambio.getPelicula()
-                if peliculaIntercambio is None:
-                    continue
+            for cine in Cine.cines:
+                for funcionIntercambio in cine.totalFunciones():
+                    peliculaIntercambio = funcionIntercambio.getPelicula()
+                    if peliculaIntercambio is None:
+                        continue
+                    if Funcion.encontrarCine(funcionIntercambio)==Funcion.encontrarCine(funcionSeleccionada):
+                        continue
 
-                if peliculaIntercambio.getGenero() == peliculaSeleccionada.getGenero():
-                    continue
+                    if peliculaIntercambio.getGenero() == peliculaSeleccionada.getGenero():
+                        continue
 
-                posicionIntercambioEnDia = Funcion.obtenerIndiceEnDia(funcionIntercambio)
-                if posicionSeleccionadaEnDia == posicionIntercambioEnDia:
-                    continue
+                    posicionIntercambioEnDia = Funcion.obtenerIndiceEnDia(funcionIntercambio)
+                    if posicionSeleccionadaEnDia == posicionIntercambioEnDia:
+                        continue
 
-                # Verificar si la película seleccionada cumple con los criterios de horario en la función candidata
-                cumpleCriteriosHorarioParaSeleccionada = Pelicula.cumpleCriteriosHorario(peliculaSeleccionada, posicionIntercambioEnDia)
-                if not cumpleCriteriosHorarioParaSeleccionada:
-                    continue
+                    # Verificar si la película seleccionada cumple con los criterios de horario en la función candidata
+                    cumpleCriteriosHorarioParaSeleccionada = Pelicula.cumpleCriteriosHorario(peliculaSeleccionada, posicionIntercambioEnDia)
+                    if not cumpleCriteriosHorarioParaSeleccionada:
+                        continue
 
-            # Verificar si la película candidata cumple con los criterios de horario en la función original
-                cumpleCriteriosHorarioParaIntercambio = Pelicula.cumpleCriteriosHorario(peliculaIntercambio, posicionSeleccionadaEnDia)
-                if not cumpleCriteriosHorarioParaIntercambio:
-                    continue
+                # Verificar si la película candidata cumple con los criterios de horario en la función original
+                    cumpleCriteriosHorarioParaIntercambio = Pelicula.cumpleCriteriosHorario(peliculaIntercambio, posicionSeleccionadaEnDia)
+                    if not cumpleCriteriosHorarioParaIntercambio:
+                        continue
 
-                funcionesPosibles.append(funcionIntercambio)
+                    funcionesPosibles.append(funcionIntercambio)
 
         if not funcionesPosibles:
             return ("No se encontró ninguna película adecuada para el intercambio. Razones posibles:\n"
@@ -110,12 +117,11 @@ class Pelicula:
         mejorPelicula = mejorFuncion.getPelicula()
         cine = Funcion.encontrarCine(mejorFuncion)
         dia = Funcion.encontrarDia(mejorFuncion, cine)
-        horario = mejorFuncion.getHoraInicio()
 
         return (f"Se recomienda intercambiar la película seleccionada con: {mejorPelicula.getTitulo()} "
                 f"(Calificación: {mejorPelicula.getCalificacionPromedio()}).\n"
                 f"Esta película se proyecta en el cine: {cine.getNombre()}, el día: {dia} "
-                f"a las: {horario}.")
+                )
 
     @staticmethod
     def cumpleCriteriosHorario(pelicula: 'Pelicula', posicionEnDia: int) -> bool:
@@ -151,4 +157,14 @@ class Pelicula:
             elif cliente.getTipo() == "VIP":
                 cliente.setSaldo(cliente.getSaldo() + 20)
         return f"Bono {cliente.getTipo()} asignado a {cliente.getNombre()}"
+    
+    @staticmethod
+    def serializarPeliculas(file_name):
+        Serializador.serializar(Pelicula.totalPeliculas, file_name)
+
+    @staticmethod
+    def deserializarPeliculas(file_name):
+        objetos = Deserializador.deserializar(file_name)
+        if objetos is not None:
+            Pelicula.totalPeliculas = objetos
 

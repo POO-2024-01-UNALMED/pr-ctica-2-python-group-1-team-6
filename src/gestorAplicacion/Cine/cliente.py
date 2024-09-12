@@ -1,4 +1,6 @@
 from typing import Optional, List
+from src.baseDatos.serializador import Serializador
+from src.baseDatos.deserializador import Deserializador
 
 
 class Cliente:
@@ -136,6 +138,15 @@ class Cliente:
 
     def getIdentificacion(self) -> int:
         return self.identificacion
+    @staticmethod
+    def serializarClientes(file_name):
+        Serializador.serializar(Cliente.allClientes, file_name)
+
+    @staticmethod
+    def deserializarClientes(file_name):
+        objetos = Deserializador.deserializar(file_name)
+        if objetos is not None:
+            Cliente.allClientes = objetos
 
     def __str__(self) -> str:
         return f"Cliente: {self.nombre}, Saldo: {self.saldo}, Tipo: {self.tipo}"

@@ -1,6 +1,8 @@
 import sys
 from typing import List, Optional
 from datetime import datetime, timedelta
+from src.baseDatos.serializador import Serializador
+from src.baseDatos.deserializador import Deserializador
 
 # Ajusta el sys.path para facilitar las importaciones
 sys.path.append("gestorAplicacion/Cine")
@@ -22,6 +24,7 @@ class Funcion:
 
         if self.pelicula:
             self.pelicula.getFunciones().append(self)
+    
 
     def setPelicula(self, nuevaPelicula):
 
@@ -127,42 +130,48 @@ class Funcion:
     @staticmethod
     def encontrarCine(funcion: 'Funcion'):
         from src.gestorAplicacion.Cine.cine import Cine
-
         for cine in Cine.cines:
-            for f in cine.getLunes():
-                if f == funcion:
-                    return cine
-            for f in cine.getMartes():
-                if f == funcion:
-                    return cine
-            for f in cine.getJueves():
-                if f == funcion:
-                    return cine
-            for f in cine.getViernes():
-                if f == funcion:
-                    return cine
-            for f in cine.getSabado():
-                if f == funcion:
+            for f in cine.totalFunciones():
+                if funcion==f:
                     return cine
         return None
+        
 
     @staticmethod
     def encontrarDia(funcion: 'Funcion', cine) -> str:
-        for i, f in enumerate(cine.getLunes()):
-            if f and f == funcion:
-                return "Lunes"
-        for i, f in enumerate(cine.getMartes()):
-            if f and f == funcion:
-                return "Martes"
-        for i, f in enumerate(cine.getJueves()):
-            if f and f == funcion:
-                return "Jueves"
-        for i, f in enumerate(cine.getViernes()):
-            if f and f == funcion:
-                return "Viernes"
-        for i, f in enumerate(cine.getSabado()):
-            if f and f == funcion:
-                return "Sábado"
+        for f in cine.getLunes():
+            if f!=None:
+                if funcion.getPelicula().getTitulo()==f.getPelicula().getTitulo() and funcion.getSala().getNumero()==f.getSala().getNumero():
+                    return "Lunes"
+        for f in cine.getMartes():
+            if f!=None:
+                if funcion.getPelicula().getTitulo()==f.getPelicula().getTitulo() and funcion.getSala().getNumero()==f.getSala().getNumero():
+                    return "Martes"
+        for f in cine.getJueves():
+            if f!=None:
+                if funcion.getPelicula().getTitulo()==f.getPelicula().getTitulo() and funcion.getSala().getNumero()==f.getSala().getNumero():
+                    return "Jueves"
+        for f in cine.getViernes():
+            if f!=None:
+                if funcion.getPelicula().getTitulo()==f.getPelicula().getTitulo() and funcion.getSala().getNumero()==f.getSala().getNumero():
+                    return "Viernes"
+        for f in cine.getSabado():
+            if f!=None:
+                if funcion.getPelicula().getTitulo()==f.getPelicula().getTitulo() and funcion.getSala().getNumero()==f.getSala().getNumero():
+                    return "Sábado"
         return "Día no encontrado"
+    
+    @staticmethod
+    def serializarFunciones(file_name):
+        Serializador.serializar(Funcion.allFunciones, file_name)
+
+    @staticmethod
+    def deserializarFunciones(file_name):
+        objetos = Deserializador.deserializar(file_name)
+        if objetos is not None:
+            Funcion.allFunciones = objetos
+    
+    def __str__(self) -> str:
+        return f"Funcion: {self.tipo}\Sala: {self.sala} {self.pelicula}"      
 
 

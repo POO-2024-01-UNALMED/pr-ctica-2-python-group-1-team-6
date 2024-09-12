@@ -1,5 +1,7 @@
 import sys
 from typing import List, Optional
+from src.baseDatos.serializador import Serializador
+from src.baseDatos.deserializador import Deserializador
 
 sys.path.append("gestorAplicacion/Cine")  # Ajusta el path según sea necesario
 
@@ -117,6 +119,14 @@ class Cine:
             procesarDia(self.viernes, "Viernes") +
             procesarDia(self.sabado, "Sábado")
         )
+    def totalFunciones(self):
+        # Combina todas las funciones, evitando las que sean None
+        todasLasFunciones = (
+            self.lunes + self.martes + self.jueves + self.viernes + self.sabado
+        )
+        # Filtra las funciones que no son None
+        funciones_validas = [funcion for funcion in todasLasFunciones if funcion is not None]
+        return funciones_validas
 
     def peliculasActivas(self):
         # Obtiene la lista de películas activas en el cine
@@ -243,6 +253,16 @@ class Cine:
             funciones[i] = funciones[i - 1]
         funciones[posicion] = None
         return True
+    
+    @staticmethod
+    def serializarCines(file_name):
+        Serializador.serializar(Cine.cines, file_name)
+
+    @staticmethod
+    def deserializarCines(file_name):
+        objetos = Deserializador.deserializar(file_name)
+        if objetos is not None:
+            Cine.cines = objetos
 
     def __str__(self) -> str:
         return f"Cine: {self.nombre}\nZona de Juegos: {self.zonaDeJuegos}\n" + self.enseñarFunciones()
