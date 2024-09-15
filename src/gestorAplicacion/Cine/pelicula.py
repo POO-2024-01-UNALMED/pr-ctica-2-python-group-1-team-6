@@ -3,7 +3,7 @@ from datetime import time
 from typing import List
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
-from cine import Cine
+
 
 
 

@@ -72,22 +72,34 @@ class Funcion:
         self.precio = precio
 
     @staticmethod
-    def realizarIntercambio(peliculaAIntercambiar, peliculaRecomendada) -> str:
-        funcionDestino = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaRecomendada), None)
-
-        if funcionDestino is None:
+    def realizarIntercambio(cineOrigen,cineNuevo,peliculaAIntercambiar, peliculaRecomendada) -> str:
+        from src.gestorAplicacion.Cine.cine import Cine
+        # Buscar la función de la película recomendada
+        for funcion in cineNuevo.totalFunciones():
+            if funcion.getPelicula()==peliculaRecomendada:
+                funcionDestino=funcion
+                if funcionDestino:
+                    break
+    
+        if not funcionDestino:
             return "No se encontró una función con la película recomendada."
 
-        funcionOrigen = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaAIntercambiar), None)
-
-        if funcionOrigen is None:
+        # Buscar la función de la película a intercambiar
+        for funcion in cineOrigen.totalFunciones():
+            if funcion.getPelicula()==peliculaAIntercambiar:
+                funcionOrigen=funcion
+                if funcionOrigen:
+                    break
+    
+        if not funcionOrigen:
             return "No se encontró una función con la película a intercambiar."
 
+        # Realizar el intercambio de películas
         funcionOrigen.setPelicula(peliculaRecomendada)
         funcionDestino.setPelicula(peliculaAIntercambiar)
 
         return "Intercambio realizado exitosamente."
-
+    
     @staticmethod
     def obtenerIndiceEnDia(funcionBuscada: 'Funcion') -> int:
         from src.gestorAplicacion.Cine.cine import Cine
@@ -172,6 +184,6 @@ class Funcion:
             Funcion.allFunciones = objetos
     
     def __str__(self) -> str:
-        return f"Funcion: {self.tipo}\Sala: {self.sala} {self.pelicula}"      
+        return f"Funcion: {self.tipo}\\Sala: {self.sala} {self.pelicula}"     
 
 
