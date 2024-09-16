@@ -27,6 +27,423 @@ class Interfaz:
      print("Error")
     
     @staticmethod
+    def comprarBoleta():
+        cines = Cine.cines #Todos los cines creados.
+        cliente = None
+        print("Has elegido la opción de comprar boleta, por favor ingresa tu número de identificación:")
+
+        #Le pedimos al usuario que ingrese su número de identificación para localizarlo en el sistema..
+        #Si no aparece, le pedimos que ingrese sus datos y le ofrecemos una tarjeta de membresía.
+        while (True):
+            numeroIdentificacion = int(input())
+            cliente = Cliente.buscarClientePorId(numeroIdentificacion)
+            if cliente is None:
+                print("Cliente no encontrado. ¿Desea crear uno nuevo?(ingrese número)\n1. Sí\n2. No")
+                respuesta = int(input())
+                if respuesta == 1:
+                    print("Ingresa tu nombre: ")
+                    nombre = input()
+                    print("Ingresa tu saldo inicial: ")
+                    saldoInicial = float(input())
+                    cliente = Cliente(nombre, saldoInicial, numeroIdentificacion)
+                    print("Cliente creado exitosamente.")
+                    break
+                elif respuesta == 2:
+                    print("Saliendo... Necesitas un usuario para continuar.")
+                    return
+                else:
+                    print("Selección invalida, elige 1 ó 2.")
+                    return
+                print("¿Deseas adquirir una tarjeta de membresía para usar en nuestros cines?(ingrese número)\n1. Sí\n2. No")
+                while (True):
+                    respuesta = int(input())
+                    if respuesta == 2:
+                        break
+                    elif respuesta == 1:
+                        printn("Tenemos los siguientes planes de tarjeta: \n1. Plan Platino. Obtienes 200 puntos por cada compra realizada. El costo de tramitarla es de 25.000$\n2. Plan Oro. Obtienes 150 puntos por cada compra realizada. El costo de tramitarla es de 17.000$\n3. Plan Bronce. Obtienes 100 puntos por cada compra realizada. El costo de tramitarla es de 10.000$")
+                        print("Elige la opción de tarjeta de tu preferencia, o ingresa 4 para salir")
+                        print("Este es tu saldo: " + cliente.getSaldo())
+                        while (True):
+                            eleccionTarjeta = int(input())
+                            if tarjeta == 1:
+                                operacion = cliente.adquirirTarjeta(25000)
+                                if (operacion):
+                                    print("Ahora cuentas con una tarjeta Platino.")
+                                    break
+                                else:
+                                    print("No tienes suficiente dinero para el plan Platino.")
+                                    if (cliente.getSaldo() < 17000 and cliente.getSaldo() < 10000):
+                                        print("Tampoco tienes suficiente dinero para el Oro y Bronce.")
+                                        break
+                                    else:
+                                        print("¿Te interesa otro plan distinto a Platino?(ingrese número)\n1. Sí\n2. No")
+                                        otroPlan = int(input())
+                                        if otroPlan == 2:
+                                            break;
+                                        elif otroPlan == 1:
+                                            mayorOro = cliente.getSaldo() >= 17000
+                                            if (mayorOro):
+                                                print("Elige:\n1.Plan Oro\n2.Plan Bronce")
+                                                planSegundo = int(input())
+                                                if (planSegundo == 1):
+                                                    cliente.adquirirTarjeta(17000)
+                                                    print("Ahora cuentas con una tarjeta Oro.")
+                                                    break
+                                                elif (planSegundo == 2):
+                                                    cliente.adquirirTarjeta(10000)
+                                                    print("Ahora cuentas con una tarjeta Bronce")
+                                                    break
+                                            else:
+                                                cliente.adquirirTarjeta(10000)
+                                                print("Ahora cuentas con una tarjeta Bronce")
+                                                break
+                            elif tarjeta == 2:
+                                operacion = cliente.adquirirTarjeta(17000)
+                                if (operacion):
+                                    print("Ahora cuentas con una tarjeta Oro.")
+                                    break
+                                else:
+                                    print("No tienes suficiente dinero para plan Oro.")
+                                    if (cliente.getSaldo() >= 10000):
+                                        print("¿Te interesa el plan Bronce?(ingrese número)\n1. Sí\n2. No")
+                                        otroPlan = int(input())
+                                        if (otroPlan) == 1:
+                                            cliente.adquiriTarjeta(10000)
+                                            print("Ahora cuentas con una tarjeta Bronce.")
+                                            break
+                                        else:
+                                            break
+                                    else:
+                                        print("Como no tienes suficiente dinero para el plan Bronce, se da por finalizada la adquisición de la tarjeta")
+                                        break
+                            elif tarjeta == 3:
+                                operacion = cliente.adquirirTarjeta(10000)
+                                if (operacion):
+                                    print("Ahora cuentas con una tarjeta Bronce.")
+                                    break 
+                                else:
+                                    print("No tienes suficiente dinero para el plan Bronce")
+                                    break
+                            elif tarjeta == 4:
+                                break
+                            else:
+                                continue
+                    else:
+                        print("Elección no válida, intentalo nuevamente.")
+                if (cliente.getTarjeta()):
+                    print("¿Desea recargar la tarjeta?(Ingrese número)\n1. Sí\n2. No")
+                    recarga = int(input())
+                    if (recarga == 1 and cliente.getSaldo()>0):
+                        print("Indique la cantidad a recargar:")
+                        while (True):
+                            cantidad = int(input())
+                            if (cliente.recargarTarjeta(cantidad)):
+                                print(cantidad + "$ añadidos a tu cuenta")
+                                break
+                            else:
+                                print("No tienes tal cantidad. Intenta con otra. Este es tu saldo actual " + str(cliente.getSaldo()))
+                                continue
+                    elif (recarga == 2):
+                        break
+                    else:
+                        print("No tienes dinero para añadir a tu tarjeta")
+                break
+            else:
+                print("Cliente encontrado.")
+                break
+        
+        print("A continuación se listan todos los cines posibles, elige el que prefieres: ")
+        
+        #Para mostrar en pantalla cada uno de los cines
+        for i in range(len(cines)):
+            cines[i],ajustarFunciones()
+            print(f"{i+1}, {cines[i].getNombre()}")
+        
+        cineEscogido = None
+        condicion = True
+        while(condicion):
+            eleccion = int(input())
+            if eleccion > len(cines) or eleccion <= 0:
+                print("Entrada no válida.")
+                continue
+            cineEscogido = cines[eleccion-1]
+            condicion = False
+        condicion = True
+    
+        print("Elegiste " + cineEscogido.getNombre())
+        print("Estas son las películas que actualmente maneja nuestro cine:")
+
+        for i in range(len(Cine.peliculas)):
+            print(f"{i+1}. {Cine.peliculas[i].getTitulo()}")
+        
+        peliculaElegida = None
+        print("Ingresa el número de la película que deseas ver, para confirmar si hay funciones activas:")
+
+        while(condicion):
+            pelicula = int(input())
+            if (pelicula > len(Cine.peliculas)) or pelicula <= 0:
+                print("Entrada no válida.")
+                continue
+            peliculaElegida = Cine.peliculas[pelicula-1]
+            condicion = False
+        condicion = True
+
+        primeraIteracion = True
+
+        while condicion:  # El método verifica que la película tenga por lo menos una función en el cine que el usuario eligió.
+            existenciaFuncion = cliente.comprarBoleta(cineEscogido, peliculaElegida)
+            
+            if not existenciaFuncion:
+                if primeraIteracion:
+                    print(f"En este momento no hay funciones disponibles para {peliculaElegida.getTitulo()} en {cineEscogido.getNombre()}")
+                    primeraIteracion = False
+                
+                print("¿Qué quieres cambiar para hacer de nuevo la búsqueda?: \n 1. El cine\n 2. La película")
+                cambio = int(input())  # Simulamos la entrada del usuario
+
+                # Se le permite al usuario cambiar su elección de cine o de película para buscar nuevamente.
+                if cambio == 1:
+                    cineEscogido = cambioCine(cineEscogido, peliculaElegida)
+                    continue  # Con el nuevo cine, volvemos a ejecutar el bucle.
+                elif cambio == 2:
+                    peliculaElegida = cambioPelicula(peliculaElegida, cineEscogido)
+                    continue  # Con la nueva película, volvemos a ejecutar el bucle.
+                else:
+                    print("Entrada no válida")
+                    continue
+            
+            condicion = False
+
+        condicion = True
+
+        print("A continuación se muestran la/las funciones que puede elegir para ver " + peliculaElegida.getTitulo())
+        funcionesPosibles = cineEscogido.obtenerFunciones(peliculaElegida)
+
+        for i in range(1, len(funcionesPosibles) + 1):
+            horaFuncion = funcionesPosibles[i - 1].definirMomentoDelDia()
+            print(f"{i}. {funcionesPosibles[i - 1].getDia()}, sala {funcionesPosibles[i - 1].getSala().getNumero()}, a las {horaFuncion}{funcionesPosibles[i - 1].getMomentoDelDia()}.")
+
+        # Muy importante preguntarle al usuario si quiere continuar con el proceso o darlo por terminado.
+        print("¿Desea hacer una reserva? \n1. Sí\n2. No. Salir.")
+        reserva = None
+
+        # Nos aseguramos de que escoja correctamente. Si quiere terminar, damos por finalizada la operación.
+        while condicion:
+            reserva = int(input())  # Simulamos la entrada del usuario
+            if reserva != 1 and reserva != 2:
+                print("Entrada no válida")
+                continue
+            elif reserva == 2:
+                return  # Salir del programa
+            condicion = False
+
+        condicion = True    
+        funcionElegida = None
+
+        # Dando una respuesta positiva le preguntamos qué función quiere tomar, si solo hay una función la tomamos simplemente:
+        if len(funcionesPosibles) == 1:
+            funcionElegida = funcionesPosibles[0]
+        else:
+            print("Elija el número de la función a la que desea asistir: ")
+            while condicion:
+                funcion = int(input())  # Simulamos la entrada del usuario
+                if funcion <= 0 or funcion > len(funcionesPosibles):
+                    print("Entrada no válida")
+                    continue
+                funcionElegida = funcionesPosibles[funcion - 1]
+                condicion = False
+        condicion = True
+        horaFuncion = funcionElegida.definirMomentoDelDia()
+
+        # Ahora mostramos en pantalla todas las sillas de sala, y le decimos que elija por fila y columna el asiento:
+        print("Esta es la distribución de las sillas de la sala en la función escogida:")
+        print(funcionElegida.getSala().estadoSilleteria())
+        print("Ingrese por fila y por columna el asiento que desea ocupar:")
+        
+        # En este bucle se verifica que el asiento elegido no se encuentre ocupado, de ser así, se pregunta nuevamente:
+        while condicion:
+            print("Fila: ")
+            fila = int(input())  
+            print("Columna: ")
+            columna = int(input())
+            
+            if funcionElegida.getSala().estaDisponible(fila - 1, columna - 1):
+                print("El asiento está disponible")
+                condicion = False
+            else:
+                print("El asiento no está disponible, intente con otro")
+                continue
+
+        condicion = True
+        precioBoleto = funcionElegida.getPrecio()  # Precio de la entrada.
+
+        # Ahora se continúa con el pago de la entrada. Si el usuario no tiene tarjeta, directamente vamos al pago con su saldo personal.
+        print("Se procede con el pago de su boleto")
+        tieneTarjeta = cliente.getTarjeta()  # Si tiene tarjeta o no.
+
+        if not tieneTarjeta:
+            print("Como no tiene ninguna tarjeta a su nombre, se procede al pago con su saldo")
+            print(f"Precio de la entrada: {precioBoleto}     Su saldo: {cliente.getSaldo()}")
+            
+            resultado = cliente.pagarConSaldo(precioBoleto)
+            
+            if resultado:
+                funcionElegida.getSala().reservarSilla(fila - 1, columna - 1)  # Marcar como ocupado el asiento.
+                print(f"Se ha realizado exitosamente el pago.\nDetalles de la operación:\nNombre del Cliente: {cliente.getNombre()}\nIdentificación: {cliente.getIdentificacion()}\nPelícula: {peliculaElegida.getTitulo()}\nSala de la proyección: {funcionElegida.getSala().getNumero()}\nDía: {funcionElegida.getDia()}\nHora de la función: {horaFuncion}{funcionElegida.getMomentoDelDia()}\nCine: {cineEscogido.getNombre()}\nAsiento: fila {fila} y columna {columna}\nPrecio de la boleta: {precioBoleto}")  # Detalles de la compra
+                return
+            else:
+                print("No tienes suficiente dinero para comprar la boleta")
+                return  # Finalizar el proceso si no hay dinero suficiente.
+        
+        # Hasta este punto llegamos si el usuario tiene tarjeta de membresía.
+        # Le preguntamos si quiere pagar con tarjeta o con su saldo personal.
+        while condicion:
+            print("¿Desea llevar a cabo el pago con su tarjeta?\n1. Sí\n2. No")
+            pago = int(input())  # Simulamos la entrada del usuario
+            
+            if pago == 1:
+                condicion = False  # Si elige con tarjeta, salimos del bucle.
+            elif pago == 2:
+                print("Se procede entonces con el pago desde su saldo")
+                print(f"Precio de la entrada: {precioBoleto}     Su saldo: {usuario.getSaldo()}")
+                
+                resultado = usuario.pagarConSaldo(precioBoleto)
+                
+                if resultado:
+                    funcionElegida.getSala().reservarSilla(fila - 1, columna - 1)
+                    print(f"Se ha realizado exitosamente el pago.\nDetalles de la operación:\nNombre del Cliente: {usuario.getNombre()}\nIdentificación: {usuario.getIdentificacion()}\nPelícula: {peliculaElegida.getTitulo()}\nSala de la proyección: {funcionElegida.getSala().getNumero()}\nDía: {funcionElegida.getDia()}\nHora de la función: {horaFuncion}{funcionElegida.getMomentoDelDia()}\nCine: {cineEscogido.getNombre()}\nAsiento: fila {fila} y columna {columna}\nPrecio de la boleta: {precioBoleto}")  # Detalles de la compra.
+                    condicion = False
+                    return
+                else:
+                    print("No tienes suficiente dinero para comprar la boleta")
+                    return  # Si no tiene suficiente dinero, damos por finalizada la operación.
+            else:
+                print("Entrada no válida.")
+                continue
+
+        condicion = True
+        # En este bucle se va a tratar del pago con el saldo o los puntos de la tarjeta del cliente
+        while condicion:
+            print("Desea pagar con:\n1. El saldo de su tarjeta\n2. Los puntos de su tarjeta")
+            pago = int(input())  # Simulamos la entrada del usuario
+            
+            if pago == 1:
+                print(f"Precio de la entrada: {precioBoleto}   Saldo de su tarjeta: {cliente.getSaldoTarjeta()}")
+                if cliente.pagarSaldoTarjeta(precioBoleto):
+                    funcionElegida.getSala().reservarSilla(fila - 1, columna - 1)
+                    puntosGanados = cliente.agregarPuntos()  # Si se completa el pago con el saldo de la tarjeta, se agregan los puntos correspondientes de acuerdo al plan de la tarjeta.
+                    print(f"Has ganado {puntosGanados} puntos por tu compra, gracias a que tienes plan {cliente.getTipoTarjeta()}.")  # Se le informa al cliente sobre los puntos.
+                    condicion = False
+                else:
+                    print("No tiene saldo suficiente en su tarjeta. ¿Quiere pagar con los puntos de la tarjeta?:\n1. Sí\n2. Finalizar Proceso")
+                    otroPago = int(input())
+                    if otroPago == 1:
+                        precioBoleto = funcionElegida.getPrecio() / 100  # Si paga con los puntos de la tarjeta se hace la conversión de los puntos gastados.
+                        print(f"Precio de la entrada a puntos: {precioBoleto}   Puntos de su tarjeta: {cliente.getPuntosTarjeta()}")
+                        if cliente.pagarPuntosTarjeta(precioBoleto):
+                            funcionElegida.getSala().reservarSilla(fila - 1, columna - 1)
+                            condicion = False
+                        else:
+                            print("No tienes tampoco puntos suficientes en la tarjeta. Finalizando el proceso.")
+                            return
+                    elif otroPago == 2:
+                        condicion = False
+                        return
+                    else:
+                        print("Entrada no válida")
+                        continue
+            elif pago == 2:
+                print(f"Precio de la entrada a puntos: {precioBoleto}   Puntos de su tarjeta: {cliente.getPuntosTarjeta()}")
+                if cliente.pagarPuntosTarjeta(precioBoleto):
+                    funcionElegida.getSala().reservarSilla(fila - 1, columna - 1)
+                    precioBoleto = funcionElegida.getPrecio() / 100
+                    condicion = False
+                else:
+                    print("No tiene suficientes puntos en su tarjeta. ¿Quiere pagar con el saldo de la tarjeta:\n1. Sí\n2. Finalizar Proceso")
+                    otroPago = int(input())
+                    if otroPago == 1:
+                        print(f"Precio de la entrada: {precioBoleto}   Saldo de su tarjeta: {cliente.getSaldoTarjeta()}")
+                        if cliente.pagarSaldoTarjeta(precioBoleto):
+                            funcionElegida.getSala().reservarSilla(fila - 1, columna - 1)
+                            puntosGanados = cliente.agregarPuntos()
+                            print(f"Has ganado {puntosGanados} puntos por tu compra, gracias a que tienes plan {cliente.getTipoTarjeta()}")
+                            condicion = False
+                        else:
+                            print("No tienes tampoco saldo suficiente. Finalizando el proceso")
+                            return
+                    elif otroPago == 2:
+                        condicion = False
+                        return
+                    else:
+                        print("Entrada no válida")
+                        continue
+        print(f"Se ha realizado exitosamente el pago.\nDetalles de la operación:\nNombre del Cliente: {cliente.getNombre()}\nIdentificación: {cliente.getIdentificacion()}\nPelícula: {peliculaElegida.getTitulo()}\nSala de la proyección: {funcionElegida.getSala().getNumero()}\nDía: {funcionElegida.getDia()}\nHora de la función: {horaFuncion}{funcionElegida.getMomentoDelDia()}\nCine: {cineEscogido.getNombre()}\nAsiento: fila {fila} y columna {columna}\nPrecio de la boleta: {precioBoleto}")  # Detalles de la compra.
+
+        
+    @staticmethod
+    def cambioCine(cine, pelicula):
+        cines = Cine.cines
+        cinesConPelicula = []
+        cineEscogido = None
+
+        # En caso de que el usuario quiera cambiar de cine, se buscan todos los que tengan funciones para la película.
+        for j in range(len(cines)):
+            if cines[j] != cine:
+                if cines[j].hayPelicula(pelicula):
+                    cinesConPelicula.append(cines[j])
+
+        # Es posible que no haya ningún cine con función para la película, se lo decimos al usuario
+        if len(cinesConPelicula) == 0:
+            print(f"En este momento, {pelicula.getTitulo()} no tiene ninguna función activa en ninguno de nuestros cines, lo único que puedes hacer es cambiar de película")
+            return cine
+
+        # Se muestran todas las opciones que tiene para cambiar el cine
+        print(f"Puedes encontrar funciones para {pelicula.getTitulo()} en:")
+        for i in range(1, len(cinesConPelicula) + 1):
+            print(f"{i}. {cinesConPelicula[i - 1].getNombre()}")
+
+        print("\nElige el cine: ")
+
+        # En este bucle nos aseguramos que su elección sea válida.
+        condicion = True
+        while condicion:
+            decision = int(input())  # Simulamos la entrada del usuario
+            if decision <= 0 or decision > len(cinesConPelicula):
+                print("Entrada no válida")
+                continue
+            cineEscogido = cinesConPelicula[decision - 1]
+            condicion = False
+
+        return cineEscogido  # Retornamos el nuevo cine.
+
+    @staticmethod
+    def cambioPelicula(pelicula, cine):
+        peliculaEscogida = None
+
+        # Como el usuario quiere cambiar la película, le mostramos cuáles tienen función en la semana.
+        print(f"Estas son las películas que están incluidas en la programación semanal \n{cine.enseñarFunciones()}")
+
+        peliculasElegibles = cine.peliculasActivas()  # Obtenemos todas estas películas para mostrarlas.
+        print("Elige el número de la película por la que quieres cambiar: ")
+
+        for j in range(1, len(peliculasElegibles) + 1):
+            print(f"{j}. {peliculasElegibles[j - 1].getTitulo()}")
+
+        # Nos aseguramos de que haga una elección correcta.
+        condicion = True
+        while condicion:
+            eleccion = int(input())  # Simulamos la entrada del usuario
+            if eleccion <= 0 or eleccion > len(peliculasElegibles):
+                print("Entrada no válida")
+                continue
+            peliculaEscogida = peliculasElegibles[eleccion - 1]
+            condicion = False
+
+        return peliculaEscogida  # Retornamos la nueva película.
+
+
+
+    @staticmethod
     def gestionarZonaDeJuegos(app):
         """Gestiona las zonas de juegos utilizando la interfaz gráfica."""
 
@@ -374,65 +791,89 @@ class Interfaz:
         print("Elige el cine al que deseas modificar su cartelera semanal:\n")
         listaVacios = None
         cine = None
+        #Le pedimos al usuario que elija el cine al que le quiere añadir funciones.
+        for i in range(len(Cine.cines)):
+            print(f"{i+1}. {Cine.cines[i].getNombre()}.")
         while True:
-            for i in range(len(Cine.cines)):
-                print(f"{i+1} {Cine.cines[i].getNombre()}.")
             eleccion = int(input("->:"))
             cine = Cine.cines[eleccion-1]
-            listaVacios = cine.hallarEspaciosSinFuncion()
-            if(listaVacios == -1):
+            listaVacios = cine.hallarEspaciosSinFuncion() #Tomamos todas los posibles horarios para añadir funciones.
+            if(listaVacios == -1): #Consideremos el caso donde no haya cupo.
                 print("Este cine no tiene huecos para agregar funciones, selecciona otro")
                 continue
             else:
                 break
         print("Esta es la programación semanal que actualmente se tiene en el cine escogido:")
-        #Falta
-
+        #Mostramos con una tabla la programación semanal.
+        
         peliculasListas = []
-        while True:
-            print("Estos son los espacios libres en el cine escogido::")
+        print("Estos son los espacios libres en el cine escogido:")
+        for j in range(len(listaVacios)):
+            print(f"{j+1}. Día {listaVacios[j][0]}, a las {listaVacios[j][1]}")
+        condicion = True
+        while condicion:
             horaPeli = None
             espacio = None
             diaPeli = None                
-            for j in range(len(listaVacios)):
-                horaDelDia = "am"
-                if listaVacios[j][2] >= time(12,0):
-                    horaDelDia = "pm"
-
-                print(f"{j+1}. Día {listaVacios[j][1]}, a las {listaVacios[j][2].strftime('%H:%M') + horaDelDia}")
             if len(listaVacios) == 1:
                 espacio = listaVacios[0]
-                print("Como solo hay una alternativa, la tomamos de inmediato")
+                print("Como solo hay una alternativa, la tomamos de inmediato.")
             else:
                 print("Elige el espacio que deseas modificar:")
                 eleccion = int(input("->:"))
-                espacio = listaVacios[eleccion]
-            peliculasParaElegir = Pelicula.ObtenerPeliculasElegibles(espacio[2], espacio[1], cine)
+                espacio = listaVacios[eleccion-1]
+                if len(espacio) == 4:
+                    print("Ya asignaste película para este espacio:")
+                    continue
+            peliculasParaElegir = Pelicula.ObtenerPeliculasElegibles(espacio[1], espacio[0], cine)
             if len(peliculasParaElegir)==1:
-                horaPeli = listaVacios[0][2]
-                diaPeli = listaVacios[0][1]
-                print(f"Como solo hay una alternativa, lo tomamos de inmediato: {peliculasParaElegir[0].getTitulo()}")
-                peliculasListas += [[peliculasParaElegir[0],diaPeli, horaPeli] ]
-                break
+                horaPeli = espacio[1]
+                diaPeli = espacio[0]
+                print(f"Solo hallamos una alternatva, lo tomamos de inmediato: {peliculasParaElegir[0].getTitulo()}, calificación: {str(peliculasParaElegir[0].getCalificacionPromedio())}")
+                peliculasListas += [[peliculasParaElegir[0],diaPeli, horaPeli, espacio[2]]]
+                espacio.append("A")
             else:
                 print("Elige la película para rellenar el espacio:\n")
                 for i in range(len(peliculasParaElegir)):
                     print(f"{str(i+1)}. {peliculasParaElegir[i].getTitulo()}, calificación: {str(peliculasParaElegir[i].getCalificacionPromedio())}")
                 eleccion = int(input("->:"))
-                diaPeli = espacio[1]
-                horaPeli = espacio[2]
-                peliculasListas += [[peliculasParaElegir[eleccion-1], diaPeli, horaPeli]]
-                listaVacios.remove(espacio)
-            if len(listaVacios) == 0:
-                break
-            else:
-                print("¿Quiéres continuar llenando espacios? (S/N)")
-                decision = input("->:")
-                if (decision == "S"):
-                    continue
-                elif (decision == "N"):
-                    print("Saliendo")
+                diaPeli = espacio[0]
+                horaPeli = espacio[1]
+                peliculasListas += [[peliculasParaElegir[eleccion-1], diaPeli, horaPeli, espacio[2]]]
+                espacio.append("A")
+            numeroVacios = 0
+            for espacio in listaVacios:
+                if len(espacio) == 3:
                     break
+                else:
+                    numeroVacios += 1
+            if numeroVacios == len(listaVacios):
+                print("No hay más espacios.")
+                break
+            print("¿Quiéres continuar llenando espacios? (S/N)")
+            decision = input("->:")
+            if (decision == "S"):
+                continue
+            elif (decision == "N"):
+                print("Saliendo")
+                break
+
+        #Por cada película para agregar debemos preguntar la sala y definir el precio de entrada
+        
+        for adicion in peliculasListas:
+            print(f"Elige la sala de proyección para {adicion[0].getTitulo()}, del día {adicion[1]} y a las {adicion[2]}")
+            for x in range(len(adicion[3])):
+                print(f"{x+1}. Sala {adicion[3][x].getNumero()}. Capacidad: {adicion[3][x].getCapacidad()} butacas")
+            eleccion = int(input("Elige la sala que prefieras: "))
+            salaEscogida = adicion[3][eleccion-1]
+            precioEntrada = int(input("Digita el precio de la entrada: "))
+            funcionAnadida = Funcion.agregarFuncion(cine, adicion[1], adicion[2], adicion[0], precioEntrada, salaEscogida)
+            for elemento in peliculasListas:
+                if adicion != elemento:
+                    if int(elemento[2][:2]) + 2 == int(adicion[2][:2]) or int(elemento[2][:2]) + 2 == int(adicion[2][:2]):
+                        for salaElemento in elemento[3]:
+                            if salaElemento == salaEscogida:
+                                elemento[3].remove(salaElemento)
     
     def menuCreacion(app):
         Interfaz.limpiarFormulario(app)

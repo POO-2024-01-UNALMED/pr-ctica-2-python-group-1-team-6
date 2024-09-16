@@ -1,9 +1,9 @@
 import sys
-from datetime import time
+from datetime import time, datetime
 from typing import List
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
-
+from cine import Cine
 
 
 
@@ -160,22 +160,33 @@ class Pelicula:
                 cliente.setSaldo(cliente.getSaldo() + 20)
         return f"Bono {cliente.getTipo()} asignado a {cliente.getNombre()}"
 
-    #Este método recibe un horario, dia y cine con los cuales determina las películas que pueden ser elegidas para programar una función, tiene en cuenta el género de la película según el horario, la duración y el orden de acuerdo a su calificación
+    #Este método recibe un horario, dia y cine con los cuales determina las películas que pueden ser elegidas para programar una función, tiene en cuenta el género de la película, el horario, la duración y el orden de acuerdo a su calificación.
     @classmethod
     def ObtenerPeliculasElegibles(cls, horario, dia, cine):
-        #Listas a analizar
-        peliculasTotales = Pelicula.totalPeliculas
-        peliculasElegibles = []
-        peliculasDelDia=cine.obtenerPeliculasDelDia(dia)
+        #Listas necesarias para almacenar la información
+        peliculasTotales = Pelicula.totalPeliculas #Todas las pelìculas que pertenecen al cine.
+        peliculasElegibles = [] 
+        peliculasDelDia=cine.obtenerPeliculasDelDia(dia) #Las filtramos para no tenerlas en cuenta en una nueva función.
         categoriasPermitidas = []
         calificaciones = []
         duracion = None
 
-        if horario == time(20,0):
+        #Convertimos el string horario en un objeto time para poder compararlo con mayor facilidad.
+        if horario.find("p") != -1:
+          if (horario[:2] == "12"):
+            horario = horario.replace(horario[:2], "00")
+          else:
+            horario = horario.replace(horario[:2], str(int(horario[:2]) + 12))
+          horario = datetime.strptime(horario[:5], "%H:%M").time()
+        elif horario.find("a") != -1:
+          horario = datetime.strptime(horario[:5], "%H:%M").time()
+
+        if horario == time(20,0): #Solo si el horario es el de 8pm, nos preocuparemos por la duración de la pelícuka.
             duracion = False
         else:
             duracion = True
 
+        #Definimos cuáles son las categorías que nos importan según el período del día
         if horario >= time(8,0) and horario <= time(16,0):
             categoriasPermitidas.append("Acción")
             categoriasPermitidas.append("Infantil")
@@ -183,13 +194,14 @@ class Pelicula:
             categoriasPermitidas.append("Terror")
             categoriasPermitidas.append("+18")
 
+        #Ahora agregaremos a la lista de películas elegibles aquellas que no estén programadas en otro momento del día y que su duración no sobrepase el límite de 4 horas.
         for pelicula in peliculasTotales:
             if pelicula in peliculasDelDia:
                 continue
             if pelicula.getGenero() in categoriasPermitidas:
                 if duracion:
                     duracionPelicula = pelicula.getDuracion()
-                    if duracionPelicula > time(4,0,0):
+                    if duracionPelicula > time(2,0,0): #Tiempo que no se puede superar
                         continue
                     else:
                         peliculasElegibles.append(pelicula)
@@ -198,7 +210,10 @@ class Pelicula:
                     peliculasElegibles.append(pelicula)
                     calificaciones.append(pelicula.getCalificacionPromedio())
 
+        #Ordenaremos la lista de películas elegibles según su calificación, de la que tiene más a la que tiene menos.
         iteracion  = 0
+        if len(peliculasElegibles) == 1:
+            return peliculasElegibles
         for calificacion in calificaciones:
             calificacionMayor = max(calificaciones)
             for pelicula in peliculasElegibles:
@@ -211,7 +226,11 @@ class Pelicula:
                         calificaciones.remove(calificacionMayor)
                         iteracion += 1
                         break
+                    else:
+                        calificaciones.remove(calificacionMayor)
+                        iteracion += 1
         return peliculasElegibles
+
     
     @staticmethod
     def serializarPeliculas(file_name):

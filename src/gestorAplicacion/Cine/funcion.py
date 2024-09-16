@@ -72,34 +72,22 @@ class Funcion:
         self.precio = precio
 
     @staticmethod
-    def realizarIntercambio(cineOrigen,cineNuevo,peliculaAIntercambiar, peliculaRecomendada) -> str:
-        from src.gestorAplicacion.Cine.cine import Cine
-        # Buscar la función de la película recomendada
-        for funcion in cineNuevo.totalFunciones():
-            if funcion.getPelicula()==peliculaRecomendada:
-                funcionDestino=funcion
-                if funcionDestino:
-                    break
-    
-        if not funcionDestino:
+    def realizarIntercambio(peliculaAIntercambiar, peliculaRecomendada) -> str:
+        funcionDestino = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaRecomendada), None)
+
+        if funcionDestino is None:
             return "No se encontró una función con la película recomendada."
 
-        # Buscar la función de la película a intercambiar
-        for funcion in cineOrigen.totalFunciones():
-            if funcion.getPelicula()==peliculaAIntercambiar:
-                funcionOrigen=funcion
-                if funcionOrigen:
-                    break
-    
-        if not funcionOrigen:
+        funcionOrigen = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaAIntercambiar), None)
+
+        if funcionOrigen is None:
             return "No se encontró una función con la película a intercambiar."
 
-        # Realizar el intercambio de películas
         funcionOrigen.setPelicula(peliculaRecomendada)
         funcionDestino.setPelicula(peliculaAIntercambiar)
 
         return "Intercambio realizado exitosamente."
-    
+
     @staticmethod
     def obtenerIndiceEnDia(funcionBuscada: 'Funcion') -> int:
         from src.gestorAplicacion.Cine.cine import Cine
@@ -172,6 +160,39 @@ class Funcion:
                 if funcion.getPelicula().getTitulo()==f.getPelicula().getTitulo() and funcion.getSala().getNumero()==f.getSala().getNumero():
                     return "Sábado"
         return "Día no encontrado"
+
+    @classmethod
+    def agregarFuncion(cls, cine, dia, hora, pelicula, precio, sala):
+        funciones = None
+        if dia == "Lunes": 
+            funciones = cine.getLunes()
+        elif dia == "Martes":
+            funciones = cine.getMartes()
+        elif dia == "Jueves":
+            funciones = cine.getJueves()
+        elif dia == "Viernes":
+            funciones = cine.getViernes()
+        else:
+            funciones = cine.getSabado()
+        posHora = hora[:2]
+        posLista = None
+        if posHora == "08" and hora[5:] == "pm":
+            posLista = 6
+        else:
+            posLista = 0
+        if posHora == "10":
+            posLista = 1
+        elif posHora == "12":
+            posLista = 2
+        elif posHora == "02":
+            posLista = 3
+        elif posHora == "04":
+            posLista = 4
+        else:
+            posLista = 5
+        funciones[posLista] = Funcion("normal", pelicula, sala, precio)
+        return funciones[posLista]
+        
     
     @staticmethod
     def serializarFunciones(file_name):
@@ -184,6 +205,7 @@ class Funcion:
             Funcion.allFunciones = objetos
     
     def __str__(self) -> str:
-        return f"Funcion: {self.tipo}\\Sala: {self.sala} {self.pelicula}"     
+        return f"Funcion: {self.tipo}\Sala: {self.sala} {self.pelicula}"      
+   
 
 

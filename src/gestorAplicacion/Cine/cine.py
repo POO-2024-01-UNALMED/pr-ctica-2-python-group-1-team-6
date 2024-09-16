@@ -1,5 +1,8 @@
 import sys
 from typing import List, Optional
+from datetime import time
+from sala import Sala
+from copy import deepcopy
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
 
@@ -10,9 +13,10 @@ class Cine:
     cines: List['Cine'] = []  # Lista estática de cines
     LIMITE_TARJETAS = 10  # Constante de límite de tarjetas
 
-    def __init__(self, nombre: str, zonaDeJuegos = None):
+    def __init__(self, nombre: str,salas: List['Sala'], zonaDeJuegos = None):
         self.nombre = nombre
         self.zonaDeJuegos = zonaDeJuegos
+        self.salas = salas
         if zonaDeJuegos is not None:
             self.zonaDeJuegos.setCine(self)
         if self not in Cine.cines:
@@ -31,6 +35,12 @@ class Cine:
     def setNombre(self, nombre: str):
         self.nombre = nombre
 
+    def setSalas(self,salas):
+        self.salas = salas
+
+    def getSalas(self):
+        return self.salas
+        
     def getLunes(self):
         return self.lunes
 
@@ -179,7 +189,7 @@ class Cine:
         # Obtiene las calificaciones de las películas en las funciones del cine
         def calificacionesDia(dia: List[Optional['Funcion']], nombreDia: str) -> List[str]:
             return [
-                f"Película: {funcion.getPelicula().getTitulo()} Sala: {funcion.getSala()} - Calificación: {funcion.getPelicula().getCalificacionPromedio()} - Día: {nombreDia}"
+                f"Película: {funcion.getPelicula().getTitulo()} - Calificación: {funcion.getPelicula().getCalificacionPromedio()} - Día: {nombreDia}"
                 for funcion in dia if funcion and funcion.getPelicula()
             ]
 
@@ -198,23 +208,27 @@ class Cine:
         self.zonaDeJuegos = zonaDeJuegos
 
     def agregarFuncion(self, nuevaFuncion, funciones):
+    # Obtiene la película de la nueva función
         nuevaPelicula = nuevaFuncion.getPelicula()
+    
+    # Encuentra la posición adecuada para la nueva función según su género
         posicionApropiada = self.encontrarPosicionApropiada(nuevaPelicula, funciones)
 
+    # Si no se encuentra una posición adecuada, avisa y no hace nada
         if posicionApropiada == -1:
-            return "No se encontró una posición apropiada."
+            print("No se encontró una posición adecuada para la función. El día está lleno o no hay un sitio apropiado.")
+            return
 
+    # Si la posición adecuada está ocupada, reorganiza para hacer espacio
         if funciones[posicionApropiada] is not None:
             if not self.reorganizarFunciones(funciones, posicionApropiada):
-                return "No se pudo reorganizar las funciones para hacer espacio."
+                print("No se pudo reorganizar las funciones para hacer espacio.")
+                return
 
-        # Verificación extra para evitar duplicados
-        if funciones[posicionApropiada] == nuevaFuncion:
-            return "La función ya ha sido agregada."
-
+    # Asigna la nueva función en la posición adecuada
         funciones[posicionApropiada] = nuevaFuncion
         nuevaFuncion.definirMomentoDelDia()
-        return f"Función agregada en la posición {posicionApropiada} para la película {nuevaPelicula.getTitulo()}."
+        print(f"Función agregada en la posición {posicionApropiada} para la película {nuevaPelicula.getTitulo()}.")
 
     def encontrarPosicionApropiada(self, nuevaPelicula, funciones) -> int:
     # Definir los rangos de posiciones según el género de la película
@@ -249,7 +263,93 @@ class Cine:
             funciones[i] = funciones[i - 1]
         funciones[posicion] = None
         return True
+
+    def obtenerPeliculasDelDia(self, dia):
+        peliculasDelDia = []
+        if dia == "Lunes":
+            for j in range(len(self.getLunes())):
+                if self.getLunes()[j] is None:
+                    continue
+                peliculasDelDia.append(self.getLunes()[j].getPelicula().getTitulo())
+        elif dia == "Martes":
+            for j in range(len(self.getMartes())):
+                if self.getLunes()[j] is None:
+                    continue
+                peliculasDelDia.append(self.getMartes()[j].getPelicula().getTitulo())
+        elif dia == "Jueves":
+            for j in range(len(self.getJueves())):
+                if self.getLunes()[j] is None:
+                    continue
+                peliculasDelDia.append(self.getJueves()[j].getPelicula().getTitulo())
+        elif dia == "Viernes":
+            for j in range(len(self.getViernes())):
+                if self.getViernes()[j] is None:
+                    continue
+                peliculasDelDia.append(self.getLunes()[j].getPelicula().getTitulo())
+        else:
+            for j in range(len(self.getSabado())):
+                if self.getLunes()[j] is None:
+                    continue
+                peliculasDelDia.append(self.getSabado()[j].getPelicula().getTitulo())
+        return peliculasDelDia
     
+    #Este método busca en las listas de funciones de cine, las posiciones donde no hay función, y regresa una lista de listas con la información encontrada: dia, hora y salas posibles.
+    def hallarEspaciosSinFuncion(self):
+        #Lista de todas las funciones en la semana del cine
+        funcionesTotales = self.lunes + self.martes + self.jueves + self.viernes + self.sabado
+        #Opciones de horario de las funciones
+        horas = [time(8,0,0), time(10,0,0), time(12,0,0), time(14,0,0), time(16,0,0), time(18,0,0), time(20,0,0)]
+        listaRetorno = []
+        #Iteramos sobre todas las dunciones del cine
+        for i in range(len(funcionesTotales)):
+            funcionActual = funcionesTotales[i]
+            salasPosibles = deepcopy(self.salas) #Hacemos una copia profunda de la lista de salas.
+            dia = None
+            if funcionActual is not None:
+                continue #Pasamos a la siguiente iteración si la función actual no es None.
+            #Determinamos el día de la función vacía.
+            if (i+1) >= 7: 
+                dia="Lunes"
+            elif (i+1)>7 and (i+1)<=14:
+                dia = "Martes"
+            elif (i+1)> 14 and (i+1)<=21:
+                dia = "Jueves"
+            elif (i+1)>21 and (i+1)<=28:
+                dia = "Viernes"
+            else:
+                dia = "Sábado"
+            posicionHora = (i+1)%7
+            #Descartamos las salas de funciones adyacentes
+            if (posicionHora == 1):
+                if funcionesTotales[i+1] is None:
+                    pass
+                else:
+                    salasPosibles.remove(funcionesTotales[i+1].getSala())
+            elif posicionHora == 0:
+                if funcionesTotales[i-1] is None:
+                    pass
+                else:
+                    salasPosibles.remove(funcionesTotales[i-1].getSala())
+            else:
+                if funcionesTotales[i+1] is None:
+                    pass
+                else:
+                    salasPosibles.remove(funcionesTotales[i+1].getSala())
+                if funcionesTotales[i-1] is None:
+                    pass
+                else:
+                    salasPosibles.remove(funcionesTotales[i-1].getSala())
+            hora = None
+            if horas[posicionHora] >= time(12,0):
+                hora = horas[posicionHora].strftime('%I:%M') + "pm"
+            else:
+                hora = horas[posicionHora].strftime('%I:%M') + "am"
+            listaRetorno += listaRetorno +[[dia, hora, salasPosibles]]
+        if len(listaRetorno) == 0:
+            return -1
+        else:
+            return listaRetorno
+            
     @staticmethod
     def serializarCines(file_name):
         Serializador.serializar(Cine.cines, file_name)
