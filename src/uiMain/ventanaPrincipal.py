@@ -10,8 +10,8 @@ from src.uiMain.interfaz import Interfaz
 class ventanaPrincipal(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Nombre de la Aplicación")
-        self.geometry("600x600")
+        self.title("Start Cinema")
+        self.geometry("1900x750")
         # Crear etiquetas y campos
         self.procesoLabel = tk.Label(self, text="")
         self.procesoLabel.pack(side="top")
@@ -21,14 +21,18 @@ class ventanaPrincipal(tk.Tk):
 
         self.resultLabel = tk.Label(self, text="", fg="blue",width=400)
         self.resultLabel.pack(side="bottom", fill="both", expand=True)
+        self.widgetsSueltos = []
 
-        self.frame = None
+        self.frame =None
+        
+        self.imagen = tk.PhotoImage(file="src/uiMain/Imagenes/start.png")
 
+        # Crear una etiqueta con la imagen
+        self.imagenLabel = tk.Label(self, image=self.imagen)
+        self.imagenLabel.pack(expand=True, fill="both")
         # Crear menú 
         self.crearMenu()
-        
-        
-
+    
     def crearMenu(self):
         #Crear el menu
         menubar = tk.Menu(self)
@@ -41,12 +45,13 @@ class ventanaPrincipal(tk.Tk):
 
         # Procesos y Consultas menu
         procesosMenu = tk.Menu(menubar, tearoff=0)
+        procesosMenu.add_command(label="Comprar boleto para ver una funcion",command=self.comprarBoleto)
+        procesosMenu.add_command(label="Comprar boleto para jugar maquinitas",command=self.jugarMaquinitas)
+        procesosMenu.add_command(label="Calificar Pelicula",command=self.calificarPelicula)
         procesosMenu.add_command(label="Gestionar zonas de juegos",command=self.gestionarZonaDeJuegos)
         procesosMenu.add_command(label="Gestionar Peliculas",command=self.gestionarPeliculas)
         procesosMenu.add_command(label="Menu de creacion",command=self.menuCreacion)
         procesosMenu.add_command(label="Menu de asignacion",command=self.menuAsignacion)
-        procesosMenu.add_command(label="Comprar boleto para jugar maquinitas",command=self.jugarMaquinitas)
-        procesosMenu.add_command(label="Calificar Pelicula",command=self.calificarPelicula)
         menubar.add_cascade(label="Procesos y Consultas", menu=procesosMenu)
 
         # Ayuda menu
@@ -58,11 +63,14 @@ class ventanaPrincipal(tk.Tk):
 
     def mostrarInfo(self):
         #Mostrar informacion sobre la aplicacion
-        messagebox.showinfo("Información", "Esta es una aplicación de ejemplo.")
+        messagebox.showinfo("Información", """Aplicación de Simulación de Cine:
+
+Compra boletos para películas y juegos, gestiona las zonas de juegos y administra la programación de películas en los cines. Ofrece una experiencia completa de operación y gestión de un cine.""")
 
     def mostrarAutores(self):
         #Mostrar los autores de la aplicacion
-        messagebox.showinfo("Acerca de", "Autores: Nombre del equipo")
+        messagebox.showinfo("Acerca de", """Autores: Juan Manuel Henao Rodriguez y 
+        Jhoan Alexis Rua Garcia""")
     
     def gestionarZonaDeJuegos(self):
        Interfaz.gestionarZonaDeJuegos(self)
@@ -77,6 +85,8 @@ class ventanaPrincipal(tk.Tk):
         Interfaz.comprarBoletaJuegos(self)
     def calificarPelicula(self):
         Interfaz.calificarPelicula(self)
+    def comprarBoleto(self):
+        Interfaz.comprarBoleta(self)
     
     def actualizarFormulario(self, titulo_criterios, criterios, titulo_valores, valores=None):
         #Actualiza los formularios de la interfaz

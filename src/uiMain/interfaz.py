@@ -29,7 +29,8 @@ class Interfaz:
     @staticmethod
     def gestionarZonaDeJuegos(app):
         """Gestiona las zonas de juegos utilizando la interfaz gráfica."""
-    
+
+        Interfaz.limpiarFormulario(app)        
         # Paso 1: Actualización de dinero recaudado en todas las zonas de juegos
         for cine in Cine.cines:
             if cine.zonaDeJuegos:
@@ -212,10 +213,10 @@ class Interfaz:
                                                 maquinaRebajada.setPrecioUso(nuevoPrecio)
                                                 app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nEl precio de {maquinaRebajada.getNombre()} ha sido rebajado a {nuevoPrecio}")
 
-                                            app.botonAceptar.config(command=confirmarNuevoPrecio)
+                                            app.frame.setComando(confirmarNuevoPrecio)
 
-                                        app.botonAceptar.config(command=seleccionarMaquinaRebaja)
-                                    app.botonAceptar.config(command=seleccionarZonaRebaja)
+                                        app.frame.setComando(seleccionarMaquinaRebaja)
+                                    app.frame.setComando(seleccionarZonaRebaja)
 
                                 elif tipoIncentivo == "Regalar un bono por el uso de una maquina":
                                     # Seleccionar la zona donde aplicar el bono
@@ -256,22 +257,23 @@ class Interfaz:
                                             maquina.activarBono()
                                             app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nEl bono ha sido activado para {maquina.getNombre()}")
 
-                                        app.frame.funAceptar(seleccionarMaquinaBono)
+                                        app.frame.setComando(seleccionarMaquinaBono)
 
-                                    app.frame.funAceptar(seleccionarZonaBono)
+                                    app.frame.setComando(seleccionarZonaBono)
 
-                            app.frame.funAceptar(seleccionarTipoIncentivo)
+                            app.frame.setComando(seleccionarTipoIncentivo)
 
                         else:
                             app.resultLabel.config(text=app.resultLabel.cget("text") + "\nNo se aplicarán incentivos.")
         
-                    app.frame.funAceptar(seleccionarIncentivo)
-                app.frame.funAceptar(seleccionarZonaDestino)
-            app.frame.funAceptar(seleccionarMaquina)
-        app.frame.funAceptar(seleccionarZona)
+                    app.frame.setComando(seleccionarIncentivo)
+                app.frame.setComando(seleccionarZonaDestino)
+            app.frame.setComando(seleccionarMaquina)
+        app.frame.setComando(seleccionarZona)
 
     @staticmethod
     def gestionarPeliculas(app):
+        Interfaz.limpiarFormulario(app)
         # Paso 1: Mostrar calificaciones de las películas
         calificaciones = []
         for cine in Cine.cines:
@@ -354,18 +356,18 @@ class Interfaz:
                                         funcion.setPrecio(nuevoPrecio)
                                         app.resultLabel.config(text=f"Nuevo precio: {nuevoPrecio}")
                                 
-                                    app.frame.funAceptar(aplicarPrecio)
+                                    app.frame.setComando(aplicarPrecio)
 
                                 elif incentivoSeleccionado == "Aplicar bono":
                                     peliculaIntercambio.activarBono()
                                     app.resultLabel.config(text=f"Bono activado para {peliculaIntercambio.getTitulo()}")
                         
-                        app.frame.funAceptar(aplicarIncentivo)
+                        app.frame.setComando(aplicarIncentivo)
 
-                    app.frame.funAceptar(seleccionarPeliculaDestino)
-                app.frame.funAceptar(seleccionarNuevoCine)
-            app.frame.funAceptar(seleccionarPelicula)
-        app.frame.funAceptar(seleccionarCine)
+                    app.frame.setComando(seleccionarPeliculaDestino)
+                app.frame.setComando(seleccionarNuevoCine)
+            app.frame.setComando(seleccionarPelicula)
+        app.frame.setComando(seleccionarCine)
     
     @staticmethod
     def gestionarCartelera():
@@ -433,6 +435,7 @@ class Interfaz:
                     break
     
     def menuCreacion(app):
+        Interfaz.limpiarFormulario(app)
         opciones = [
             "Crear Zona de Juegos",
             "Crear Máquina",
@@ -461,10 +464,13 @@ class Interfaz:
         combo = ttk.Combobox(app, values=opciones, textvariable=valorDefecto)
         combo.bind("<<ComboboxSelected>>", changed)
         combo.pack(side="top", anchor="center", pady=5)
+        app.widgetsSueltos.append(combo)
     
         # Crea el campo de entrada para mostrar la opción seleccionada (si es necesario)
         app.entrada = tk.Entry(app)  # Define app.entrada para que esté accesible en el ámbito de la clase
         app.entrada.pack(side="top", anchor="center", pady=5)
+        app.widgetsSueltos.append(app.entrada)
+
         app.actualizarFormulario("",[],"")
     
         # Si no se va a utilizar actualizarFormulario aquí, puedes eliminarlo o ajustarlo
@@ -487,7 +493,7 @@ class Interfaz:
                  crearCine(app)
             elif opcion == "Crear Sala":
                  crearSala(app)    
-        app.frame.funAceptar(aceptarOpcion)  # Vincula la función aceptarOpcion con el botón 'Aceptar'
+        app.frame.setComando(aceptarOpcion)  # Vincula la función aceptarOpcion con el botón 'Aceptar'
     
         # Función para crear Zona de Juegos
         def crearZonaDeJuegos(app):
@@ -505,7 +511,7 @@ class Interfaz:
                 zona = ZonaDeJuegos(nombreZona, horario)
                 app.resultLabel.config(text=f"Zona de Juegos creada: {zona}")
 
-            app.frame.funAceptar(aceptarZona)  # Vincula aceptarZona con el botón 'Aceptar' para la creación de la zona
+            app.frame.setComando(aceptarZona)  # Vincula aceptarZona con el botón 'Aceptar' para la creación de la zona
         def crearMaquina(app):
             criterios = ["Nombre de la maquina", "Tipo de maquina","Materiales necesarios para la maquina","Precio de la maquina"]
             app.procesoLabel.config(text="Crear Maquina")
@@ -523,7 +529,7 @@ class Interfaz:
                 maquina=Maquina(nombreMaquina,tipo,materiales,precio)
                 app.resultLabel.config(text=f"Maquina creada: {maquina}")
 
-            app.frame.funAceptar(aceptarMaquina)  # Vincula aceptarMaquina con el botón 'Aceptar' para la creación de la maquina
+            app.frame.setComando(aceptarMaquina)  # Vincula aceptarMaquina con el botón 'Aceptar' para la creación de la maquina
         def crearPelicula(app):
             criterios = ["Titulo de la pelicula", "Genero","Durcion (en horas y minutos, formato HH:MM)"]
             app.procesoLabel.config(text="Crear Pelicula")
@@ -541,7 +547,7 @@ class Interfaz:
                 pelicula=Pelicula(titulo,genero,duracion)
                 app.resultLabel.config(text=f"Pelicula creada: {pelicula}")
 
-            app.frame.funAceptar(aceptarPelicula)  # Vincula aceptarPelicula con el botón 'Aceptar' para la creación de la pelicual
+            app.frame.setComando(aceptarPelicula)  # Vincula aceptarPelicula con el botón 'Aceptar' para la creación de la pelicual
         def crearFuncion(app):
             criterios = ["Tipo de funcion"]
             app.procesoLabel.config(text="Crear Funcion")
@@ -549,14 +555,14 @@ class Interfaz:
             combo.destroy()
             app.entrada.destroy()
             app.actualizarFormulario("Datos Funcion", criterios, "Valores", [])
-
+            
             # Función que se ejecuta al presionar el botón 'Aceptar' para la creación de la funcion
             def aceptarFuncion():
                 tipoFuncion = app.frame.getValue("Tipo de funcion")
                 funcion=Funcion(tipoFuncion)
                 app.resultLabel.config(text=f"Funcion creada: {funcion}")
 
-            app.frame.funAceptar(aceptarFuncion)  # Vincula aceptarFuncion con el botón 'Aceptar' para la creación de la funcion
+            app.frame.setComando(aceptarFuncion)  # Vincula aceptarFuncion con el botón 'Aceptar' para la creación de la funcion
         def crearCliente(app):
             criterios = ["Nombre del cliente", "Saldo","ID"]
             app.procesoLabel.config(text="Crear Cliente")
@@ -573,7 +579,7 @@ class Interfaz:
                 cliente=Cliente(nombre,saldo,id)
                 app.resultLabel.config(text=f"Cliente creado: {cliente}")
 
-            app.frame.funAceptar(aceptarCliente)  # Vincula aceptarCliente con el botón 'Aceptar' para la creación del cliente
+            app.frame.setComando(aceptarCliente)  # Vincula aceptarCliente con el botón 'Aceptar' para la creación del cliente
         def crearCine(app):
             criterios = ["Nombre del cine"]
             app.procesoLabel.config(text="Crear Cine")
@@ -588,7 +594,7 @@ class Interfaz:
                 cine=Cine(nombre)
                 app.resultLabel.config(text=f"Cine creado: {cine}")
 
-            app.frame.funAceptar(aceptarCine)  # Vincula aceptarCine con el botón 'Aceptar' para la creación del cine
+            app.frame.setComando(aceptarCine)  # Vincula aceptarCine con el botón 'Aceptar' para la creación del cine
         def crearSala(app):
             criterios = ["Numero de la sala","numero de filas","numero de columnas"]
             app.procesoLabel.config(text="Crear Sala")
@@ -605,9 +611,10 @@ class Interfaz:
                 sala=Sala(numero,filas,columnas)
                 app.resultLabel.config(text=f"Sala creada: {sala}")
 
-            app.frame.funAceptar(aceptarSala)  # Vincula aceptarSala con el botón 'Aceptar' para la creación de la sala
+            app.frame.setComando(aceptarSala)  # Vincula aceptarSala con el botón 'Aceptar' para la creación de la sala
     
     def menuAsignacion(app):
+        Interfaz.limpiarFormulario(app)
         opciones = [
             "Asignar una zona de juegos a un cine",
             "Agregar una función a un cine",
@@ -629,9 +636,12 @@ class Interfaz:
         combo = ttk.Combobox(app, values=opciones, textvariable=valorDefecto,width=40)
         combo.bind("<<ComboboxSelected>>", changed)
         combo.pack(side="top", anchor="center", pady=5)
+        app.widgetsSueltos.append(combo)
 
         app.entrada = tk.Entry(app,width=40)
         app.entrada.pack(side="top", anchor="center", pady=5)
+        app.widgetsSueltos.append(app.entrada)
+
         app.actualizarFormulario("", [], "")
 
         def aceptarOpcion():
@@ -650,7 +660,7 @@ class Interfaz:
                 # Acción para salir
                 pass
 
-        app.frame.funAceptar(aceptarOpcion)
+        app.frame.setComando(aceptarOpcion)
 
         def asignarZonaCine(app):
             if not ZonaDeJuegos.zonasDeJuegos or not Cine.cines:
@@ -665,24 +675,35 @@ class Interfaz:
             zonas = [zona.getNombre() for zona in ZonaDeJuegos.zonasDeJuegos if zona.getCine() is None]
             # Filtrar cines que no tengan una zona de juegos asignada
             cines = [cine.getNombre() for cine in Cine.cines if cine.getZonaDeJuegos() is None]
+
             valorDefecto1 = tk.StringVar(value="Opciones de zonas")
             valorDefecto2 = tk.StringVar(value="Opciones de cines")
+
             def changed1(event):
                 app.entrada1.delete(0, "end")
                 app.entrada1.insert(0, combo1.get())
             def changed2(event):
                 app.entrada2.delete(0, "end")
                 app.entrada2.insert(0, combo2.get())
+
             combo1 = ttk.Combobox(app, values=zonas, textvariable=valorDefecto1,width=40)
             combo1.bind("<<ComboboxSelected>>", changed1)
             combo1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo1)
+
             combo2 = ttk.Combobox(app, values=cines, textvariable=valorDefecto2,width=40)
             combo2.bind("<<ComboboxSelected>>", changed2)
             combo2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo2)
+
             app.entrada1 = tk.Entry(app,width=40)
             app.entrada1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada1)
+
             app.entrada2 = tk.Entry(app,width=40)
             app.entrada2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada2)
+
             app.actualizarFormulario("", [], "")
 
             def aceptarAsignacion():
@@ -698,7 +719,7 @@ class Interfaz:
                 combo2.destroy()
                 app.entrada1.destroy()
                 app.entrada2.destroy()
-            app.frame.funAceptar(aceptarAsignacion)
+            app.frame.setComando(aceptarAsignacion)
 
         def agregarFuncionCine(app):
             if not Funcion.allFunciones or not Cine.cines:
@@ -733,23 +754,29 @@ class Interfaz:
             combo1 = ttk.Combobox(app, values=funciones, textvariable=valorDefecto1, width=40)
             combo1.bind("<<ComboboxSelected>>", changed1)
             combo1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo1)
     
             combo2 = ttk.Combobox(app, values=cines, textvariable=valorDefecto2, width=40)
             combo2.bind("<<ComboboxSelected>>", changed2)
             combo2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo2)
 
             combo3 = ttk.Combobox(app, values=dias, textvariable=valorDefecto3, width=40)
             combo3.bind("<<ComboboxSelected>>", changed3)
             combo3.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo3)
     
             app.entrada1 = tk.Entry(app, width=40)
             app.entrada1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada1)
     
             app.entrada2 = tk.Entry(app, width=40)
             app.entrada2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada2)
 
             app.entrada3 = tk.Entry(app, width=40)
             app.entrada3.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada3)
     
             app.actualizarFormulario("", [], "")
 
@@ -788,7 +815,7 @@ class Interfaz:
                 app.entrada2.destroy()
                 app.entrada3.destroy()
 
-            app.frame.funAceptar(aceptarAsignacion)
+            app.frame.setComando(aceptarAsignacion)
 
 
         def agregarMaquinaZona(app):
@@ -818,16 +845,20 @@ class Interfaz:
             combo1 = ttk.Combobox(app, values=maquinas, textvariable=valorDefecto1, width=40)
             combo1.bind("<<ComboboxSelected>>", changed1)
             combo1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo1)
     
             combo2 = ttk.Combobox(app, values=zonas, textvariable=valorDefecto2, width=40)
             combo2.bind("<<ComboboxSelected>>", changed2)
             combo2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo2)
     
             app.entrada1 = tk.Entry(app, width=40)
             app.entrada1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada1)
     
             app.entrada2 = tk.Entry(app, width=40)
             app.entrada2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada2)
     
             app.actualizarFormulario("", [], "")
 
@@ -856,7 +887,7 @@ class Interfaz:
                 app.entrada1.destroy()
                 app.entrada2.destroy()
     
-            app.frame.funAceptar(aceptarAsignacion)
+            app.frame.setComando(aceptarAsignacion)
 
         
 
@@ -887,16 +918,20 @@ class Interfaz:
             combo1 = ttk.Combobox(app, values=peliculas, textvariable=valorDefecto1, width=40)
             combo1.bind("<<ComboboxSelected>>", changed1)
             combo1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo1)
     
             combo2 = ttk.Combobox(app, values=funciones, textvariable=valorDefecto2, width=40)
             combo2.bind("<<ComboboxSelected>>", changed2)
             combo2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo2)
     
             app.entrada1 = tk.Entry(app, width=40)
             app.entrada1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada1)
     
             app.entrada2 = tk.Entry(app, width=40)
             app.entrada2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada2)
     
             app.actualizarFormulario("", [], "")
 
@@ -915,7 +950,7 @@ class Interfaz:
                 app.entrada1.destroy()
                 app.entrada2.destroy()
 
-            app.frame.funAceptar(aceptarAsignacion)
+            app.frame.setComando(aceptarAsignacion)
 
         def asignarSalaFuncion(app):
             if not Sala.allSalas or not Funcion.allFunciones:
@@ -944,16 +979,20 @@ class Interfaz:
             combo1 = ttk.Combobox(app, values=salas, textvariable=valorDefecto1, width=40)
             combo1.bind("<<ComboboxSelected>>", changed1)
             combo1.pack(side="top", anchor="center", pady=5)
-    
+            app.widgetsSueltos.append(combo1)
+
             combo2 = ttk.Combobox(app, values=funciones, textvariable=valorDefecto2, width=40)
             combo2.bind("<<ComboboxSelected>>", changed2)
             combo2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(combo2)
     
             app.entrada1 = tk.Entry(app, width=40)
             app.entrada1.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada1)
     
             app.entrada2 = tk.Entry(app, width=40)
             app.entrada2.pack(side="top", anchor="center", pady=5)
+            app.widgetsSueltos.append(app.entrada2)
     
             app.actualizarFormulario("", [], "")
 
@@ -972,10 +1011,11 @@ class Interfaz:
                 app.entrada1.destroy()
                 app.entrada2.destroy()
                 
-            app.frame.funAceptar(aceptarAsignacion)
+            app.frame.setComando(aceptarAsignacion)
 
     @staticmethod
     def comprarBoletaJuegos(app):
+        Interfaz.limpiarFormulario(app)
         # Paso 1: Identificación del cliente
         criterios = ["Número de identificación"]
         app.actualizarFormulario("Ingrese su número de identificación", criterios, "Cliente seleccionado")
@@ -1001,13 +1041,13 @@ class Interfaz:
                             app.resultLabel.config(text="Cliente creado exitosamente.")
                             seleccionarCine(cliente)  # Pasamos el cliente a la siguiente función
 
-                        app.frame.funAceptar(crearNuevoCliente)
+                        app.frame.setComando(crearNuevoCliente)
 
                     elif respuesta == "No":
                         app.resultLabel.config(text="Operación cancelada.")
                         return
 
-                app.frame.funAceptar(crearCliente)
+                app.frame.setComando(crearCliente)
             else:
                 seleccionarCine(cliente)  # Pasamos el cliente a la siguiente función
 
@@ -1059,14 +1099,15 @@ class Interfaz:
                     else:
                         app.resultLabel.config(text="Saldo insuficiente.")
 
-                app.frame.funAceptar(comprarBoleta)
+                app.frame.setComando(comprarBoleta)
 
-            app.frame.funAceptar(seleccionarZonaDeJuegos)
+            app.frame.setComando(seleccionarZonaDeJuegos)
 
-        app.frame.funAceptar(identificarCliente)
+        app.frame.setComando(identificarCliente)
    
     @staticmethod
     def calificarPelicula(app):
+        Interfaz.limpiarFormulario(app)
         # Obtener todas las películas activas en los cines
         peliculas = []
         for cine in Cine.cines:
@@ -1117,9 +1158,165 @@ class Interfaz:
                 )
                 app.resultLabel.config(text=mensaje)
 
-            app.frame.funAceptar(ingresarCalificacion)
+            app.frame.setComando(ingresarCalificacion)
 
-        app.frame.funAceptar(seleccionarPelicula)
+        app.frame.setComando(seleccionarPelicula)
+    
+    @staticmethod
+    def comprarBoleta(app):
+        Interfaz.limpiarFormulario(app)
+
+        # Paso 1: Solicitar ID del cliente
+        app.procesoLabel.config(text="Comprar Boleta - Paso 1")
+        app.indicacionLabel.config(text="Ingrese su ID de cliente")
+    
+        criterios = ["ID de cliente"]
+        app.actualizarFormulario("Datos del Cliente", criterios, "Valores", [])
+    
+        def obtenerCliente():
+            cliente_id = int(app.frame.getValue("ID de cliente"))
+            cliente = Cliente.buscarClientePorId(cliente_id)
+        
+            # Si el cliente no existe, ofrecer opción de crearlo
+            if cliente is None:
+                app.indicacionLabel.config(text="Cliente no encontrado. ¿Desea crear uno?")
+                opciones = ["Sí", "No"]
+                app.actualizarFormulario("Opciones", ["Crear Cliente"], "Opciones", opciones)
+            
+                def crearCliente():
+                    crear_cliente = app.frame.getValue("Crear Cliente")
+                    if crear_cliente == "Sí":
+                        # Solicitar nombre y saldo del nuevo cliente
+                        criterios_cliente = ["Nombre", "Saldo"]
+                        app.indicacionLabel.config(text="Ingrese los datos del nuevo cliente")
+                        app.actualizarFormulario("Crear Cliente", criterios_cliente, "Valores", [])
+                    
+                        def confirmarCliente():
+                            nombre = app.frame.getValue("Nombre")
+                            saldo = float(app.frame.getValue("Saldo"))
+                            nuevo_cliente = Cliente(nombre, saldo, cliente_id)
+                            app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nCliente {nombre} creado con éxito.")
+                            continuarCompra(nuevo_cliente)
+                    
+                        app.frame.setComando(confirmarCliente)
+                    else:
+                        app.resultLabel.config(text=app.resultLabel.cget("text") + "\nNo se realizó la compra.")
+                        return
+            
+                app.frame.setComando(crearCliente)
+            else:
+                continuarCompra(cliente)
+
+        app.frame.setComando(obtenerCliente)
+    
+        def continuarCompra(cliente):
+            # Paso 2: Seleccionar cine
+            cinesDisponibles = [cine.getNombre() for cine in Cine.cines]
+            app.procesoLabel.config(text="Comprar Boleta - Paso 2")
+            app.indicacionLabel.config(text="Seleccione el cine")
+            app.actualizarFormulario("Cine", ["Seleccione Cine"], "Opciones", [])
+            app.resultLabel.config(text="\n".join(cinesDisponibles))
+
+            def seleccionarCine():
+                cine_seleccionado_nombre = app.frame.getValue("Seleccione Cine")
+                cine_seleccionado = next(cine for cine in Cine.cines if cine.getNombre() == cine_seleccionado_nombre)
+            
+                # Paso 3: Seleccionar función
+                dias_semana = ['Lunes', 'Martes', 'Jueves', 'Viernes', 'Sábado']
+                funciones_por_dia = {
+                    'Lunes': cine_seleccionado.getLunes(),
+                    'Martes': cine_seleccionado.getMartes(),
+                    'Jueves': cine_seleccionado.getJueves(),
+                    'Viernes': cine_seleccionado.getViernes(),
+                    'Sábado': cine_seleccionado.getSabado(),
+                }
+
+                funcionesDisponibles = []
+                funcion_map = {}
+                contador = 1
+                for dia in dias_semana:
+                    funciones_dia = funciones_por_dia[dia]
+                    for funcion in funciones_dia:
+                        if funcion:
+                            pelicula = funcion.getPelicula().getTitulo()
+                            funcionesDisponibles.append(f"{contador}. {dia}: {pelicula}")
+                            funcion_map[contador] = funcion
+                            contador += 1
+
+                app.procesoLabel.config(text="Comprar Boleta - Paso 3")
+                app.indicacionLabel.config(text="Seleccione la función")
+                app.actualizarFormulario("Funcion", ["Seleccione Función"], "Opciones", [])
+                app.resultLabel.config(text="\n".join(funcionesDisponibles))
+
+                def seleccionarFuncion():
+                    funcionSeleccionadaIndex = app.frame.getValue("Seleccione Función")
+                    funcionSeleccionada = funcion_map[int(funcionSeleccionadaIndex.split()[0])]
+
+                    app.resultLabel.config(text=funcionSeleccionada.getSala().estadoSilleteria())
+                
+                    # Paso 4: Seleccionar asiento
+                    app.procesoLabel.config(text="Comprar Boleta - Paso 4")
+                    app.indicacionLabel.config(text="Seleccione la fila y columna")
+                    app.actualizarFormulario("Asiento", ["Fila", "Columna"], "Valores", [])
+                
+                    def seleccionarAsiento():
+                        fila = int(app.frame.getValue("Fila")) - 1
+                        columna = int(app.frame.getValue("Columna")) - 1
+                    
+                        if funcionSeleccionada.getSala().estaDisponible(fila, columna):
+                            funcionSeleccionada.getSala().reservarSilla(fila, columna)
+                            app.resultLabel.config(text=app.resultLabel.cget("text") + "\nAsiento reservado con éxito.")
+                            mostrarRecibo(cliente, cine_seleccionado, funcionSeleccionada, fila, columna)
+                        else:
+                            app.resultLabel.config(text=app.resultLabel.cget("text") + "\nEl asiento seleccionado no está disponible.")
+                            return
+                
+                    app.frame.setComando(seleccionarAsiento)
+            
+                app.frame.setComando(seleccionarFuncion)
+        
+            app.frame.setComando(seleccionarCine)
+    
+        def mostrarRecibo(cliente, cine, funcion, fila, columna):
+            # Mostrar el recibo final
+            precio = funcion.getPrecio()
+            if cliente.getTipo() == "Preferencial":
+                precio *= 0.9
+            elif cliente.getTipo() == "VIP":
+                precio *= 0.8
+        
+            recibo = f"\n--- Recibo de compra ---\nCliente: {cliente.getNombre()} ({cliente.getIdentificacion()})\n" \
+                    f"Cine: {cine.getNombre()}\nPelícula: {funcion.getPelicula().getTitulo()}\nSala: {funcion.getSala().getNumero()}\n" \
+                    f"Asiento: Fila {fila + 1}, Columna {columna + 1}\nHora de la función: {funcion.getHoraInicio()}\n" \
+                    f"Precio total: ${precio:.2f}\n------------------------"
+            app.resultLabel.config(text=app.resultLabel.cget("text") + recibo)
+
+        
+    @staticmethod
+    def limpiarFormulario(app):
+        # Destruir los widgets del app.frame si los hay
+        if app.frame is not None and app.frame.winfo_children():
+            for widget in app.frame.winfo_children():
+                widget.destroy()
+    
+        # Destruir los widgets sueltos (Combobox y Entry fuera del frame)
+        if app.widgetsSueltos:
+            for widget in app.widgetsSueltos:
+                widget.destroy()
+            app.widgetsSueltos.clear()  # Limpiar la lista después de destruir los widgets
+        
+        if hasattr(app, 'imagenLabel') and app.imagenLabel is not None:
+            app.imagenLabel.destroy()
+            app.imagenLabel = None
+
+        # Limpiar etiquetas de resultado y proceso
+        if app.resultLabel is not None:
+            app.resultLabel.config(text="")
+        if app.procesoLabel is not None:
+            app.procesoLabel.config(text="")
+        if app.indicacionLabel is not None:
+            app.indicacionLabel.config(text="")
+        
 
     @staticmethod
     def serializarTodo():

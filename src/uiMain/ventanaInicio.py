@@ -8,7 +8,7 @@ class ventanaInicio(tk.Tk):
     def __init__(self):
         # Crear ventana
         super().__init__()
-        self.geometry("700x700")
+        self.geometry("1900x750")
         self.title("Ventana de Inicio")
         self.config(bg="black")
 
@@ -27,30 +27,49 @@ class ventanaInicio(tk.Tk):
         p6.pack(side="bottom", fill="both", padx=5, pady=5)
 
         # Texto de bienvenida
-        textSaludo = """Bienvenido
-        al
-        Sistema"""
+        textSaludo = """
+        Bienvenido 
+        al Sistema"""
         saludo = tk.Label(p3, text=textSaludo, font=("Arial", 30), bg="black", fg="white")
         saludo.pack(fill="both", expand=True)
 
         # Hojas de vida
-        self.textHoja1 = """Personaje 1: Luna Starwind..."""
-        self.textHoja2 = """Personaje 2: Kai Vortex..."""
-        self.hojaDeVida = tk.Button(p5, text=self.textHoja1, command=self.hojasDeVida, bg="black", fg="white", font=("Arial", 15))
+        self.textHoja1 = """
+        Nombre: Juan Manuel Henao Rodriguez
+        
+        Edad: 18 años
+        
+        Ocupacion: Estudiante de ingenieria de sistemas e informatica (2 semestre)
+        
+        Lugar de nacimiento: Corregimiento San Diego municipio de Liborina-Antioquia
+        
+        Cualidades: Responsable, proactivo y capacidad de aprendizaje rápido.
+        """
+        self.textHoja2 = """
+        Nombre: Jhoan Alexis Rua Garcia
+        
+        Edad: 19 años
+        
+        Ocupacion: Estudiante de ingenieria de sistemas e informatica (2 semestre)
+        
+        Lugar de nacimiento: Municipio de Barbosa-Antioquia
+        
+        Cualidades: Creativo, comprometido y capacidad para resolver problemas.
+        """
+        self.hojaDeVida = tk.Button(p5, text=self.textHoja1,command=self.hojasDeVida, bg="black", fg="white", font=("Arial", 15))
         self.hojaDeVida.pack(fill="both", expand=True)
 
         # Cargar imágenes
         self.cargarImagenes()
 
-        # Mostrar imágenes iniciales
         self.label1 = tk.Label(p6, image=self.imagen1)
-        self.label1.grid(row=0, column=0, sticky="nw")
+        self.label1.grid(row=0, column=0, sticky="nw",padx=120,pady=5)
         self.label2 = tk.Label(p6, image=self.imagen2)
-        self.label2.grid(row=0, column=1, sticky="ne")
+        self.label2.grid(row=0, column=1, sticky="ne",padx=30,pady=5)
         self.label3 = tk.Label(p6, image=self.imagen3)
-        self.label3.grid(row=1, column=0, sticky="sw")
+        self.label3.grid(row=1, column=0, sticky="sw",padx=120,pady=5)
         self.label4 = tk.Label(p6, image=self.imagen4)
-        self.label4.grid(row=1, column=1, sticky="se")
+        self.label4.grid(row=1, column=1, sticky="se",padx=30,pady=5)
 
         # Botón de ventana principal
         ventanaPrincipal = tk.Button(p4, text="Ventana Principal", bg="black", fg="white", font=("Arial", 20), command=self.abrirVentanaPrincipal)
@@ -75,8 +94,8 @@ class ventanaInicio(tk.Tk):
         
 
     def cargarImagenes(self):
-        """Cargar todas las imágenes necesarias"""
-        self.imagen1 = tk.PhotoImage(file="src/uiMain/Imagenes/iatchi1.png")
+        #Cargar todas las imagenes
+        self.imagen1 = tk.PhotoImage(file="src/uiMain/Imagenes/itachi1.png")
         self.imagen2 = tk.PhotoImage(file="src/uiMain/Imagenes/itachi2.png")
         self.imagen3 = tk.PhotoImage(file="src/uiMain/Imagenes/itachi3.png")
         self.imagen4 = tk.PhotoImage(file="src/uiMain/Imagenes/itachi4.png")
@@ -92,7 +111,7 @@ class ventanaInicio(tk.Tk):
         self.imagenesRotacion = [self.imagen9, self.imagen10, self.imagen11, self.imagen12, self.imagen13]
 
     def hojasDeVida(self):
-        """Alternar entre los personajes en el botón de hojas de vida"""
+        #Alternar entre los personajes en el botón de hojas de vida
         actualText = self.hojaDeVida['text']
         if actualText == self.textHoja1:
             self.hojaDeVida.config(text=self.textHoja2)
@@ -108,16 +127,16 @@ class ventanaInicio(tk.Tk):
             self.label4.config(image=self.imagen4)
 
     def rotarImagen(self, event):
-        """Rotar imágenes cuando el mouse sale del área"""
+        #Rotar imágenes cuando el mouse sale del área
         self.imagenActual = (self.imagenActual + 1) % len(self.imagenesRotacion)
         self.label5.config(image=self.imagenesRotacion[self.imagenActual])
 
     def salir(self):
-        """Cerrar la aplicación"""
-        self.ventanaInicio.destroy()
+        #Cerrar la aplicación
+        self.destroy()
 
     def alternarVisibilidad(self):
-        """Alternar la visibilidad de la descripción del sistema"""
+        #Alternar la visibilidad de la descripción del sistema
         if self.descripcionVisible:
             if self.frameCentral:
                 self.frameCentral.destroy()
@@ -125,22 +144,36 @@ class ventanaInicio(tk.Tk):
             self.descripcionVisible = False
         else:
             if self.frameCentral is None:
-                self.frameCentral = tk.Frame(self.ventanaInicio)
-                self.frameCentral.pack(expand=True)
-                descripcionText = "Es un sistema de cines muy chimba"
-                descripcion = tk.Label(self.frameCentral, text=descripcionText, font=("Arial", 20))
+                self.frameCentral = tk.Frame(self)
+                self.frameCentral.place(x=600,y=150)
+                descripcionText = """
+El sistema, al presionar 
+el botón 'Ventana Principal', 
+te redireccionará a otra 
+ventana con un menú llamado 
+'Procesos y Consultas'. 
+Este menú te mostrará 
+opciones para crear y asignar 
+los objetos que conforman un 
+cine, gestionar tus zonas 
+de juegos y películas, y, 
+obviamente, podrás comprar 
+boletos tanto para el cine 
+como para las máquinas 
+de juegos."""
+                self.frameCentral.lift()
+                descripcion = tk.Label(self.frameCentral, text=descripcionText, font=("Arial", 20),bg="black",fg="white")
                 descripcion.pack(expand=True)
             self.descripcionVisible = True
 
     def abrirVentanaPrincipal(self):
-        """Abrir la ventana principal y ocultar la ventana de inicio"""
+        #Abrir la ventana principal y ocultar la ventana de inicio
         from src.uiMain.ventanaPrincipal import ventanaPrincipal
         from src.uiMain.interfaz import Interfaz
         self.destroy()  # Ocultar la ventana de inicio
         Interfaz.deserializarTodo()
         app = ventanaPrincipal()
         app.mainloop()
-
 
 if __name__ == "__main__":
     app=ventanaInicio()

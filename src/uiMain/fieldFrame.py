@@ -33,7 +33,14 @@ class FieldFrame(tk.Frame):
         
         tk.Button(self, text="Borrar", font = ("Arial", 12), fg = "white", bg = "blue",command=self.clear,
         width=12,height=2).grid(pady = (10,10), padx=(10,10), column = 1, row = len(self.criterios)+1, columnspan=3)
+        tk.Button(self, text="Aceptar", font = ("Arial", 12), fg = "white", bg = "blue", width=7,height=2, command=lambda: self.funAceptar(self.comando)).grid(pady = (10,10),
+            padx=(10,10), column = 0, row = len(self.criterios)+1)
 
+        self.comando = None
+
+    def clear(self):
+        for entry in self.entries.values():
+            entry.delete(0, tk.END)
 
     def getValue(self, criterio):
        #retorna el valor del criterio
@@ -43,17 +50,25 @@ class FieldFrame(tk.Frame):
         else:
             return None
 
-    def clear(self):
-        for entry in self.entries.values():
-            entry.delete(0, tk.END)
     def validar(self):
+        #Valida que todos los campos estén llenos
         for criterio in self.criterios:
             value = self.getValue(criterio)
             if not value:
                 messagebox.showwarning("Error", f"El campo {criterio} no puede estar vacío.")
-                return
-        messagebox.showinfo("Guardado", "Datos guardados exitosamente.")
-    def funAceptar(self, comando = None):
-        tk.Button(self, text="Aceptar", font = ("Arial", 12), fg = "white", bg = "blue", width=7,height=2, command=comando).grid(pady = (10,10),
-        padx=(10,10), column = 0, row = len(self.criterios)+1)
-        self.validar
+                return False
+        return True
+
+    def funAceptar(self, comando=None):
+        #Valida los campos y, si son válidos, ejecuta el comando pasado como argumento
+        if self.validar():
+            # Si la validación es exitosa, ejecuta el comando
+            if comando is not None:
+                comando()  # Ejecuta el comando pasado
+        else:
+            pass
+
+    def setComando(self, comando):
+        #Permite configurar el comando a ejecutar cuando se presiona Aceptar.
+        self.comando = comando
+        
