@@ -1,16 +1,19 @@
 import sys
 from typing import List, Optional
+from datetime import time
+from copy import deepcopy
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
 
 sys.path.append("gestorAplicacion/Cine")  # Ajusta el path según sea necesario
 
+#La clase cine es el eje de todo, ya que contiene funciones y zonas de juegos. 
 class Cine:
     peliculas: List = []  # Lista estática de películas
     cines: List['Cine'] = []  # Lista estática de cines
     LIMITE_TARJETAS = 10  # Constante de límite de tarjetas
 
-    def __init__(self, nombre: str, zonaDeJuegos = None):
+    def __init__(self, nombre, zonaDeJuegos = None):
         self.nombre = nombre
         self.zonaDeJuegos = zonaDeJuegos
         if zonaDeJuegos is not None:
@@ -31,11 +34,6 @@ class Cine:
     def setNombre(self, nombre: str):
         self.nombre = nombre
 
-    def setSalas(self,salas):
-        self.salas = salas
-
-    def getSalas(self):
-        return self.salas
         
     def getLunes(self):
         return self.lunes
@@ -259,41 +257,11 @@ class Cine:
             funciones[i] = funciones[i - 1]
         funciones[posicion] = None
         return True
-
-    def obtenerPeliculasDelDia(self, dia):
-        peliculasDelDia = []
-        if dia == "Lunes":
-            for j in range(len(self.getLunes())):
-                if self.getLunes()[j] is None:
-                    continue
-                peliculasDelDia.append(self.getLunes()[j].getPelicula().getTitulo())
-        elif dia == "Martes":
-            for j in range(len(self.getMartes())):
-                if self.getLunes()[j] is None:
-                    continue
-                peliculasDelDia.append(self.getMartes()[j].getPelicula().getTitulo())
-        elif dia == "Jueves":
-            for j in range(len(self.getJueves())):
-                if self.getLunes()[j] is None:
-                    continue
-                peliculasDelDia.append(self.getJueves()[j].getPelicula().getTitulo())
-        elif dia == "Viernes":
-            for j in range(len(self.getViernes())):
-                if self.getViernes()[j] is None:
-                    continue
-                peliculasDelDia.append(self.getLunes()[j].getPelicula().getTitulo())
-        else:
-            for j in range(len(self.getSabado())):
-                if self.getLunes()[j] is None:
-                    continue
-                peliculasDelDia.append(self.getSabado()[j].getPelicula().getTitulo())
-        return peliculasDelDia
-    
-            
+    #Se encargar de serializar Todos lo objetos de la clase cine      
     @staticmethod
     def serializarCines(file_name):
         Serializador.serializar(Cine.cines, file_name)
-
+    #Se encargar de deserializar Todos lo objetos de la clase cine  
     @staticmethod
     def deserializarCines(file_name):
         objetos = Deserializador.deserializar(file_name)

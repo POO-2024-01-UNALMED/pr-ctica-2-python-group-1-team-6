@@ -1,5 +1,5 @@
 import sys
-from datetime import time
+from datetime import time, datetime
 from typing import List
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
@@ -8,7 +8,7 @@ from src.baseDatos.deserializador import Deserializador
 
 
 sys.path.append("gestorAplicacion/Cine")
-
+#Es la funcion que instancia los objetos de tipo pelicula y contiene sus metodos mas importantes
 class Pelicula:
     # Lista estática para almacenar todas las películas
     totalPeliculas: List['Pelicula'] = []
@@ -70,7 +70,7 @@ class Pelicula:
 
     def __str__(self) -> str:
         return f"Pelicula: {self.titulo}, Género: {self.genero}, Calificacion: {self.calificacionPromedio}"
-
+    #Es el metodo que se encarga de recomendar la mejor opcion para intercambiar una pelicula segun sus filtros
     @staticmethod
     def recomendarIntercambio(peliculaSeleccionada: 'Pelicula') -> str:
         from src.gestorAplicacion.Cine.funcion import Funcion
@@ -124,7 +124,7 @@ class Pelicula:
                 f"(Calificación: {mejorPelicula.getCalificacionPromedio()}).\n"
                 f"Esta película se proyecta en el cine: {cine.getNombre()}, el día: {dia} "
                 )
-
+    #Metodo que ayuda al anterior a determinar si las peliculas si se pueden cambiar, analiza los horarios 
     @staticmethod
     def cumpleCriteriosHorario(pelicula: 'Pelicula', posicionEnDia: int) -> bool:
         if pelicula.getGenero() == "Infantil":
@@ -156,15 +156,13 @@ class Pelicula:
         
         return f"Bono  asignado a {cliente.getNombre()}"
 
-
+    #Guarda todas las peliculas
     @staticmethod
     def serializarPeliculas(file_name):
         Serializador.serializar(Pelicula.totalPeliculas, file_name)
-
+    #Carga todas las peliculas
     @staticmethod
     def deserializarPeliculas(file_name):
         objetos = Deserializador.deserializar(file_name)
         if objetos is not None:
             Pelicula.totalPeliculas = objetos
-
-

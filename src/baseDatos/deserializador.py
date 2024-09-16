@@ -1,5 +1,6 @@
 import pickle
 import os
+#Clase que se encarga de dserializar los objetos
 class Deserializador:
     
     @staticmethod

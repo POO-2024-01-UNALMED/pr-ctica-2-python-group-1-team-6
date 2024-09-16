@@ -3,7 +3,7 @@ import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-
+#Ventana de inicio
 class ventanaInicio(tk.Tk):
     def __init__(self):
         # Crear ventana
@@ -127,11 +127,12 @@ class ventanaInicio(tk.Tk):
             self.label4.config(image=self.imagen4)
 
     def rotarImagen(self, event):
-        #Rotar imágenes cuando el mouse sale del área
+        #Rota las imagenes cuando el mouse sale del area
         self.imagenActual = (self.imagenActual + 1) % len(self.imagenesRotacion)
         self.label5.config(image=self.imagenesRotacion[self.imagenActual])
 
     def salir(self):
+        #Boton para cerrar el sistema y guardar todo
         from src.uiMain.interfaz import Interfaz
         Interfaz.serializarTodo()
         self.destroy()
@@ -168,7 +169,7 @@ de juegos."""
             self.descripcionVisible = True
 
     def abrirVentanaPrincipal(self):
-        #Abrir la ventana principal y ocultar la ventana de inicio
+        #Abrir la ventana principal y destruir la ventana de inicio, ademas carga toda la info del sistema
         from src.uiMain.ventanaPrincipal import ventanaPrincipal
         from src.uiMain.interfaz import Interfaz
         self.destroy()  # Ocultar la ventana de inicio

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
-
+#Clase padre de zonaDeJuegos y bodega
 class Establecimiento(ABC):
     def __init__(self, nombre):
         # Atributo para almacenar el nombre del establecimiento
@@ -57,6 +57,8 @@ class ZonaDeJuegos(Establecimiento):
     def getMaquinas(self):
         # Retorna la lista de máquinas
         return self.maquinas
+    def getHorario(self):
+        return self.horario
 
     def getMaquinasDañadas(self):
         # Retorna una lista de máquinas que necesitan mantenimiento
@@ -145,9 +147,6 @@ class ZonaDeJuegos(Establecimiento):
         objetos = Deserializador.deserializar(file_name)
         if objetos is not None:
             ZonaDeJuegos.zonasDeJuegos = objetos
-    def getHorario(self):
-        return self.horario
-    
 
 
     def __str__(self):

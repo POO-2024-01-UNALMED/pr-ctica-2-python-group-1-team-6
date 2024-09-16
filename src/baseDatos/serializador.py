@@ -1,5 +1,5 @@
 import pickle
-
+#Clase que serializa los objetos
 class Serializador:
     
     @staticmethod

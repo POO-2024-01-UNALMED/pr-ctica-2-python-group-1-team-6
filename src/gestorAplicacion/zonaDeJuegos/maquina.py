@@ -83,13 +83,9 @@ class Maquina:
     def asignarBono(self, cliente):
         # Asigna un bono al cliente basado en su tipo si el bono está activo
         if self.bonoActivo:
-            if cliente.getTipo() == "Generico":
-                cliente.setSaldo(cliente.getSaldo() + 15)  # Bono para cliente genérico
-            elif cliente.getTipo() == "Preferencial":
-                cliente.setSaldo(cliente.getSaldo() + 20)  # Bono para cliente preferencial
-            elif cliente.getTipo() == "VIP":
-                cliente.setSaldo(cliente.getSaldo() + 30)  # Bono para cliente VIP
-        return f"Bono {cliente.getTipo()} asignado a {cliente.getNombre()}"
+            cliente.setSaldo(cliente.getSaldo() + 10)  
+            
+        return f"Bono asignado a {cliente.getNombre()}"
     
     @staticmethod
     def obtenerDosMaquinasMenosVenden():

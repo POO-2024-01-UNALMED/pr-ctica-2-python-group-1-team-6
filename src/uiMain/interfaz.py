@@ -20,16 +20,14 @@ from tkinter import messagebox
 
 
 from datetime import time,datetime
-
+#Aqui estan todos los metodos que le dan una funcionalidad al sistema
 class Interfaz:
 
-    @staticmethod
-    def error():
-     print("Error")
-
+    
+    #Gestionar Zona de juegos
     @staticmethod
     def gestionarZonaDeJuegos(app):
-        """Gestiona las zonas de juegos utilizando la interfaz gráfica."""
+        
         Interfaz.limpiarFormulario(app)        
         # Paso 1: Actualización de dinero recaudado en todas las zonas de juegos
         for cine in Cine.cines:
@@ -52,7 +50,7 @@ class Interfaz:
             return
 
         criterios = ["Ingrese la zona de juegos para reparación"]
-        opciones_zonas = [cine.zonaDeJuegos.getNombre() for cine in zonasDisponibles]
+        opcionesZonas = [cine.zonaDeJuegos.getNombre() for cine in zonasDisponibles]
 
         app.procesoLabel.config(text="Seleccionar Zona de Juegos")
         app.indicacionLabel.config(text="Seleccione la zona donde desea reparar una máquina")
@@ -87,11 +85,11 @@ class Interfaz:
                 return
 
             # Paso 3: Selección de la máquina dañada
-            criterios_maquinas = ["Ingrese la máquina dañada"]
-            opciones_maquinas = [maquina.getNombre() for maquina in maquinasDañadas]
+            criteriosMaquinas = ["Ingrese la máquina dañada"]
+            opcionesMaquinas = [maquina.getNombre() for maquina in maquinasDañadas]
             app.procesoLabel.config(text="Seleccionar Máquina a Reparar")
             app.indicacionLabel.config(text="Seleccione la máquina que desea reparar")
-            app.actualizarFormulario("Máquinas Dañadas", criterios_maquinas, "Valores", [])
+            app.actualizarFormulario("Máquinas Dañadas", criteriosMaquinas, "Valores", [])
 
             # Botón 'Aceptar' para realizar la reparación
             def seleccionarMaquina():
@@ -105,7 +103,7 @@ class Interfaz:
                             break
             
                     if maquinaSeleccionada is None:
-                        datosValidos = opciones_maquinas  # Opcional: Lista de nombres válidos
+                        datosValidos = opcionesMaquinas  # Opcional: Lista de nombres válidos
                         raise DatoErroneoExcepcion(datosValidos, maquina_nombre)
 
                 except DatoErroneoExcepcion as e:
@@ -113,8 +111,8 @@ class Interfaz:
                     return
                         
                 #Reparacion
-                resultado_reparacion = Bodega.allBodegas[0].realizarMantenimiento(zonaActual, maquinasDañadas.index(maquinaSeleccionada))
-                app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nReparación realizada: {resultado_reparacion}")
+                resultadoReparacion = Bodega.allBodegas[0].realizarMantenimiento(zonaActual, maquinasDañadas.index(maquinaSeleccionada))
+                app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nReparación realizada: {resultadoReparacion}")
 
                 # Recomendación de movimiento
                 recomendacion = zonaActual.recomendarMovimiento(maquinaSeleccionada)
@@ -127,26 +125,26 @@ class Interfaz:
 
                 # Botón 'Aceptar' para mover la máquina
                 def seleccionarZonaDestino():
-                    zona_destino_nombre = app.frame.getValue("Ingrese la zona de destino")
-                    print(zona_destino_nombre)
+                    zonaDestinoNombre = app.frame.getValue("Ingrese la zona de destino")
+                    print(zonaDestinoNombre)
                     # Buscar la zona de destino por su nombre
                     try:
                         zonaDestino = None
                         for cine in zonasDisponibles:
-                            if cine.zonaDeJuegos.getNombre() == zona_destino_nombre:
+                            if cine.zonaDeJuegos.getNombre() == zonaDestinoNombre:
                                 zonaDestino = cine.zonaDeJuegos
                                 break
                 
                         if zonaDestino is None:
-                            datosValidos=opciones_zonas
-                            raise DatoErroneoExcepcion(datosValidos,zona_destino_nombre)
+                            datosValidos=opcionesZonas
+                            raise DatoErroneoExcepcion(datosValidos,zonaDestinoNombre)
                     except DatoErroneoExcepcion as e:
                         messagebox.showerror("Error",f"{str(e)}.\n Zonas validas: {', '.join(e.datosValidos)}")
                         return
 
                     if zonaActual != zonaDestino:
-                        resultado_movimiento = zonaActual.moverMaquina(zonaDestino, maquinasDañadas.index(maquinaSeleccionada))
-                        app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nMovimiento realizado: {resultado_movimiento}")
+                        resultadoMovimiento = zonaActual.moverMaquina(zonaDestino, maquinasDañadas.index(maquinaSeleccionada))
+                        app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nMovimiento realizado: {resultadoMovimiento}")
                     else:
                         app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nLa máquina permanecerá en {zonaActual.getNombre()}")
                     # Paso 4: Aplicar incentivos
@@ -154,21 +152,21 @@ class Interfaz:
 
                 def aplicarIncentivo():
                     # Preguntar al usuario si desea aplicar incentivos
-                    criterios_incentivo = ["¿Desea aplicar algún incentivo en una zona de juegos? Si/No"]
-                    opciones_incentivo = ["Si", "No"]
+                    criteriosIncentivo = ["¿Desea aplicar algún incentivo en una zona de juegos? Si/No"]
+                    opcionesIncentivo = ["Si", "No"]
 
                     app.procesoLabel.config(text="Aplicar Incentivos")
                     app.indicacionLabel.config(text="Seleccione si desea aplicar un incentivo")
-                    app.actualizarFormulario("Aplicar Incentivo", criterios_incentivo, "Opciones", opciones_incentivo)
+                    app.actualizarFormulario("Aplicar Incentivo", criteriosIncentivo, "Opciones", opcionesIncentivo)
 
                     def seleccionarIncentivo():
                         opcionIncentivo = app.frame.getValue("¿Desea aplicar algún incentivo en una zona de juegos? Si/No")
                     
                         if opcionIncentivo == "Si":
-                            criterios_tipo_incentivo = ["Seleccione el tipo de incentivo"]
+                            criteriosTipoIncentivo = ["Seleccione el tipo de incentivo"]
                             app.procesoLabel.config(text="Tipo de Incentivo")
                             app.indicacionLabel.config(text="Seleccione el tipo de incentivo")
-                            app.actualizarFormulario("Tipo de Incentivo", criterios_tipo_incentivo, "Opciones", [])
+                            app.actualizarFormulario("Tipo de Incentivo", criteriosTipoIncentivo, "Opciones", [])
 
                             def seleccionarTipoIncentivo():
                                 tipoIncentivo = app.frame.getValue("Seleccione el tipo de incentivo")
@@ -189,17 +187,17 @@ class Interfaz:
                                     app.actualizarFormulario("Zonas para Rebaja", ["Seleccione una zona"], "Opciones", [])
 
                                     def seleccionarZonaRebaja():
-                                        zona_rebaja_nombre = app.frame.getValue("Seleccione una zona")
+                                        zonaRebajaNombre = app.frame.getValue("Seleccione una zona")
 
                                         try:
                                             zonaRebaja = None
                                             for cine in zonasDisponibles:
-                                                if cine.zonaDeJuegos.getNombre() == zona_rebaja_nombre:
+                                                if cine.zonaDeJuegos.getNombre() == zonaRebajaNombre:
                                                     zonaRebaja = cine.zonaDeJuegos
                                                     break
 
                                             if zonaRebaja is None:
-                                                raise DatoErroneoExcepcion(opciones_zonas,zona_rebaja_nombre)
+                                                raise DatoErroneoExcepcion(opcionesZonas,zonaRebajaNombre)
                                         except DatoErroneoExcepcion as e:
                                             messagebox.showerror("Error",f"{str(e)}.\nZonas validas: {', '.join(e.datosValidos)}")
                                             return 
@@ -207,21 +205,21 @@ class Interfaz:
 
                                         # Seleccionar la máquina para rebajar el precio
                                         maquinasEnZona = zonaRebaja.getMaquinas()
-                                        opciones_maquinas_rebaja = [maquina.getNombre() for maquina in maquinasEnZona]
+                                        opcionesMaquinasRebaja = [maquina.getNombre() for maquina in maquinasEnZona]
                                         app.actualizarFormulario("Máquinas para Rebaja", ["Seleccione una máquina"], "Opciones", [])
 
                                         def seleccionarMaquinaRebaja():
-                                            maquina_rebaja_nombre = app.frame.getValue("Seleccione una máquina")
+                                            maquinaRebajaNombre = app.frame.getValue("Seleccione una máquina")
                                             try:
                                                 maquinaRebajada = None
                                                 for maquina in maquinasEnZona:
-                                                    if maquina.getNombre() == maquina_rebaja_nombre:
+                                                    if maquina.getNombre() == maquinaRebajaNombre:
                                                         maquinaRebajada = maquina
                                                     break
 
                                                 # Si la máquina no es válida, lanzamos la excepción DatoErroneoExcepcion
                                                 if maquinaRebajada is None:
-                                                    raise DatoErroneoExcepcion(opciones_maquinas_rebaja, maquina_rebaja_nombre)
+                                                    raise DatoErroneoExcepcion(opcionesMaquinasRebaja, maquinaRebajaNombre)
 
                                             except DatoErroneoExcepcion as e:
                                                 messagebox.showerror("Error",f"{str(e)}.\nMáquinas válidas: {', '.join(e.datosValidos)}")
@@ -243,20 +241,20 @@ class Interfaz:
                                     # Seleccionar la zona donde aplicar el bono
                                     app.procesoLabel.config(text="Seleccionar Zona para Bono")
                                     app.indicacionLabel.config(text="Seleccione la zona donde desea aplicar el bono")
-                                    app.actualizarFormulario("Zonas para Bono", ["Seleccione una zona"], "Opciones", opciones_zonas)
+                                    app.actualizarFormulario("Zonas para Bono", ["Seleccione una zona"], "Opciones", opcionesZonas)
 
                                     def seleccionarZonaBono():
-                                        zona_bono_nombre = app.frame.getValue("Seleccione una zona")
+                                        zonaBonoNombre = app.frame.getValue("Seleccione una zona")
                                         try:
                                             zona = None
                                             for cine in zonasDisponibles:
-                                                if cine.zonaDeJuegos.getNombre() == zona_bono_nombre:
+                                                if cine.zonaDeJuegos.getNombre() == zonaBonoNombre:
                                                     zona = cine.zonaDeJuegos
                                                     break
 
                                     # Si la zona no es válida, lanzamos la excepción DatoErroneoExcepcion
                                             if zona is None:
-                                                raise DatoErroneoExcepcion(opciones_zonas, zona_bono_nombre)
+                                                raise DatoErroneoExcepcion(opcionesZonas, zonaBonoNombre)
 
                                         except DatoErroneoExcepcion as e:
                                             messagebox.showerror("Error",f"{str(e)}.\nZonas válidas: {', '.join(e.datosValidos)}")
@@ -264,8 +262,8 @@ class Interfaz:
 
                                         # Seleccionar la máquina para aplicar el bono
                                         maquinasEnZona = zona.getMaquinas()
-                                        opciones_maquinas_bono = [maquina.getNombre() for maquina in maquinasEnZona]
-                                        app.actualizarFormulario("Máquinas para Bono", ["Seleccione una máquina"], "Opciones", opciones_maquinas_bono)
+                                        opcionesMaquinasBono = [maquina.getNombre() for maquina in maquinasEnZona]
+                                        app.actualizarFormulario("Máquinas para Bono", ["Seleccione una máquina"], "Opciones", opcionesMaquinasBono)
 
                                         def seleccionarMaquinaBono():
                                             maquina_bono_nombre = app.frame.getValue("Seleccione una máquina")
@@ -279,7 +277,7 @@ class Interfaz:
 
                                                 #Si la máquina no es válida, lanzamos la excepción DatoErroneoExcepcion
                                                 if maquina is None:
-                                                    raise DatoErroneoExcepcion(opciones_maquinas_bono, maquina_bono_nombre)
+                                                    raise DatoErroneoExcepcion(opcionesMaquinasBono, maquina_bono_nombre)
 
                                             except DatoErroneoExcepcion as e:
                                                 messagebox.showerror("Error",f"{str(e)}.\nMáquinas válidas: {', '.join(e.datosValidos)}")
@@ -306,7 +304,7 @@ class Interfaz:
                 app.frame.setComando(seleccionarZonaDestino)
             app.frame.setComando(seleccionarMaquina)
         app.frame.setComando(seleccionarZona)
-
+    #Gestionar Peliculas
     @staticmethod
     def gestionarPeliculas(app):
         Interfaz.limpiarFormulario(app)
@@ -470,96 +468,7 @@ class Interfaz:
                 app.frame.setComando(seleccionarNuevoCine)
             app.frame.setComando(seleccionarPelicula)
         app.frame.setComando(seleccionarCine)
-    
-    @staticmethod
-    def gestionarCartelera():
-        print("Elige el cine al que deseas modificar su cartelera semanal:\n")
-        listaVacios = None
-        cine = None
-        #Le pedimos al usuario que elija el cine al que le quiere añadir funciones.
-        for i in range(len(Cine.cines)):
-            print(f"{i+1}. {Cine.cines[i].getNombre()}.")
-        while True:
-            eleccion = int(input("->:"))
-            cine = Cine.cines[eleccion-1]
-            listaVacios = cine.hallarEspaciosSinFuncion() #Tomamos todas los posibles horarios para añadir funciones.
-            if(listaVacios == -1): #Consideremos el caso donde no haya cupo.
-                print("Este cine no tiene huecos para agregar funciones, selecciona otro")
-                continue
-            else:
-                break
-        print("Esta es la programación semanal que actualmente se tiene en el cine escogido:")
-        #Mostramos con una tabla la programación semanal.
-        
-        peliculasListas = []
-        print("Estos son los espacios libres en el cine escogido:")
-        for j in range(len(listaVacios)):
-            print(f"{j+1}. Día {listaVacios[j][0]}, a las {listaVacios[j][1]}")
-        condicion = True
-        while condicion:
-            horaPeli = None
-            espacio = None
-            diaPeli = None                
-            if len(listaVacios) == 1:
-                espacio = listaVacios[0]
-                print("Como solo hay una alternativa, la tomamos de inmediato.")
-            else:
-                print("Elige el espacio que deseas modificar:")
-                eleccion = int(input("->:"))
-                espacio = listaVacios[eleccion-1]
-                if len(espacio) == 4:
-                    print("Ya asignaste película para este espacio:")
-                    continue
-            peliculasParaElegir = Pelicula.ObtenerPeliculasElegibles(espacio[1], espacio[0], cine)
-            if len(peliculasParaElegir)==1:
-                horaPeli = espacio[1]
-                diaPeli = espacio[0]
-                print(f"Solo hallamos una alternatva, lo tomamos de inmediato: {peliculasParaElegir[0].getTitulo()}, calificación: {str(peliculasParaElegir[0].getCalificacionPromedio())}")
-                peliculasListas += [[peliculasParaElegir[0],diaPeli, horaPeli, espacio[2]]]
-                espacio.append("A")
-            else:
-                print("Elige la película para rellenar el espacio:\n")
-                for i in range(len(peliculasParaElegir)):
-                    print(f"{str(i+1)}. {peliculasParaElegir[i].getTitulo()}, calificación: {str(peliculasParaElegir[i].getCalificacionPromedio())}")
-                eleccion = int(input("->:"))
-                diaPeli = espacio[0]
-                horaPeli = espacio[1]
-                peliculasListas += [[peliculasParaElegir[eleccion-1], diaPeli, horaPeli, espacio[2]]]
-                espacio.append("A")
-            numeroVacios = 0
-            for espacio in listaVacios:
-                if len(espacio) == 3:
-                    break
-                else:
-                    numeroVacios += 1
-            if numeroVacios == len(listaVacios):
-                print("No hay más espacios.")
-                break
-            print("¿Quiéres continuar llenando espacios? (S/N)")
-            decision = input("->:")
-            if (decision == "S"):
-                continue
-            elif (decision == "N"):
-                print("Saliendo")
-                break
-
-        #Por cada película para agregar debemos preguntar la sala y definir el precio de entrada
-        
-        for adicion in peliculasListas:
-            print(f"Elige la sala de proyección para {adicion[0].getTitulo()}, del día {adicion[1]} y a las {adicion[2]}")
-            for x in range(len(adicion[3])):
-                print(f"{x+1}. Sala {adicion[3][x].getNumero()}. Capacidad: {adicion[3][x].getCapacidad()} butacas")
-            eleccion = int(input("Elige la sala que prefieras: "))
-            salaEscogida = adicion[3][eleccion-1]
-            precioEntrada = int(input("Digita el precio de la entrada: "))
-            funcionAnadida = Funcion.agregarFuncion(cine, adicion[1], adicion[2], adicion[0], precioEntrada, salaEscogida)
-            for elemento in peliculasListas:
-                if adicion != elemento:
-                    if int(elemento[2][:2]) + 2 == int(adicion[2][:2]) or int(elemento[2][:2]) + 2 == int(adicion[2][:2]):
-                        for salaElemento in elemento[3]:
-                            if salaElemento == salaEscogida:
-                                elemento[3].remove(salaElemento)
-    
+    #Menu para crear instancias en ejecucion
     def menuCreacion(app):
         Interfaz.limpiarFormulario(app)
         opciones = [
@@ -825,7 +734,7 @@ class Interfaz:
                 app.resultLabel.config(text=f"Sala creada: {sala}")
 
             app.frame.setComando(aceptarSala)  # Vincula aceptarSala con el botón 'Aceptar' para la creación de la sala
-    
+    #Menu para asignar instancias creadas en ejecucuion
     def menuAsignacion(app):
         Interfaz.limpiarFormulario(app)
         opciones = [
@@ -1263,7 +1172,7 @@ class Interfaz:
                 app.entrada2.destroy()
                 
             app.frame.setComando(aceptarAsignacion)
-
+    #Comprar boleta para jugar maquinitas
     @staticmethod
     def comprarBoletaJuegos(app):
         Interfaz.limpiarFormulario(app)
@@ -1378,10 +1287,11 @@ class Interfaz:
 
                             # Paso 5: Asignar bono si está activo
                             bonoMensaje = maquinaSeleccionada.asignarBono(cliente)
-                            app.resultLabel.config(text=f"Compra realizada. {bonoMensaje}")
+                            
 
                             # Paso 6: Imprimir recibo
                             recibo = (
+                                f"Compra realizada. {bonoMensaje}"
                                 f"Recibo:\nCliente: {cliente.getNombre()}\n"
                                 f"Máquina: {maquinaSeleccionada.getNombre()}\n"
                                 f"Precio: {maquinaSeleccionada.getPrecioUso()}\n"
@@ -1399,7 +1309,7 @@ class Interfaz:
             app.frame.setComando(seleccionarZonaDeJuegos)
 
         app.frame.setComando(identificarCliente)
-   
+    #Metodo para calificar las peliculas
     @staticmethod
     def calificarPelicula(app):
         Interfaz.limpiarFormulario(app)
@@ -1471,7 +1381,7 @@ class Interfaz:
             app.frame.setComando(ingresarCalificacion)
 
         app.frame.setComando(seleccionarPelicula)
-    
+    #Metodo para comprar las boletas para ver una pelicula
     @staticmethod
     def comprarBoleta(app):
         Interfaz.limpiarFormulario(app)
@@ -1593,15 +1503,21 @@ class Interfaz:
                     try:
                         # Primer bloque try para seleccionar la función
                         funcionSeleccionadaIndex = app.frame.getValue("Seleccione Función")
+                        try:
+                            if not funcionSeleccionadaIndex.isdigit():
+                                raise ExcepcionSugerida2(funcionSeleccionadaIndex)
+                        except ExcepcionSugerida2 as s:
+                            messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                            return
         
                          # Validar si la clave existe en funcionMap antes de intentar acceder a ella
-                        indice_funcion = int(funcionSeleccionadaIndex.split()[0])
-                        if indice_funcion not in funcionMap:
+                        indiceFuncion = int(funcionSeleccionadaIndex.split()[0])
+                        if indiceFuncion not in funcionMap:
                             # Si el índice no está en el mapa, lanzamos la excepción personalizada
                             raise ExcepcionSugerida1()
 
                         # Accedemos a la función seleccionada solo si la clave es válida
-                        funcionSeleccionada = funcionMap[indice_funcion]
+                        funcionSeleccionada = funcionMap[indiceFuncion]
 
                         # Actualizamos la interfaz
                         app.resultLabel.config(text=funcionSeleccionada.getSala().estadoSilleteria())
@@ -1685,7 +1601,7 @@ class Interfaz:
             
             
 
-        
+    #Limpia la ventana cada vez que se ingresa a un metodo
     @staticmethod
     def limpiarFormulario(app):
         # Destruir los widgets del app.frame si los hay
@@ -1711,7 +1627,7 @@ class Interfaz:
         if app.indicacionLabel is not None:
             app.indicacionLabel.config(text="")
         
-
+    #Llama a todos los metodos que serializan y les manda el archivo donde lo deben hacer
     @staticmethod
     def serializarTodo():
         Cine.serializarCines('src/baseDatos/temp/cine.pkl')
@@ -1722,7 +1638,7 @@ class Interfaz:
         ZonaDeJuegos.serializarZonasDeJuegos('src/baseDatos/temp/zonaDeJuegos.pkl')
         Bodega.serializarBodegas('src/baseDatos/temp/bodega.pkl')
         Maquina.serializarMaquinas('src/baseDatos/temp/maquina.pkl')
-    
+    #Llama a todos los metodos que deserializan y les manda el archivo en donde estara la informacion
     @staticmethod
     def deserializarTodo():
         Cine.deserializarCines('src/baseDatos/temp/cine.pkl')
@@ -1733,6 +1649,15 @@ class Interfaz:
         ZonaDeJuegos.deserializarZonasDeJuegos('src/baseDatos/temp/zonaDeJuegos.pkl')
         Bodega.deserializarBodegas('src/baseDatos/temp/bodega.pkl')
         Maquina.deserializarMaquinas('src/baseDatos/temp/maquina.pkl')
+
+    
+
+
+        
+
+
+
+    
 
 
         

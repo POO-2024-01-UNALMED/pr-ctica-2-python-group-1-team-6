@@ -1,6 +1,6 @@
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
-
+#Esta es la clase que contiene la silleteria y todos sus metodos
 class Sala:
     allSalas = []
 
@@ -73,4 +73,3 @@ class Sala:
         objetos = Deserializador.deserializar(file_name)
         if objetos is not None:
             Sala.allSalas = objetos
-

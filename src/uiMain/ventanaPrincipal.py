@@ -6,7 +6,7 @@ from tkinter import messagebox
 from src.uiMain.fieldFrame import FieldFrame
 from src.uiMain.interfaz import Interfaz
 
-
+#Ventana principal
 class ventanaPrincipal(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -27,10 +27,10 @@ class ventanaPrincipal(tk.Tk):
         
         self.imagen = tk.PhotoImage(file="src/uiMain/Imagenes/start.png")
 
-        # Crear una etiqueta con la imagen
+        # Crear una etiqueta con la imagen que aparece de "interfaz"
         self.imagenLabel = tk.Label(self, image=self.imagen)
         self.imagenLabel.pack(expand=True, fill="both")
-        # Crear menú 
+        # Crear menu 
         self.crearMenu()
     
     def crearMenu(self):
@@ -69,8 +69,7 @@ Compra boletos para películas y juegos, gestiona las zonas de juegos y administ
 
     def mostrarAutores(self):
         #Mostrar los autores de la aplicacion
-        messagebox.showinfo("Acerca de", """Autores: Juan Manuel Henao Rodriguez y 
-        Jhoan Alexis Rua Garcia""")
+        messagebox.showinfo("Acerca de", """Autores: Juan Manuel Henao Rodriguez """)
     
     def gestionarZonaDeJuegos(self):
        Interfaz.gestionarZonaDeJuegos(self)
@@ -88,13 +87,13 @@ Compra boletos para películas y juegos, gestiona las zonas de juegos y administ
     def comprarBoleto(self):
         Interfaz.comprarBoleta(self)
     
-    def actualizarFormulario(self, titulo_criterios, criterios, titulo_valores, valores=None):
+    def actualizarFormulario(self, titulo_criterios, criterios, titulo_valores, valores=None,habilitado=None):
         #Actualiza los formularios de la interfaz
         if self.frame:
             self.frame.pack_forget()
         
         # Crear un nuevo FieldFrame
-        self.frame = FieldFrame(self, titulo_criterios, criterios, titulo_valores, valores)
+        self.frame = FieldFrame(self, titulo_criterios, criterios, titulo_valores, valores,habilitado)
         self.frame.pack(side="top", anchor="center")
     
     def volverAVentanaInicio(self):
