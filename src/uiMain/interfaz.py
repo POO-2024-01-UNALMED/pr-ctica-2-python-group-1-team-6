@@ -11,6 +11,7 @@ from src.gestorAplicacion.Cine.pelicula import Pelicula
 from src.gestorAplicacion.Cine.funcion import Funcion
 from src.gestorAplicacion.zonaDeJuegos.establecimiento import *
 from src.gestorAplicacion.zonaDeJuegos.maquina import Maquina
+from src.uiMain.excepciones import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -29,7 +30,6 @@ class Interfaz:
     @staticmethod
     def gestionarZonaDeJuegos(app):
         """Gestiona las zonas de juegos utilizando la interfaz gráfica."""
-
         Interfaz.limpiarFormulario(app)        
         # Paso 1: Actualización de dinero recaudado en todas las zonas de juegos
         for cine in Cine.cines:
@@ -56,21 +56,28 @@ class Interfaz:
 
         app.procesoLabel.config(text="Seleccionar Zona de Juegos")
         app.indicacionLabel.config(text="Seleccione la zona donde desea reparar una máquina")
-        app.actualizarFormulario("Zonas Disponibles", criterios, "Valores", opciones_zonas)
+        app.actualizarFormulario("Zonas Disponibles", criterios, "Valores", [])
 
         # Botón 'Aceptar' pasa a seleccionar la máquina dañada
         def seleccionarZona():
-            zona_nombre = app.frame.getValue("Ingrese la zona de juegos para reparación")
+            zonaNombre = app.frame.getValue("Ingrese la zona de juegos para reparación")
         
             # Buscar la zona seleccionada por su nombre
-            zonaActual = None
-            for cine in zonasDisponibles:
-                if cine.zonaDeJuegos.getNombre() == zona_nombre:
-                    zonaActual = cine.zonaDeJuegos
-                    break
-        
-            if zonaActual is None:
-                app.resultLabel.config(text=app.resultLabel.cget("text") + "\nSeleccione una zona válida.")
+            try:
+                zonaActual = None
+                for cine in zonasDisponibles:
+                    if cine.zonaDeJuegos.getNombre() == zonaNombre:
+                        zonaActual = cine.zonaDeJuegos
+                        break
+
+                # Si no se encuentra una zona válida, lanzamos la excepción personalizada
+                if zonaActual is None:
+                    datosValidos = [cine.zonaDeJuegos.getNombre() for cine in zonasDisponibles]  # Lista de nombres válidos
+                    raise DatoErroneoExcepcion(datosValidos, zonaNombre)
+
+            except DatoErroneoExcepcion as e:
+                # Manejo del error con un pop-up para informar al usuario
+                messagebox.showerror("Error",f"{str(e)}.\nZonas válidas: {', '.join(e.datosValidos)}")
                 return
 
             maquinasDañadas = zonaActual.getMaquinasDañadas()
@@ -84,24 +91,28 @@ class Interfaz:
             opciones_maquinas = [maquina.getNombre() for maquina in maquinasDañadas]
             app.procesoLabel.config(text="Seleccionar Máquina a Reparar")
             app.indicacionLabel.config(text="Seleccione la máquina que desea reparar")
-            app.actualizarFormulario("Máquinas Dañadas", criterios_maquinas, "Valores", opciones_maquinas)
+            app.actualizarFormulario("Máquinas Dañadas", criterios_maquinas, "Valores", [])
 
             # Botón 'Aceptar' para realizar la reparación
             def seleccionarMaquina():
                 maquina_nombre = app.frame.getValue("Ingrese la máquina dañada")
             
-                # Buscar la máquina seleccionada por su nombre
-                maquinaSeleccionada = None
-                for maquina in maquinasDañadas:
-                    if maquina.getNombre() == maquina_nombre:
-                        maquinaSeleccionada = maquina
-                        break
+                try: # Buscar la máquina seleccionada por su nombre
+                    maquinaSeleccionada = None
+                    for maquina in maquinasDañadas:
+                        if maquina.getNombre() == maquina_nombre:
+                            maquinaSeleccionada = maquina
+                            break
             
-                if maquinaSeleccionada is None:
-                    app.resultLabel.config(text=app.resultLabel.cget("text") + "\nSeleccione una máquina válida.")
-                    return
+                    if maquinaSeleccionada is None:
+                        datosValidos = opciones_maquinas  # Opcional: Lista de nombres válidos
+                        raise DatoErroneoExcepcion(datosValidos, maquina_nombre)
 
-                # Reparación
+                except DatoErroneoExcepcion as e:
+                    messagebox.showerror("Error",f"{str(e)}.\nMaquinas validas:{', '.join(e.datosValidos)}")
+                    return
+                        
+                #Reparacion
                 resultado_reparacion = Bodega.allBodegas[0].realizarMantenimiento(zonaActual, maquinasDañadas.index(maquinaSeleccionada))
                 app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nReparación realizada: {resultado_reparacion}")
 
@@ -112,21 +123,25 @@ class Interfaz:
                 criterios=["Ingrese la zona de destino"]
                 app.procesoLabel.config(text="Seleccionar Zona de Destino")
                 app.indicacionLabel.config(text="Seleccione la zona donde desea mover la máquina")
-                app.actualizarFormulario("Zonas Disponibles", criterios, "Valores", opciones_zonas)
+                app.actualizarFormulario("Zonas Disponibles", criterios, "Valores", [])
 
                 # Botón 'Aceptar' para mover la máquina
                 def seleccionarZonaDestino():
                     zona_destino_nombre = app.frame.getValue("Ingrese la zona de destino")
                     print(zona_destino_nombre)
                     # Buscar la zona de destino por su nombre
-                    zonaDestino = None
-                    for cine in zonasDisponibles:
-                        if cine.zonaDeJuegos.getNombre() == zona_destino_nombre:
-                            zonaDestino = cine.zonaDeJuegos
-                            break
+                    try:
+                        zonaDestino = None
+                        for cine in zonasDisponibles:
+                            if cine.zonaDeJuegos.getNombre() == zona_destino_nombre:
+                                zonaDestino = cine.zonaDeJuegos
+                                break
                 
-                    if zonaDestino is None:
-                        app.resultLabel.config(text=app.resultLabel.cget("text") + "\nSeleccione una zona válida.")
+                        if zonaDestino is None:
+                            datosValidos=opciones_zonas
+                            raise DatoErroneoExcepcion(datosValidos,zona_destino_nombre)
+                    except DatoErroneoExcepcion as e:
+                        messagebox.showerror("Error",f"{str(e)}.\n Zonas validas: {', '.join(e.datosValidos)}")
                         return
 
                     if zonaActual != zonaDestino:
@@ -138,8 +153,8 @@ class Interfaz:
                     aplicarIncentivo()
 
                 def aplicarIncentivo():
-        # Preguntar al usuario si desea aplicar incentivos
-                    criterios_incentivo = ["¿Desea aplicar algún incentivo en una zona de juegos?"]
+                    # Preguntar al usuario si desea aplicar incentivos
+                    criterios_incentivo = ["¿Desea aplicar algún incentivo en una zona de juegos? Si/No"]
                     opciones_incentivo = ["Si", "No"]
 
                     app.procesoLabel.config(text="Aplicar Incentivos")
@@ -147,14 +162,13 @@ class Interfaz:
                     app.actualizarFormulario("Aplicar Incentivo", criterios_incentivo, "Opciones", opciones_incentivo)
 
                     def seleccionarIncentivo():
-                        opcionIncentivo = app.frame.getValue("¿Desea aplicar algún incentivo en una zona de juegos?")
-
+                        opcionIncentivo = app.frame.getValue("¿Desea aplicar algún incentivo en una zona de juegos? Si/No")
+                    
                         if opcionIncentivo == "Si":
                             criterios_tipo_incentivo = ["Seleccione el tipo de incentivo"]
-                            opciones_tipo_incentivo = ["Rebajar el precio de una maquina", "Regalar un bono por el uso de una maquina"]
                             app.procesoLabel.config(text="Tipo de Incentivo")
                             app.indicacionLabel.config(text="Seleccione el tipo de incentivo")
-                            app.actualizarFormulario("Tipo de Incentivo", criterios_tipo_incentivo, "Opciones", opciones_tipo_incentivo)
+                            app.actualizarFormulario("Tipo de Incentivo", criterios_tipo_incentivo, "Opciones", [])
 
                             def seleccionarTipoIncentivo():
                                 tipoIncentivo = app.frame.getValue("Seleccione el tipo de incentivo")
@@ -172,37 +186,46 @@ class Interfaz:
                                     # Seleccionar la zona donde aplicar la rebaja
                                     app.procesoLabel.config(text="Seleccionar Zona para Rebaja")
                                     app.indicacionLabel.config(text="Seleccione la zona donde desea aplicar la rebaja")
-                                    app.actualizarFormulario("Zonas para Rebaja", ["Seleccione una zona"], "Opciones", opciones_zonas)
+                                    app.actualizarFormulario("Zonas para Rebaja", ["Seleccione una zona"], "Opciones", [])
 
                                     def seleccionarZonaRebaja():
                                         zona_rebaja_nombre = app.frame.getValue("Seleccione una zona")
-                                        zonaRebaja = None
-                                        for cine in zonasDisponibles:
-                                            if cine.zonaDeJuegos.getNombre() == zona_rebaja_nombre:
-                                                zonaRebaja = cine.zonaDeJuegos
-                                                break
 
-                                        if zonaRebaja is None:
-                                            app.resultLabel.config(text=app.resultLabel.cget("text") + "\nSeleccione una zona válida.")
-                                            return
+                                        try:
+                                            zonaRebaja = None
+                                            for cine in zonasDisponibles:
+                                                if cine.zonaDeJuegos.getNombre() == zona_rebaja_nombre:
+                                                    zonaRebaja = cine.zonaDeJuegos
+                                                    break
+
+                                            if zonaRebaja is None:
+                                                raise DatoErroneoExcepcion(opciones_zonas,zona_rebaja_nombre)
+                                        except DatoErroneoExcepcion as e:
+                                            messagebox.showerror("Error",f"{str(e)}.\nZonas validas: {', '.join(e.datosValidos)}")
+                                            return 
+
 
                                         # Seleccionar la máquina para rebajar el precio
                                         maquinasEnZona = zonaRebaja.getMaquinas()
                                         opciones_maquinas_rebaja = [maquina.getNombre() for maquina in maquinasEnZona]
-                                        app.actualizarFormulario("Máquinas para Rebaja", ["Seleccione una máquina"], "Opciones", opciones_maquinas_rebaja)
+                                        app.actualizarFormulario("Máquinas para Rebaja", ["Seleccione una máquina"], "Opciones", [])
 
                                         def seleccionarMaquinaRebaja():
                                             maquina_rebaja_nombre = app.frame.getValue("Seleccione una máquina")
-                                            maquinaRebajada = None
-                                            for maquina in maquinasEnZona:
-                                                if maquina.getNombre() == maquina_rebaja_nombre:
-                                                    maquinaRebajada = maquina
+                                            try:
+                                                maquinaRebajada = None
+                                                for maquina in maquinasEnZona:
+                                                    if maquina.getNombre() == maquina_rebaja_nombre:
+                                                        maquinaRebajada = maquina
                                                     break
 
-                                            if maquinaRebajada is None:
-                                                app.resultLabel.config(text=app.resultLabel.cget("text") + "\nSeleccione una máquina válida.")
-                                                return
+                                                # Si la máquina no es válida, lanzamos la excepción DatoErroneoExcepcion
+                                                if maquinaRebajada is None:
+                                                    raise DatoErroneoExcepcion(opciones_maquinas_rebaja, maquina_rebaja_nombre)
 
+                                            except DatoErroneoExcepcion as e:
+                                                messagebox.showerror("Error",f"{str(e)}.\nMáquinas válidas: {', '.join(e.datosValidos)}")
+                                                return
                                             # Ingresar el nuevo precio
                                             app.procesoLabel.config(text="Nuevo Precio")
                                             app.indicacionLabel.config(text=f"Ingrese el nuevo precio para {maquinaRebajada.getNombre()}")
@@ -212,9 +235,7 @@ class Interfaz:
                                                 nuevoPrecio = float(app.frame.getValue("Nuevo Precio"))
                                                 maquinaRebajada.setPrecioUso(nuevoPrecio)
                                                 app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nEl precio de {maquinaRebajada.getNombre()} ha sido rebajado a {nuevoPrecio}")
-
                                             app.frame.setComando(confirmarNuevoPrecio)
-
                                         app.frame.setComando(seleccionarMaquinaRebaja)
                                     app.frame.setComando(seleccionarZonaRebaja)
 
@@ -226,14 +247,19 @@ class Interfaz:
 
                                     def seleccionarZonaBono():
                                         zona_bono_nombre = app.frame.getValue("Seleccione una zona")
-                                        zona = None
-                                        for cine in zonasDisponibles:
-                                            if cine.zonaDeJuegos.getNombre() == zona_bono_nombre:
-                                                zona = cine.zonaDeJuegos
-                                                break
+                                        try:
+                                            zona = None
+                                            for cine in zonasDisponibles:
+                                                if cine.zonaDeJuegos.getNombre() == zona_bono_nombre:
+                                                    zona = cine.zonaDeJuegos
+                                                    break
 
-                                        if zona is None:
-                                            app.resultLabel.config(text=app.resultLabel.cget("text") + "\nSeleccione una zona válida.")
+                                    # Si la zona no es válida, lanzamos la excepción DatoErroneoExcepcion
+                                            if zona is None:
+                                                raise DatoErroneoExcepcion(opciones_zonas, zona_bono_nombre)
+
+                                        except DatoErroneoExcepcion as e:
+                                            messagebox.showerror("Error",f"{str(e)}.\nZonas válidas: {', '.join(e.datosValidos)}")
                                             return
 
                                         # Seleccionar la máquina para aplicar el bono
@@ -243,16 +269,21 @@ class Interfaz:
 
                                         def seleccionarMaquinaBono():
                                             maquina_bono_nombre = app.frame.getValue("Seleccione una máquina")
-                                            maquina = None
-                                            for maquina in maquinasEnZona:
-                                                if maquina.getNombre() == maquina_bono_nombre:
-                                                    maquina = maquina
-                                                    break
+                                            
+                                            try:
+                                                maquina = None
+                                                for maquina in maquinasEnZona:
+                                                    if maquina.getNombre() == maquina_bono_nombre:
+                                                        maquina = maquina
+                                                        break
 
-                                            if maquina is None:
-                                                app.resultLabel.config(text=app.resultLabel.cget("text") + "\nSeleccione una máquina válida.")
+                                                #Si la máquina no es válida, lanzamos la excepción DatoErroneoExcepcion
+                                                if maquina is None:
+                                                    raise DatoErroneoExcepcion(opciones_maquinas_bono, maquina_bono_nombre)
+
+                                            except DatoErroneoExcepcion as e:
+                                                messagebox.showerror("Error",f"{str(e)}.\nMáquinas válidas: {', '.join(e.datosValidos)}")
                                                 return
-
                                             # Activar el bono en la máquina seleccionada
                                             maquina.activarBono()
                                             app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nEl bono ha sido activado para {maquina.getNombre()}")
@@ -260,11 +291,16 @@ class Interfaz:
                                         app.frame.setComando(seleccionarMaquinaBono)
 
                                     app.frame.setComando(seleccionarZonaBono)
-
+                                else:
+                                     messagebox.showerror("Error","Dato invalido")
+                                     return
                             app.frame.setComando(seleccionarTipoIncentivo)
 
-                        else:
+                        elif opcionIncentivo=="No":
                             app.resultLabel.config(text=app.resultLabel.cget("text") + "\nNo se aplicarán incentivos.")
+                        else:
+                            messagebox.showerror("Error","Dato invalido")
+                            return
         
                     app.frame.setComando(seleccionarIncentivo)
                 app.frame.setComando(seleccionarZonaDestino)
@@ -289,7 +325,19 @@ class Interfaz:
 
         def seleccionarCine():
             cineSeleccionado = app.frame.getValue("Nombre del cine")
-            cineOrigen = next(cine for cine in Cine.cines if cine.getNombre() == cineSeleccionado)
+            try:
+                cineOrigen = None
+                # Buscar si el cine existe en la lista de cines
+                cineOrigen = next((cine for cine in Cine.cines if cine.getNombre() == cineSeleccionado), None)
+    
+                # Si no se encuentra el cine, lanza la excepción
+                if cineOrigen is None:
+                    nombresCines = [cine.getNombre() for cine in Cine.cines]
+                    raise DatoErroneoExcepcion(nombresCines, cineSeleccionado)
+
+            except DatoErroneoExcepcion as e:
+                messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
+                return  # Asegurarse de que el código se detenga aquí
 
             # Paso 3: Selección de película
             peliculas=["Ingrese el titulo de la pelicula"]
@@ -297,8 +345,17 @@ class Interfaz:
 
             def seleccionarPelicula():
                 peliculaSeleccionada = app.frame.getValue("Ingrese el titulo de la pelicula")
-                peliculaAIntercambiar = next(pelicula for pelicula in cineOrigen.peliculasActivas() if pelicula.getTitulo() == peliculaSeleccionada)
                 
+                try:
+                    peliculaAIntercambiar=None
+                    peliculaAIntercambiar = next((pelicula for pelicula in cineOrigen.peliculasActivas() if pelicula.getTitulo() == peliculaSeleccionada),None)
+
+                    if peliculaAIntercambiar is None:
+                        nombresPeliculas= [pelicula.getTitulo() for pelicula in cineOrigen.peliculasActivas()]
+                        raise DatoErroneoExcepcion(nombresPeliculas, peliculaSeleccionada)
+                except DatoErroneoExcepcion as e:
+                    messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
+                    return  # Asegurarse de que el código se detenga aquí
                 # Paso 4: Recomendar una película para intercambio
                 recomendacion = Pelicula.recomendarIntercambio(peliculaAIntercambiar)
                 app.resultLabel.config(text=f"Recomendación: {recomendacion}")
@@ -309,7 +366,20 @@ class Interfaz:
                 
                 def seleccionarNuevoCine():
                     nuevoCineSeleccionado = app.frame.getValue("Ingrese el nombre del cine de la pelicula a intercambiar")
-                    nuevoCine = next(cine for cine in Cine.cines if cine.getNombre() == nuevoCineSeleccionado)
+                    try:
+                        nuevoCine = None
+                        # Buscar si el cine existe en la lista de cines
+                        nuevoCine = next((cine for cine in Cine.cines if cine.getNombre() == nuevoCineSeleccionado),None)
+    
+                        # Si no se encuentra el cine, lanza la excepción
+                        if nuevoCine is None:
+                            nombresCines = [cine.getNombre() for cine in Cine.cines]
+                            raise DatoErroneoExcepcion(nombresCines, nuevoCineSeleccionado)
+
+                    except DatoErroneoExcepcion as e:
+                        messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
+                        return  # Asegurarse de que el código se detenga aquí
+                    
                     
                     # Paso 5: Selección de película en el nuevo cine
                     peliculasNuevoCine = ["Ingrese el titulo de la pelicula intercambio"]
@@ -317,7 +387,18 @@ class Interfaz:
                     
                     def seleccionarPeliculaDestino():
                         peliculaIntercambioSeleccionada = app.frame.getValue("Ingrese el titulo de la pelicula intercambio")
-                        peliculaIntercambio = next(pelicula for pelicula in nuevoCine.peliculasActivas() if pelicula.getTitulo() == peliculaIntercambioSeleccionada)
+                        try:
+                            peliculaIntercambio=None
+                            peliculaIntercambio = next((pelicula for pelicula in nuevoCine.peliculasActivas() if pelicula.getTitulo() == peliculaIntercambioSeleccionada),None)
+
+                            if peliculaIntercambio is None:
+                                nombresPeliculas= [pelicula.getTitulo() for pelicula in nuevoCine.peliculasActivas()]
+                                raise DatoErroneoExcepcion(nombresPeliculas, peliculaIntercambioSeleccionada)
+                        except DatoErroneoExcepcion as e:
+                            messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
+                            return  # Asegurarse de que el código se detenga aquí
+                        
+                        
 
                         # Confirmar intercambio
                         confirmacion = messagebox.askyesno("Confirmar Intercambio", f"¿Desea intercambiar {peliculaAIntercambiar.getTitulo()} por {peliculaIntercambio.getTitulo()}?")
@@ -337,32 +418,53 @@ class Interfaz:
                                         calificaciones.append(f"Cine: {cine.getNombre()}")
                                         calificaciones.extend(cine.obtenerCalificacionesPeliculas())
                                     app.resultLabel.config(text="\n".join(calificaciones))
-                                    funciones = ["Ingrese el titulo de la pelicula perteneciente a la funcion","Ingrese su numero de sala"]
-                                    app.actualizarFormulario("Seleccione la función", funciones, "Función seleccionada")
+                                    criterios = ["Ingrese el titulo de la pelicula perteneciente a la funcion","Ingrese su numero de sala","Ingrese el nuevo precio"]
+                                    app.actualizarFormulario("Seleccione la función",criterios, "Función seleccionada")
                                 
                                     def aplicarPrecio():
                                         titulo = app.frame.getValue("Ingrese el titulo de la pelicula perteneciente a la funcion")
-                                        numSala=app.frame.getValue("Ingrese su numero de sala")
-                                        print(numSala,titulo)
-                                        for cine in Cine.cines:
-                                            for f in cine.totalFunciones():
-                                                if f.getPelicula().getTitulo()==titulo and f.getSala().getNumero()==numSala:
-                                                    funcion=f
-                                                    if funcion:
+                                        numSala = app.frame.getValue("Ingrese su numero de sala")
+                                        try:
+                                            # Obtener el título de la película y el número de sala ingresados por el usuaario
+                                
+                                            # Buscar la función correspondiente
+                                            funcion = None
+                                            for cine in Cine.cines:
+                                                for f in cine.totalFunciones():
+                                                    if f.getPelicula().getTitulo() == titulo and f.getSala().getNumero() == int(numSala):
+                                                        funcion = f
                                                         break
-                                        precio = ["Ingrese el nuevo precio"]
-                                        app.actualizarFormulario("Nuevo precio", precio, "Valor")
-                                        nuevoPrecio=int(app.frame.getValue("Ingrese el nuevo precio"))
-                                        funcion.setPrecio(nuevoPrecio)
-                                        app.resultLabel.config(text=f"Nuevo precio: {nuevoPrecio}")
+        
+                                            if funcion is None:
+                                                raise DatoErroneoExcepcion("Datos inexistentes", "título o número de sala")
+                                            
+                                        except DatoErroneoExcepcion as e:
+                                            messagebox.showerror("Error",f"{str(e)} {e.mensaje}")  # Mostrar el mensaje personalizado de error
+                                            return
+                                        try:
+                                            nuevoPrecio = app.frame.getValue("Ingrese el nuevo precio")
+                                            
+
+                                            if not nuevoPrecio.isdigit():
+                                                raise ExcepcionSugerida2(nuevoPrecio)
+                                            nuevoPrecio=int(nuevoPrecio)
+        
+                                            # Aplicar el nuevo precio
+                                            funcion.setPrecio(nuevoPrecio)
+                                            app.resultLabel.config(text=f"Nuevo precio: {nuevoPrecio}")
+                                        except ExcepcionSugerida2 as s:
+                                            messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                                            return
                                 
                                     app.frame.setComando(aplicarPrecio)
-
                                 elif incentivoSeleccionado == "Aplicar bono":
                                     peliculaIntercambio.activarBono()
                                     app.resultLabel.config(text=f"Bono activado para {peliculaIntercambio.getTitulo()}")
+                                else:
+                                    messagebox.showerror("Error","Opcion no valida")
+                                    return
                         
-                        app.frame.setComando(aplicarIncentivo)
+                            app.frame.setComando(aplicarIncentivo)
 
                     app.frame.setComando(seleccionarPeliculaDestino)
                 app.frame.setComando(seleccionarNuevoCine)
@@ -548,14 +650,35 @@ class Interfaz:
             def aceptarMaquina():
                 nombreMaquina = app.frame.getValue("Nombre de la maquina")
                 tipo = app.frame.getValue("Tipo de maquina")
-                materiales = int(app.frame.getValue("Materiales necesarios para la maquina"))
-                precio = float(app.frame.getValue("Precio de la maquina"))
+                materiales = app.frame.getValue("Materiales necesarios para la maquina")
+                precio = app.frame.getValue("Precio de la maquina")
+                try:
+                    # Validar el género
+                    if tipo not in ["Arcade", "Dance Dance","Mesa de discos","Boxing","Basket"]:
+                        raise DatoErroneoExcepcion(["Arcade", "Dance Dance","Mesa de discos","Boxing","Basket"],"tipo")
+                except DatoErroneoExcepcion as e:
+                    messagebox.showerror("Error de tipoo", f"{str(e)} {e.mensaje}")
+                    return
+                try:
+                    if not materiales.isdigit():
+                        raise ExcepcionSugerida2(materiales)
+                    materiales=int(materiales)
+                except ExcepcionSugerida2 as s:
+                    messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                    return
+                try:
+                    if not precio.isdigit():
+                        raise ExcepcionSugerida2(precio)
+                    precio=int(precio)
+                except ExcepcionSugerida2 as s:
+                    messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                    return
                 maquina=Maquina(nombreMaquina,tipo,materiales,precio)
                 app.resultLabel.config(text=f"Maquina creada: {maquina}")
 
             app.frame.setComando(aceptarMaquina)  # Vincula aceptarMaquina con el botón 'Aceptar' para la creación de la maquina
         def crearPelicula(app):
-            criterios = ["Titulo de la pelicula", "Genero","Durcion (en horas y minutos, formato HH:MM)"]
+            criterios = ["Titulo de la pelicula", "Genero","Duracion (en horas y minutos, formato HH:MM)"]
             app.procesoLabel.config(text="Crear Pelicula")
             app.indicacionLabel.config(text="Ingrese las especificaciones de la pelicula")
             combo.destroy()
@@ -566,10 +689,34 @@ class Interfaz:
             def aceptarPelicula():
                 titulo = app.frame.getValue("Titulo de la pelicula")
                 genero = app.frame.getValue("Genero")
-                duracion = datetime.strptime((app.frame.getValue("Durcion (en horas y minutos, formato HH:MM)")),"%H:%M").time()
+                duracionStr = app.frame.getValue("Duracion (en horas y minutos, formato HH:MM)")
                 
-                pelicula=Pelicula(titulo,genero,duracion)
-                app.resultLabel.config(text=f"Pelicula creada: {pelicula}")
+                try:
+                    # Validar el género
+                    if genero not in ["Accion", "Drama","+18","Infantil","Terror"]:
+                        raise DatoErroneoExcepcion(["Acción", "Drama","+18","Infantil","Terror"],"genero")
+                except DatoErroneoExcepcion as e:
+                    messagebox.showerror("Error de género", f"{str(e)} {e.mensaje}")
+                    return
+
+                    # Validar el formato de duración
+                try:
+                    # Validar si la entrada de duración no es vacía o None
+                    if not duracionStr:
+                        raise DatoErroneoExcepcion("formato HH:MM", "Duracion (en horas y minutos, formato HH:MM)")
+
+                    # Intentar convertir la cadena a tiempo
+                    try:
+                        duracion = datetime.strptime(duracionStr, "%H:%M").time()
+                    except ValueError:
+                        raise DatoErroneoExcepcion("formato HH:MM", duracionStr)
+
+                except DatoErroneoExcepcion as a:
+                    messagebox.showerror("Error de duración", f"Error: {str(a)} {a.mensaje}")
+                    return
+                
+                pelicula = Pelicula(titulo, genero, duracion)
+                app.resultLabel.config(text=f"Película creada: {pelicula}")
 
             app.frame.setComando(aceptarPelicula)  # Vincula aceptarPelicula con el botón 'Aceptar' para la creación de la pelicual
         def crearFuncion(app):
@@ -583,6 +730,13 @@ class Interfaz:
             # Función que se ejecuta al presionar el botón 'Aceptar' para la creación de la funcion
             def aceptarFuncion():
                 tipoFuncion = app.frame.getValue("Tipo de funcion")
+                try:
+                    # Validar el género
+                    if tipoFuncion not in ["Normal","VIP"]:
+                        raise DatoErroneoExcepcion(["Normal","VIP"],"funcion")
+                except DatoErroneoExcepcion as e:
+                    messagebox.showerror("Error de funcion", f"{str(e)} {e.mensaje}")
+                    return
                 funcion=Funcion(tipoFuncion)
                 app.resultLabel.config(text=f"Funcion creada: {funcion}")
 
@@ -598,8 +752,22 @@ class Interfaz:
             # Función que se ejecuta al presionar el botón 'Aceptar' para la creación del cliente
             def aceptarCliente():
                 nombre = app.frame.getValue("Nombre del cliente")
-                saldo = float(app.frame.getValue("Saldo"))
-                id = int(app.frame.getValue("ID"))
+                saldo = app.frame.getValue("Saldo")
+                id = app.frame.getValue("ID")
+                try:
+                    if not saldo.isdigit():
+                        raise ExcepcionSugerida2(saldo)
+                    saldo=int(saldo)
+                except ExcepcionSugerida2 as s:
+                    messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                    return
+                try:
+                    if not id.isdigit():
+                        raise ExcepcionSugerida2(id)
+                    id=int(id)
+                except ExcepcionSugerida2 as s:
+                    messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                    return
                 cliente=Cliente(nombre,saldo,id)
                 app.resultLabel.config(text=f"Cliente creado: {cliente}")
 
@@ -629,9 +797,30 @@ class Interfaz:
 
             # Función que se ejecuta al presionar el botón 'Aceptar' para la creación de la sala
             def aceptarSala():
-                numero = int(app.frame.getValue("Numero de la sala"))
-                filas = int(app.frame.getValue("numero de filas"))
-                columnas = int(app.frame.getValue("numero de columnas"))
+                numero = app.frame.getValue("Numero de la sala")
+                filas = app.frame.getValue("numero de filas")
+                columnas = app.frame.getValue("numero de columnas")
+                try:
+                    if not numero.isdigit():
+                        raise ExcepcionSugerida2(numero)
+                    numero=int(numero)
+                except ExcepcionSugerida2 as s:
+                    messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                    return
+                try:
+                    if not filas.isdigit():
+                        raise ExcepcionSugerida2(filas)
+                    filas=int(filas)
+                except ExcepcionSugerida2 as s:
+                    messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                    return
+                try:
+                    if not columnas.isdigit():
+                        raise ExcepcionSugerida2(columnas)
+                    columnas=int(columnas)
+                except ExcepcionSugerida2 as s:
+                    messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                    return
                 sala=Sala(numero,filas,columnas)
                 app.resultLabel.config(text=f"Sala creada: {sala}")
 
@@ -755,7 +944,15 @@ class Interfaz:
             combo.destroy()
             app.entrada.destroy()
     
-            funciones = [f"{funcion.getPelicula().getTitulo()},{funcion.getTipo()},{funcion.getSala()}" for funcion in Funcion.allFunciones]
+            try:
+                funciones = []
+                for funcion in Funcion.allFunciones:
+                    if funcion.getPelicula() is None or funcion.getSala() is None:
+                        raise AtributoNoneExcepcion()
+                    funciones.append(f"{funcion.getPelicula().getTitulo()},{funcion.getTipo()},{funcion.getSala()}")
+            except AtributoNoneExcepcion as e:
+                messagebox.showerror("Error", e.mensaje())
+                return
             cines = [cine.getNombre() for cine in Cine.cines]
             dias=["Lunes","Martes","Jueves","Viernes","Sabado"]
     
@@ -808,7 +1005,17 @@ class Interfaz:
                 funcionSeleccionada = app.entrada1.get()
                 cineSeleccionado = app.entrada2.get()
         
-                funcion = next(f for f in Funcion.allFunciones if f"{f.getPelicula().getTitulo()},{f.getTipo()},{f.getSala()}" == funcionSeleccionada)
+                try:
+                    for f in Funcion.allFunciones:
+                        if f.getPelicula() is None or f.getSala() is None:
+                            raise AtributoNoneExcepcion()
+                        if f"{f.getPelicula().getTitulo()},{f.getTipo()},{f.getSala()}" == funcionSeleccionada:
+                            funcion = f
+                            break
+                except AtributoNoneExcepcion as e:
+                    messagebox.showerror("Error", e.mensaje())
+                    return
+
                 cine = next(c for c in Cine.cines if c.getNombre() == cineSeleccionado)
 
                 if app.entrada3.get()=="Lunes":
@@ -893,7 +1100,7 @@ class Interfaz:
                 maquina = next(m for m in Maquina.allMaquinas if m.getNombre() == maquinaSeleccionada)
                 zona = next(z for z in ZonaDeJuegos.zonasDeJuegos if z.getNombre() == zonaSeleccionada)
                 
-                zonaAsignada = False
+                maquinaAsignada = False
 
                 for cine in Cine.cines:
                     if cine.getZonaDeJuegos() and cine.getZonaDeJuegos().getNombre() == zona.getNombre() and cine.getZonaDeJuegos().getHorario() == zona.getHorario():
@@ -926,7 +1133,16 @@ class Interfaz:
             app.entrada.destroy()
     
             peliculas = [pelicula.getTitulo() for pelicula in Pelicula.totalPeliculas]
-            funciones = [f"{funcion.getTipo()},{funcion.getSala()}" for funcion in Funcion.allFunciones if funcion.getPelicula() is None]
+            try:
+                funciones = []
+                for funcion in Funcion.allFunciones:
+                    if funcion.getPelicula() is None:
+                        if funcion.getSala() is None:
+                            raise AtributoNoneExcepcion()  # Lanza la excepción si la película es None
+                        funciones.append(f"{funcion.getTipo()},{funcion.getSala()}")
+            except AtributoNoneExcepcion as e:
+                messagebox.showerror("Error", e.mensaje())
+                return
     
             valorDefecto1 = tk.StringVar(value="Opciones de películas")
             valorDefecto2 = tk.StringVar(value="Opciones de funciones")
@@ -964,7 +1180,18 @@ class Interfaz:
                 funcionSeleccionada = app.entrada2.get()
         
                 pelicula = next(p for p in Pelicula.totalPeliculas if p.getTitulo() == peliculaSeleccionada)
-                funcion = next(f for f in Funcion.allFunciones if f"{f.getTipo()},{f.getSala()}" == funcionSeleccionada)
+                funcion=None
+                try:
+                    for f in Funcion.allFunciones:
+                        if f.getSala() is None:
+                            raise AtributoNoneExcepcion()
+                        if f"{f.getTipo()},{f.getSala()}" == funcionSeleccionada:
+                            funcion = f
+                            break
+                except AtributoNoneExcepcion as e:
+                    messagebox.showerror("Error", e.mensaje())
+                    return
+
         
                 funcion.setPelicula(pelicula)
                 app.resultLabel.config(text=f"Película {pelicula.getTitulo()} asignada a la función {funcion.getTipo()} en la sala {funcion.getSala()}")
@@ -1045,23 +1272,39 @@ class Interfaz:
         app.actualizarFormulario("Ingrese su número de identificación", criterios, "Cliente seleccionado")
 
         def identificarCliente():
-            idCliente = int(app.frame.getValue("Número de identificación"))
+            idCliente = app.frame.getValue("Número de identificación")
+            try:
+                if not idCliente.isdigit():
+                    raise ExcepcionSugerida2(idCliente)
+                idCliente=int(idCliente)
+            except ExcepcionSugerida2 as s:
+                messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                return
             cliente = Cliente.buscarClientePorId(idCliente)
 
             if cliente is None:
-                opciones = ["Sí", "No"]
-                app.actualizarFormulario("Cliente no encontrado. ¿Desea crear uno nuevo?", ["Seleccione una opción"], "Respuesta", opciones)
+                app.actualizarFormulario("Cliente no encontrado. ¿Desea crear uno nuevo?", ["Si o No"], "Respuesta")
 
                 def crearCliente():
-                    respuesta = app.frame.getValue("Seleccione una opción")
-                    if respuesta == "Sí":
-                        criteriosCliente = ["Nombre completo", "Saldo inicial"]
-                        app.actualizarFormulario("Ingrese los datos del nuevo cliente", criteriosCliente, "Datos cliente")
+                    respuesta = app.frame.getValue("Si o No")
+                    if respuesta == "Si":
+                        criteriosCliente = ["Nombre completo", "Saldo inicial","ID"]
+                        valores = ["", "", str(idCliente)]
+                        habilitado = [True, True, False]
+                        app.actualizarFormulario("Ingrese los datos del nuevo cliente", criteriosCliente, "Datos cliente",valores,habilitado)
 
                         def crearNuevoCliente():
                             nombre = app.frame.getValue("Nombre completo")
-                            saldoInicial = float(app.frame.getValue("Saldo inicial"))
-                            cliente = Cliente(nombre, saldoInicial, idCliente)
+                            saldoInicial = app.frame.getValue("Saldo inicial")
+                            id=int(app.frame.getValue("ID"))
+                            try:
+                                if not saldoInicial.isdigit():
+                                    raise ExcepcionSugerida2(saldoInicial)
+                                saldoInicial=int(saldoInicial)
+                            except ExcepcionSugerida2 as s:
+                                messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                                return
+                            cliente = Cliente(nombre, saldoInicial, id)
                             app.resultLabel.config(text="Cliente creado exitosamente.")
                             seleccionarCine(cliente)  # Pasamos el cliente a la siguiente función
 
@@ -1069,6 +1312,9 @@ class Interfaz:
 
                     elif respuesta == "No":
                         app.resultLabel.config(text="Operación cancelada.")
+                        return
+                    else:
+                        messagebox.showerror("Error","Respuesta invalida")
                         return
 
                 app.frame.setComando(crearCliente)
@@ -1081,7 +1327,19 @@ class Interfaz:
             app.resultLabel.config(text="\n".join(cines))
             def seleccionarZonaDeJuegos():
                 cineSeleccionado = app.frame.getValue("Nombre del cine")
-                cine = next(c for c in Cine.cines if c.getNombre() == cineSeleccionado)
+                try:
+                    cine = None
+                    # Buscar si el cine existe en la lista de cines
+                    cine = next((c for c in Cine.cines if c.getNombre() == cineSeleccionado),None)
+    
+                    # Si no se encuentra el cine, lanza la excepción
+                    if cine is None:
+                        nombresCines = [c.getNombre() for c in Cine.cines]
+                        raise DatoErroneoExcepcion(nombresCines, cineSeleccionado)
+
+                except DatoErroneoExcepcion as e:
+                    messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
+                    return  # Asegurarse de que el código se detenga aquí
 
                 # Paso 3: Selección de la máquina en la zona de juegos
                 maquinas = cine.getZonaDeJuegos().getMaquinas()
@@ -1090,10 +1348,19 @@ class Interfaz:
                 app.resultLabel.config(text="\n".join(opcionesMaquinas))
                 def comprarBoleta():
                     maquina = app.frame.getValue("Máquina")
-                    maquinaSeleccionada = next(
-                        m for cine in Cine.cines for m in cine.getZonaDeJuegos().getMaquinas() if m.getNombre() == maquina
-                    )
+                    try:
+                        maquinaSeleccionada = None
+                        # Buscar si el cine existe en la lista de cines
+                        maquinaSeleccionada = next((m for m in maquinas if m.getNombre() == maquina),None)
+    
+                        # Si no se encuentra el cine, lanza la excepción
+                        if maquinaSeleccionada is None:
+                            nombresMaquinas = [m.getNombre() for m in maquinas]
+                            raise DatoErroneoExcepcion(nombresMaquinas, maquina)
 
+                    except DatoErroneoExcepcion as e:
+                        messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
+                        return  # Asegurarse de que el código se detenga aquí
                     # Verificar si la máquina requiere mantenimiento
                     if maquinaSeleccionada.necesitaMantenimiento():
                         messagebox.showwarning(
@@ -1101,27 +1368,31 @@ class Interfaz:
                             f"La máquina {maquinaSeleccionada.getNombre()} no está disponible debido a mantenimiento."
                         )
                         return
+                    
+                    try:
+                        # Paso 4: Realizar la compra
+                        if cliente.getSaldo() >= maquinaSeleccionada.getPrecioUso():
+                            cliente.setSaldo(cliente.getSaldo() - maquinaSeleccionada.getPrecioUso())
+                            maquinaSeleccionada.usar()
+                            app.resultLabel.config(text="Compra realizada exitosamente.")
 
-                    # Paso 4: Realizar la compra
-                    if cliente.getSaldo() >= maquinaSeleccionada.getPrecioUso():
-                        cliente.setSaldo(cliente.getSaldo() - maquinaSeleccionada.getPrecioUso())
-                        maquinaSeleccionada.usar()
-                        app.resultLabel.config(text="Compra realizada exitosamente.")
+                            # Paso 5: Asignar bono si está activo
+                            bonoMensaje = maquinaSeleccionada.asignarBono(cliente)
+                            app.resultLabel.config(text=f"Compra realizada. {bonoMensaje}")
 
-                        # Paso 5: Asignar bono si está activo
-                        bonoMensaje = maquinaSeleccionada.asignarBono(cliente)
-                        app.resultLabel.config(text=f"Compra realizada. {bonoMensaje}")
-
-                        # Paso 6: Imprimir recibo
-                        recibo = (
-                            f"Recibo:\nCliente: {cliente.getNombre()}\n"
-                            f"Máquina: {maquinaSeleccionada.getNombre()}\n"
-                            f"Precio: {maquinaSeleccionada.getPrecioUso()}\n"
-                            f"Saldo restante: {cliente.getSaldo()}"
-                        )
-                        app.resultLabel.config(text=recibo)
-                    else:
-                        app.resultLabel.config(text="Saldo insuficiente.")
+                            # Paso 6: Imprimir recibo
+                            recibo = (
+                                f"Recibo:\nCliente: {cliente.getNombre()}\n"
+                                f"Máquina: {maquinaSeleccionada.getNombre()}\n"
+                                f"Precio: {maquinaSeleccionada.getPrecioUso()}\n"
+                                f"Saldo restante: {cliente.getSaldo()}"
+                                )
+                            app.resultLabel.config(text=recibo)
+                        else:
+                            raise SaldoInsuficienteExcepcion(cliente.getNombre(), maquinaSeleccionada.getPrecioUso())
+                    except SaldoInsuficienteExcepcion as e:
+                        # Mostrar mensaje de error si el saldo es insuficiente
+                        messagebox.showerror("Error", f"{str(e)} {e.mensaje()}")
 
                 app.frame.setComando(comprarBoleta)
 
@@ -1157,21 +1428,36 @@ class Interfaz:
 
         def seleccionarPelicula():
             seleccion = app.frame.getValue("Película")
-            peliculaSeleccionada = next(pelicula for pelicula in peliculas if f"{pelicula.getTitulo()}" in seleccion)
+            try:
+                peliculaSeleccionada=None
+                
+                peliculaSeleccionada = peliculaSeleccionada = next((pelicula for pelicula in peliculas if f"{pelicula.getTitulo()}" in seleccion),None)
+    
+                if peliculaSeleccionada is None:
+                    raise DatoErroneoExcepcion(peliculasOpciones, seleccion)
 
+            except DatoErroneoExcepcion as e:
+                messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
+                return  # Asegurarse de que el código se detenga aquí
             # Solicitar calificación
             app.actualizarFormulario(f"Ingrese una calificación para {peliculaSeleccionada.getTitulo()} (1-5)", ["Calificación"], "Calificación seleccionada")
         
             def ingresarCalificacion():
                 try:
-                    calificacion = float(app.frame.getValue("Calificación"))
-                    if calificacion < 1 or calificacion > 5:
-                        app.resultLabel.config(text="Calificación inválida. Ingrese un valor entre 1 y 5.")
+                    calificacion = app.frame.getValue("Calificación")
+                    if not calificacion or not calificacion.replace('.', '', 1).isdigit():
+                        raise ExcepcionSugerida2(calificacion)
+                    calificacion=float(calificacion)
+                    try:
+                        if calificacion < 1 or calificacion > 5:
+                            messagebox.showerror("Error","Calificación inválida. Ingrese un valor entre 1 y 5.")
+                            return
+                    except ValueError:
+                        messagebox.showerror("Error","Calificación inválida. Ingrese un número válido.")
                         return
-                except ValueError:
-                    app.resultLabel.config(text="Calificación inválida. Ingrese un número válido.")
+                except ExcepcionSugerida2 as e:
+                    messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
                     return
-            
                 # Actualizar calificación de la película
                 peliculaSeleccionada.actualizarCalificacion(calificacion)
             
@@ -1192,39 +1478,58 @@ class Interfaz:
 
         # Paso 1: Solicitar ID del cliente
         app.procesoLabel.config(text="Comprar Boleta - Paso 1")
-        app.indicacionLabel.config(text="Ingrese su ID de cliente")
+        app.indicacionLabel.config(text="Ingrese su ID ")
     
-        criterios = ["ID de cliente"]
+        criterios = ["ID"]
         app.actualizarFormulario("Datos del Cliente", criterios, "Valores", [])
     
         def obtenerCliente():
-            cliente_id = int(app.frame.getValue("ID de cliente"))
-            cliente = Cliente.buscarClientePorId(cliente_id)
+            clienteId = app.frame.getValue("ID")
+            try:
+                if not clienteId.isdigit():
+                    raise ExcepcionSugerida2(clienteId)
+                clienteId=int(clienteId)
+            except ExcepcionSugerida2 as s:
+                messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                return
+            cliente = Cliente.buscarClientePorId(clienteId)
         
             # Si el cliente no existe, ofrecer opción de crearlo
             if cliente is None:
                 app.indicacionLabel.config(text="Cliente no encontrado. ¿Desea crear uno?")
-                opciones = ["Sí", "No"]
-                app.actualizarFormulario("Opciones", ["Crear Cliente"], "Opciones", opciones)
+                app.actualizarFormulario("Opciones", ["Crear Cliente(Si/No)"], "Opciones")
             
                 def crearCliente():
-                    crear_cliente = app.frame.getValue("Crear Cliente")
-                    if crear_cliente == "Sí":
+                    crearCliente = app.frame.getValue("Crear Cliente(Si/No)")
+                    if crearCliente == "Si":
                         # Solicitar nombre y saldo del nuevo cliente
-                        criterios_cliente = ["Nombre", "Saldo"]
+                        criteriosCliente = ["Nombre", "Saldo","ID"]
+                        valoresCliente=["","",str(clienteId)]
+                        habilitado=[True,True,False]
                         app.indicacionLabel.config(text="Ingrese los datos del nuevo cliente")
-                        app.actualizarFormulario("Crear Cliente", criterios_cliente, "Valores", [])
+                        app.actualizarFormulario("Crear Cliente", criteriosCliente, "Valores", valoresCliente,habilitado)
                     
                         def confirmarCliente():
                             nombre = app.frame.getValue("Nombre")
-                            saldo = float(app.frame.getValue("Saldo"))
-                            nuevo_cliente = Cliente(nombre, saldo, cliente_id)
+                            saldo = app.frame.getValue("Saldo")
+                            try:
+                                if not saldo.isdigit():
+                                    raise ExcepcionSugerida2(saldo)
+                                saldo=int(saldo)
+                            except ExcepcionSugerida2 as s:
+                                messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                                return
+                            clienteId=int(app.frame.getValue("ID"))
+                            nuevoCliente = Cliente(nombre, saldo, clienteId)
                             app.resultLabel.config(text=app.resultLabel.cget("text") + f"\nCliente {nombre} creado con éxito.")
-                            continuarCompra(nuevo_cliente)
+                            continuarCompra(nuevoCliente)
                     
                         app.frame.setComando(confirmarCliente)
-                    else:
+                    elif crearCliente=="No":
                         app.resultLabel.config(text=app.resultLabel.cget("text") + "\nNo se realizó la compra.")
+                        return
+                    else:
+                        messagebox.showerror("Error","Opcion no valida")
                         return
             
                 app.frame.setComando(crearCliente)
@@ -1242,29 +1547,41 @@ class Interfaz:
             app.resultLabel.config(text="\n".join(cinesDisponibles))
 
             def seleccionarCine():
-                cine_seleccionado_nombre = app.frame.getValue("Seleccione Cine")
-                cine_seleccionado = next(cine for cine in Cine.cines if cine.getNombre() == cine_seleccionado_nombre)
+                cineSeleccionadoNombre = app.frame.getValue("Seleccione Cine")
+            
+                try:
+                    cineSeleccionado = None
+                    # Buscar si el cine existe en la lista de cines
+                    cineSeleccionado = next((cine for cine in Cine.cines if cine.getNombre() == cineSeleccionadoNombre),None)
+    
+                    # Si no se encuentra el cine, lanza la excepción
+                    if cineSeleccionado is None:
+                        raise DatoErroneoExcepcion(cinesDisponibles, cineSeleccionadoNombre)
+
+                except DatoErroneoExcepcion as e:
+                    messagebox.showerror("Error", f"{str(e)}\n{e.mensaje()}")
+                    return  # Asegurarse de que el código se detenga aquí
             
                 # Paso 3: Seleccionar función
-                dias_semana = ['Lunes', 'Martes', 'Jueves', 'Viernes', 'Sábado']
-                funciones_por_dia = {
-                    'Lunes': cine_seleccionado.getLunes(),
-                    'Martes': cine_seleccionado.getMartes(),
-                    'Jueves': cine_seleccionado.getJueves(),
-                    'Viernes': cine_seleccionado.getViernes(),
-                    'Sábado': cine_seleccionado.getSabado(),
+                diasSemana = ['Lunes', 'Martes', 'Jueves', 'Viernes', 'Sábado']
+                funcionesPorDia = {
+                    'Lunes': cineSeleccionado.getLunes(),
+                    'Martes': cineSeleccionado.getMartes(),
+                    'Jueves': cineSeleccionado.getJueves(),
+                    'Viernes': cineSeleccionado.getViernes(),
+                    'Sábado': cineSeleccionado.getSabado(),
                 }
 
                 funcionesDisponibles = []
-                funcion_map = {}
+                funcionMap = {}
                 contador = 1
-                for dia in dias_semana:
-                    funciones_dia = funciones_por_dia[dia]
-                    for funcion in funciones_dia:
+                for dia in diasSemana:
+                    funcionesDia = funcionesPorDia[dia]
+                    for funcion in funcionesDia:
                         if funcion:
                             pelicula = funcion.getPelicula().getTitulo()
                             funcionesDisponibles.append(f"{contador}. {dia}: {pelicula}")
-                            funcion_map[contador] = funcion
+                            funcionMap[contador] = funcion
                             contador += 1
 
                 app.procesoLabel.config(text="Comprar Boleta - Paso 3")
@@ -1273,29 +1590,66 @@ class Interfaz:
                 app.resultLabel.config(text="\n".join(funcionesDisponibles))
 
                 def seleccionarFuncion():
-                    funcionSeleccionadaIndex = app.frame.getValue("Seleccione Función")
-                    funcionSeleccionada = funcion_map[int(funcionSeleccionadaIndex.split()[0])]
+                    try:
+                        # Primer bloque try para seleccionar la función
+                        funcionSeleccionadaIndex = app.frame.getValue("Seleccione Función")
+        
+                         # Validar si la clave existe en funcionMap antes de intentar acceder a ella
+                        indice_funcion = int(funcionSeleccionadaIndex.split()[0])
+                        if indice_funcion not in funcionMap:
+                            # Si el índice no está en el mapa, lanzamos la excepción personalizada
+                            raise ExcepcionSugerida1()
 
-                    app.resultLabel.config(text=funcionSeleccionada.getSala().estadoSilleteria())
-                
-                    # Paso 4: Seleccionar asiento
-                    app.procesoLabel.config(text="Comprar Boleta - Paso 4")
-                    app.indicacionLabel.config(text="Seleccione la fila y columna")
-                    app.actualizarFormulario("Asiento", ["Fila", "Columna"], "Valores", [])
-                
-                    def seleccionarAsiento():
-                        fila = int(app.frame.getValue("Fila")) - 1
-                        columna = int(app.frame.getValue("Columna")) - 1
-                    
-                        if funcionSeleccionada.getSala().estaDisponible(fila, columna):
-                            funcionSeleccionada.getSala().reservarSilla(fila, columna)
-                            app.resultLabel.config(text=app.resultLabel.cget("text") + "\nAsiento reservado con éxito.")
-                            mostrarRecibo(cliente, cine_seleccionado, funcionSeleccionada, fila, columna)
-                        else:
-                            app.resultLabel.config(text=app.resultLabel.cget("text") + "\nEl asiento seleccionado no está disponible.")
-                            return
-                
-                    app.frame.setComando(seleccionarAsiento)
+                        # Accedemos a la función seleccionada solo si la clave es válida
+                        funcionSeleccionada = funcionMap[indice_funcion]
+
+                        # Actualizamos la interfaz
+                        app.resultLabel.config(text=funcionSeleccionada.getSala().estadoSilleteria())
+
+                        # Paso 4: Seleccionar asiento
+                        app.procesoLabel.config(text="Comprar Boleta - Paso 4")
+                        app.indicacionLabel.config(text="Seleccione la fila y columna")
+                        app.actualizarFormulario("Asiento", ["Fila", "Columna"], "Valores", [])
+
+                        def seleccionarAsiento():
+                            # Captura la fila y columna y las convierte a índice
+                            fila = app.frame.getValue("Fila")
+                            columna = app.frame.getValue("Columna")
+                            try:
+                                if not fila.isdigit():
+                                    raise ExcepcionSugerida2(fila)
+                                fila=int(fila)-1
+                            except ExcepcionSugerida2 as s:
+                                messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                                return
+                            try:
+                                if not columna.isdigit():
+                                    raise ExcepcionSugerida2(columna)
+                                columna=int(columna)-1
+                            except ExcepcionSugerida2 as s:
+                                messagebox.showerror("Error", f"{str(s)} {s.mensaje}")
+                                return
+
+                            # Validamos si el asiento está disponible
+                            if funcionSeleccionada.getSala().estaDisponible(fila, columna):
+                                funcionSeleccionada.getSala().reservarSilla(fila, columna)
+                                app.resultLabel.config(text=app.resultLabel.cget("text") + "\nAsiento reservado con éxito.")
+                                mostrarRecibo(cliente, cineSeleccionado, funcionSeleccionada, fila, columna)
+                            else:
+                                messagebox.showerror("Error","El asiento seleccionado no esta disponible")
+                                return
+                            
+
+                        # Asignamos el comando para seleccionar asiento
+                        app.frame.setComando(seleccionarAsiento)
+    
+                    except IndexError:
+                        # Si ocurre un error de índice en la selección de función, lanzamos la excepción personalizada
+                        raise ExcepcionSugerida1()
+
+                    # Capturamos la excepción personalizada y mostramos un mensaje de error en un pop-up
+                    except ExcepcionSugerida1 as s:
+                        messagebox.showerror("Error", str(s))
             
                 app.frame.setComando(seleccionarFuncion)
         
@@ -1304,16 +1658,32 @@ class Interfaz:
         def mostrarRecibo(cliente, cine, funcion, fila, columna):
             # Mostrar el recibo final
             precio = funcion.getPrecio()
-            if cliente.getTipo() == "Preferencial":
-                precio *= 0.9
-            elif cliente.getTipo() == "VIP":
-                precio *= 0.8
-        
-            recibo = f"\n--- Recibo de compra ---\nCliente: {cliente.getNombre()} ({cliente.getIdentificacion()})\n" \
+            try:
+                # Paso 4: Realizar la compra
+                if cliente.getSaldo() >= precio:
+                    cliente.setSaldo(cliente.getSaldo() - precio)
+                    app.resultLabel.config(text="Compra realizada exitosamente.")
+
+                    # Paso 5: Asignar bono si está activo
+                    bonoMensaje = funcion.getPelicula().asignarBono(cliente)
+                    app.resultLabel.config(text=f"Compra realizada. {bonoMensaje}")
+
+                    # Paso 6: Imprimir recibo
+                    recibo = f"\n--- Recibo de compra ---\nCliente: {cliente.getNombre()} ({cliente.getIdentificacion()})\n" \
                     f"Cine: {cine.getNombre()}\nPelícula: {funcion.getPelicula().getTitulo()}\nSala: {funcion.getSala().getNumero()}\n" \
                     f"Asiento: Fila {fila + 1}, Columna {columna + 1}\nHora de la función: {funcion.getHoraInicio()}\n" \
                     f"Precio total: ${precio:.2f}\n------------------------"
-            app.resultLabel.config(text=app.resultLabel.cget("text") + recibo)
+                    app.resultLabel.config(text=app.resultLabel.cget("text") + recibo)
+                    
+                else:
+                    raise SaldoInsuficienteExcepcion(cliente.getNombre(), precio)
+            except SaldoInsuficienteExcepcion as e:
+                # Mostrar mensaje de error si el saldo es insuficiente
+                messagebox.showerror("Error", f"{str(e)} {e.mensaje()}")
+            
+        
+            
+            
 
         
     @staticmethod
@@ -1363,10 +1733,6 @@ class Interfaz:
         ZonaDeJuegos.deserializarZonasDeJuegos('src/baseDatos/temp/zonaDeJuegos.pkl')
         Bodega.deserializarBodegas('src/baseDatos/temp/bodega.pkl')
         Maquina.deserializarMaquinas('src/baseDatos/temp/maquina.pkl')
-        
-
-    def primeraOperacion():
-        print('ufu')
 
 
         

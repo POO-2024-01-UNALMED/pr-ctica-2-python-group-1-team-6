@@ -20,14 +20,14 @@ class SaldoInsuficienteExcepcion(ExcepcionC1):
         self.cantidad=cantidad
     
     def mensaje(self):
-        print(f"{self.nombreU} no tines {self.cantidad}")
+        return f"{self.nombreU} no tines {self.cantidad}"
 
 class AtributoNoneExcepcion(ExcepcionC1):
     def __init__(self):
         super().__init__("Intentaste acceder a un atributo con valor 'None'.")
     
-    def manejar_error(self):
-        print("Rutina de manejo para AtributoNoneException: Verifica que el atributo esté correctamente inicializado.")
+    def mensaje(self):
+        return "Recuerda respetar el orden de asignacion"
 
 # Excepciones inventadas personalizadas para la Rama 2
 class DatoErroneoExcepcion(ExcepcionC2):
@@ -36,7 +36,7 @@ class DatoErroneoExcepcion(ExcepcionC2):
         self.datosValidos=datosValidos
         self.entrada=entrada
     def mensaje(self):
-        print(f"Ingresaste un dato erroneo en el criterio {self.entrada}, los datos adecuados son {self.datosValidos}")
+        return f"Ingresaste un dato erroneo en el criterio {self.entrada}, los datos adecuados son {self.datosValidos}"
 
 # Excepción inventada adicional para la Rama 2
 class ExcepcionInventada4(ExcepcionC2):
@@ -47,14 +47,17 @@ class ExcepcionInventada4(ExcepcionC2):
         print("Rutina de manejo para ExceptionInventada4: Revisando consulta en la base de datos...")
 
 # Excepciones sugeridas como parte de la Rama 1
-class IndiceFueraDeRangoError(ExcepcionC1):
+class ExcepcionSugerida1(ExcepcionC1):
     def __init__(self):
         super().__init__("Se intentó acceder a un índice fuera del rango válido.")
 
 # Excepciones sugeridas como parte de la Rama 2
 class ExcepcionSugerida2(ExcepcionC2):
-    def __init__(self):
-        super().__init__("Excepción sugerida 2.")
+    def __init__(self, valor_ingresado):
+        # Personalizar el mensaje con el valor ingresado
+        super().__init__(f"Se ingresó un valor no numérico: '{valor_ingresado}'.")
+        self.valor_ingresado = valor_ingresado
     
-    def manejarError(self):
-        print("Rutina para ExceptionSugerida2.")
+    def mensaje(self):
+        # Rutina para manejar el error
+        return f"Error: El valor ingresado '{self.valor_ingresado}' no es un número válido."

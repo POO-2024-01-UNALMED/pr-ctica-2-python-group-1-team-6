@@ -145,6 +145,9 @@ class ZonaDeJuegos(Establecimiento):
         objetos = Deserializador.deserializar(file_name)
         if objetos is not None:
             ZonaDeJuegos.zonasDeJuegos = objetos
+    def getHorario(self):
+        return self.horario
+    
 
 
     def __str__(self):

@@ -1,8 +1,5 @@
 import sys
 from typing import List, Optional
-from datetime import time
-from sala import Sala
-from copy import deepcopy
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
 
@@ -13,10 +10,9 @@ class Cine:
     cines: List['Cine'] = []  # Lista estática de cines
     LIMITE_TARJETAS = 10  # Constante de límite de tarjetas
 
-    def __init__(self, nombre: str,salas: List['Sala'], zonaDeJuegos = None):
+    def __init__(self, nombre: str, zonaDeJuegos = None):
         self.nombre = nombre
         self.zonaDeJuegos = zonaDeJuegos
-        self.salas = salas
         if zonaDeJuegos is not None:
             self.zonaDeJuegos.setCine(self)
         if self not in Cine.cines:
@@ -189,7 +185,7 @@ class Cine:
         # Obtiene las calificaciones de las películas en las funciones del cine
         def calificacionesDia(dia: List[Optional['Funcion']], nombreDia: str) -> List[str]:
             return [
-                f"Película: {funcion.getPelicula().getTitulo()} - Calificación: {funcion.getPelicula().getCalificacionPromedio()} - Día: {nombreDia}"
+                f"Película: {funcion.getPelicula().getTitulo()} Sala: {funcion.getSala()} - Calificación: {funcion.getPelicula().getCalificacionPromedio()} - Día: {nombreDia}"
                 for funcion in dia if funcion and funcion.getPelicula()
             ]
 
@@ -293,62 +289,6 @@ class Cine:
                 peliculasDelDia.append(self.getSabado()[j].getPelicula().getTitulo())
         return peliculasDelDia
     
-    #Este método busca en las listas de funciones de cine, las posiciones donde no hay función, y regresa una lista de listas con la información encontrada: dia, hora y salas posibles.
-    def hallarEspaciosSinFuncion(self):
-        #Lista de todas las funciones en la semana del cine
-        funcionesTotales = self.lunes + self.martes + self.jueves + self.viernes + self.sabado
-        #Opciones de horario de las funciones
-        horas = [time(8,0,0), time(10,0,0), time(12,0,0), time(14,0,0), time(16,0,0), time(18,0,0), time(20,0,0)]
-        listaRetorno = []
-        #Iteramos sobre todas las dunciones del cine
-        for i in range(len(funcionesTotales)):
-            funcionActual = funcionesTotales[i]
-            salasPosibles = deepcopy(self.salas) #Hacemos una copia profunda de la lista de salas.
-            dia = None
-            if funcionActual is not None:
-                continue #Pasamos a la siguiente iteración si la función actual no es None.
-            #Determinamos el día de la función vacía.
-            if (i+1) >= 7: 
-                dia="Lunes"
-            elif (i+1)>7 and (i+1)<=14:
-                dia = "Martes"
-            elif (i+1)> 14 and (i+1)<=21:
-                dia = "Jueves"
-            elif (i+1)>21 and (i+1)<=28:
-                dia = "Viernes"
-            else:
-                dia = "Sábado"
-            posicionHora = (i+1)%7
-            #Descartamos las salas de funciones adyacentes
-            if (posicionHora == 1):
-                if funcionesTotales[i+1] is None:
-                    pass
-                else:
-                    salasPosibles.remove(funcionesTotales[i+1].getSala())
-            elif posicionHora == 0:
-                if funcionesTotales[i-1] is None:
-                    pass
-                else:
-                    salasPosibles.remove(funcionesTotales[i-1].getSala())
-            else:
-                if funcionesTotales[i+1] is None:
-                    pass
-                else:
-                    salasPosibles.remove(funcionesTotales[i+1].getSala())
-                if funcionesTotales[i-1] is None:
-                    pass
-                else:
-                    salasPosibles.remove(funcionesTotales[i-1].getSala())
-            hora = None
-            if horas[posicionHora] >= time(12,0):
-                hora = horas[posicionHora].strftime('%I:%M') + "pm"
-            else:
-                hora = horas[posicionHora].strftime('%I:%M') + "am"
-            listaRetorno += listaRetorno +[[dia, hora, salasPosibles]]
-        if len(listaRetorno) == 0:
-            return -1
-        else:
-            return listaRetorno
             
     @staticmethod
     def serializarCines(file_name):

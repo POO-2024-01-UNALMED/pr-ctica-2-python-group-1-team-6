@@ -132,7 +132,8 @@ class ventanaInicio(tk.Tk):
         self.label5.config(image=self.imagenesRotacion[self.imagenActual])
 
     def salir(self):
-        #Cerrar la aplicación
+        from src.uiMain.interfaz import Interfaz
+        Interfaz.serializarTodo()
         self.destroy()
 
     def alternarVisibilidad(self):

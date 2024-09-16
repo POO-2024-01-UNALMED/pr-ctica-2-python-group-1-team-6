@@ -1,6 +1,5 @@
 import sys
-from typing import List, Optional
-from datetime import datetime, timedelta
+from typing import List
 from src.baseDatos.serializador import Serializador
 from src.baseDatos.deserializador import Deserializador
 
@@ -16,8 +15,7 @@ class Funcion:
         self.tipo = tipo
         self.sala = sala
         self.precio = precio
-        self.dia = ""
-        self.momentoDelDia = ""
+        
 
         if self not in Funcion.allFunciones:
             Funcion.allFunciones.append(self)
@@ -53,18 +51,6 @@ class Funcion:
     def setSala(self, sala):
         self.sala = sala
 
-    def getDia(self) -> str:
-        return self.dia
-
-    def setDia(self, dia: str):
-        self.dia = dia
-
-    def getMomentoDelDia(self) -> str:
-        return self.momentoDelDia
-
-    def setMomentoDelDia(self, momentoDelDia: str):
-        self.momentoDelDia = momentoDelDia
-
     def getPrecio(self) -> float:
         return self.precio
 
@@ -72,21 +58,34 @@ class Funcion:
         self.precio = precio
 
     @staticmethod
-    def realizarIntercambio(peliculaAIntercambiar, peliculaRecomendada) -> str:
-        funcionDestino = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaRecomendada), None)
-
-        if funcionDestino is None:
+    def realizarIntercambio(cineOrigen,cineNuevo,peliculaAIntercambiar, peliculaRecomendada) -> str:
+        from src.gestorAplicacion.Cine.cine import Cine
+        # Buscar la función de la película recomendada
+        for funcion in cineNuevo.totalFunciones():
+            if funcion.getPelicula()==peliculaRecomendada:
+                funcionDestino=funcion
+                if funcionDestino:
+                    break
+    
+        if not funcionDestino:
             return "No se encontró una función con la película recomendada."
 
-        funcionOrigen = next((f for f in Funcion.allFunciones if f.getPelicula() == peliculaAIntercambiar), None)
-
-        if funcionOrigen is None:
+        # Buscar la función de la película a intercambiar
+        for funcion in cineOrigen.totalFunciones():
+            if funcion.getPelicula()==peliculaAIntercambiar:
+                funcionOrigen=funcion
+                if funcionOrigen:
+                    break
+    
+        if not funcionOrigen:
             return "No se encontró una función con la película a intercambiar."
 
+        # Realizar el intercambio de películas
         funcionOrigen.setPelicula(peliculaRecomendada)
         funcionDestino.setPelicula(peliculaAIntercambiar)
 
         return "Intercambio realizado exitosamente."
+
 
     @staticmethod
     def obtenerIndiceEnDia(funcionBuscada: 'Funcion') -> int:
@@ -114,18 +113,6 @@ class Funcion:
         indice = Funcion.obtenerIndiceEnDia(self)
         horas = ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"]
         return horas[indice] if 0 <= indice < len(horas) else ""
-
-    def definirMomentoDelDia(self) -> datetime:
-        inicio = self.getHoraInicio()
-        medioDia = datetime.strptime("12:00", "%H:%M")
-        horaReal = datetime.strptime(inicio, "%H:%M")
-
-        if medioDia > horaReal:
-            self.setMomentoDelDia("am")
-        else:
-            self.setMomentoDelDia("pm")
-
-        return horaReal
 
     @staticmethod
     def encontrarCine(funcion: 'Funcion'):
@@ -161,37 +148,7 @@ class Funcion:
                     return "Sábado"
         return "Día no encontrado"
 
-    @classmethod
-    def agregarFuncion(cls, cine, dia, hora, pelicula, precio, sala):
-        funciones = None
-        if dia == "Lunes": 
-            funciones = cine.getLunes()
-        elif dia == "Martes":
-            funciones = cine.getMartes()
-        elif dia == "Jueves":
-            funciones = cine.getJueves()
-        elif dia == "Viernes":
-            funciones = cine.getViernes()
-        else:
-            funciones = cine.getSabado()
-        posHora = hora[:2]
-        posLista = None
-        if posHora == "08" and hora[5:] == "pm":
-            posLista = 6
-        else:
-            posLista = 0
-        if posHora == "10":
-            posLista = 1
-        elif posHora == "12":
-            posLista = 2
-        elif posHora == "02":
-            posLista = 3
-        elif posHora == "04":
-            posLista = 4
-        else:
-            posLista = 5
-        funciones[posLista] = Funcion("normal", pelicula, sala, precio)
-        return funciones[posLista]
+
         
     
     @staticmethod
@@ -205,7 +162,7 @@ class Funcion:
             Funcion.allFunciones = objetos
     
     def __str__(self) -> str:
-        return f"Funcion: {self.tipo}\Sala: {self.sala} {self.pelicula}"      
+        return f"Funcion: {self.tipo} Sala: {self.sala} {self.pelicula}"    
    
 
 

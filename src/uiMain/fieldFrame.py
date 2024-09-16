@@ -21,15 +21,14 @@ class FieldFrame(tk.Frame):
             entry = tk.Entry(self)
             entry.grid(row=i + 1, column=1)
 
-            # Disable the field if required
-            if habilitado and not habilitado[i]:
-                entry.config(state='disabled')
-            
-            # Insert initial values if provided
             if valores:
                 entry.insert(0, valores[i])
 
             self.entries[criterio] = entry
+            # Disable the field if required
+            if habilitado and not habilitado[i]:
+                entry.config(state='disabled')
+    
         
         tk.Button(self, text="Borrar", font = ("Arial", 12), fg = "white", bg = "blue",command=self.clear,
         width=12,height=2).grid(pady = (10,10), padx=(10,10), column = 1, row = len(self.criterios)+1, columnspan=3)
@@ -71,4 +70,5 @@ class FieldFrame(tk.Frame):
     def setComando(self, comando):
         #Permite configurar el comando a ejecutar cuando se presiona Aceptar.
         self.comando = comando
+        
         
