@@ -95,19 +95,37 @@ class ventanaInicio(tk.Tk):
 
     def cargarImagenes(self):
         #Cargar todas las imagenes
-        self.imagen1 = tk.PhotoImage(file="src/uiMain/Imagenes/itachi1.png")
-        self.imagen2 = tk.PhotoImage(file="src/uiMain/Imagenes/itachi2.png")
-        self.imagen3 = tk.PhotoImage(file="src/uiMain/Imagenes/itachi3.png")
-        self.imagen4 = tk.PhotoImage(file="src/uiMain/Imagenes/itachi4.png")
-        self.imagen5 = tk.PhotoImage(file="src/uiMain/Imagenes/shisui1.png")
-        self.imagen6 = tk.PhotoImage(file="src/uiMain/Imagenes/shisui2.png")
-        self.imagen7 = tk.PhotoImage(file="src/uiMain/Imagenes/shisui3.png")
-        self.imagen8 = tk.PhotoImage(file="src/uiMain/Imagenes/shisui4.png")
-        self.imagen9 = tk.PhotoImage(file="src/uiMain/Imagenes/images.png")
-        self.imagen10 = tk.PhotoImage(file="src/uiMain/Imagenes/descarga-_1_.png")
-        self.imagen11 = tk.PhotoImage(file="src/uiMain/Imagenes/descarga-_2_.png")
-        self.imagen12 = tk.PhotoImage(file="src/uiMain/Imagenes/descarga-_3_.png")
-        self.imagen13 = tk.PhotoImage(file="src/uiMain/Imagenes/descarga.png")
+        dir_actual = os.path.dirname(os.path.abspath(__file__))
+
+        # Construye las rutas absolutas para cada imagen
+        ruta_imagen1 = os.path.join(dir_actual, 'Imagenes', 'itachi1.png')
+        ruta_imagen2 = os.path.join(dir_actual, 'Imagenes', 'itachi2.png')
+        ruta_imagen3 = os.path.join(dir_actual, 'Imagenes', 'itachi3.png')
+        ruta_imagen4 = os.path.join(dir_actual, 'Imagenes', 'itachi4.png')
+        ruta_imagen5 = os.path.join(dir_actual, 'Imagenes', 'shisui1.png')
+        ruta_imagen6 = os.path.join(dir_actual, 'Imagenes', 'shisui2.png')
+        ruta_imagen7 = os.path.join(dir_actual, 'Imagenes', 'shisui3.png')
+        ruta_imagen8 = os.path.join(dir_actual, 'Imagenes', 'shisui4.png')
+        ruta_imagen9 = os.path.join(dir_actual, 'Imagenes', 'images.png')
+        ruta_imagen10 = os.path.join(dir_actual, 'Imagenes', 'descarga-_1_.png')
+        ruta_imagen11 = os.path.join(dir_actual, 'Imagenes', 'descarga-_2_.png')
+        ruta_imagen12 = os.path.join(dir_actual, 'Imagenes', 'descarga-_3_.png')
+        ruta_imagen13 = os.path.join(dir_actual, 'Imagenes', 'descarga.png')
+
+        # Cargar las imágenes usando las rutas absolutas
+        self.imagen1 = tk.PhotoImage(file=ruta_imagen1)
+        self.imagen2 = tk.PhotoImage(file=ruta_imagen2)
+        self.imagen3 = tk.PhotoImage(file=ruta_imagen3)
+        self.imagen4 = tk.PhotoImage(file=ruta_imagen4)
+        self.imagen5 = tk.PhotoImage(file=ruta_imagen5)
+        self.imagen6 = tk.PhotoImage(file=ruta_imagen6)
+        self.imagen7 = tk.PhotoImage(file=ruta_imagen7)
+        self.imagen8 = tk.PhotoImage(file=ruta_imagen8)
+        self.imagen9 = tk.PhotoImage(file=ruta_imagen9)
+        self.imagen10 = tk.PhotoImage(file=ruta_imagen10)
+        self.imagen11 = tk.PhotoImage(file=ruta_imagen11)
+        self.imagen12 = tk.PhotoImage(file=ruta_imagen12)
+        self.imagen13 = tk.PhotoImage(file=ruta_imagen13)
         self.imagenesRotacion = [self.imagen9, self.imagen10, self.imagen11, self.imagen12, self.imagen13]
 
     def hojasDeVida(self):

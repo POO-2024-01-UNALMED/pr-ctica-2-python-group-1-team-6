@@ -25,7 +25,11 @@ class ventanaPrincipal(tk.Tk):
 
         self.frame =None
         
-        self.imagen = tk.PhotoImage(file="src/uiMain/Imagenes/start.png")
+        dir_actual = os.path.dirname(os.path.abspath(__file__))
+
+        # Construye las rutas absolutas para cada imagen
+        ruta_imagen = os.path.join(dir_actual, 'Imagenes', 'start.png')
+        self.imagen = tk.PhotoImage(file=ruta_imagen)
 
         # Crear una etiqueta con la imagen que aparece de "interfaz"
         self.imagenLabel = tk.Label(self, image=self.imagen)

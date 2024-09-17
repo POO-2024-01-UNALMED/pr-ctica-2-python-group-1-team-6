@@ -1630,25 +1630,31 @@ class Interfaz:
     #Llama a todos los metodos que serializan y les manda el archivo donde lo deben hacer
     @staticmethod
     def serializarTodo():
-        Cine.serializarCines('src/baseDatos/temp/cine.pkl')
-        Cliente.serializarClientes('src/baseDatos/temp/cliente.pkl')
-        Funcion.serializarFunciones('src/baseDatos/temp/funcion.pkl')
-        Pelicula.serializarPeliculas('src/baseDatos/temp/pelicula.pkl')
-        Sala.serializarSalas('src/baseDatos/temp/sala.pkl')
-        ZonaDeJuegos.serializarZonasDeJuegos('src/baseDatos/temp/zonaDeJuegos.pkl')
-        Bodega.serializarBodegas('src/baseDatos/temp/bodega.pkl')
-        Maquina.serializarMaquinas('src/baseDatos/temp/maquina.pkl')
-    #Llama a todos los metodos que deserializan y les manda el archivo en donde estara la informacion
+        base_path = os.path.dirname(__file__)  # Obtener la ruta del archivo actual
+
+        # Crear rutas absolutas y serializar
+        Cine.serializarCines(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'cine.pkl')))
+        Cliente.serializarClientes(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'cliente.pkl')))
+        Funcion.serializarFunciones(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'funcion.pkl')))
+        Pelicula.serializarPeliculas(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'pelicula.pkl')))
+        Sala.serializarSalas(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'sala.pkl')))
+        ZonaDeJuegos.serializarZonasDeJuegos(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'zonaDeJuegos.pkl')))
+        Bodega.serializarBodegas(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'bodega.pkl')))
+        Maquina.serializarMaquinas(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'maquina.pkl')))
+
     @staticmethod
     def deserializarTodo():
-        Cine.deserializarCines('src/baseDatos/temp/cine.pkl')
-        Cliente.deserializarClientes('src/baseDatos/temp/cliente.pkl')
-        Funcion.deserializarFunciones('src/baseDatos/temp/funcion.pkl')
-        Pelicula.deserializarPeliculas('src/baseDatos/temp/pelicula.pkl')
-        Sala.deserializarSalas('src/baseDatos/temp/sala.pkl')
-        ZonaDeJuegos.deserializarZonasDeJuegos('src/baseDatos/temp/zonaDeJuegos.pkl')
-        Bodega.deserializarBodegas('src/baseDatos/temp/bodega.pkl')
-        Maquina.deserializarMaquinas('src/baseDatos/temp/maquina.pkl')
+        base_path = os.path.dirname(__file__)  # Obtener la ruta del archivo actual
+
+        # Crear rutas absolutas y deserializar
+        Cine.deserializarCines(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'cine.pkl')))
+        Cliente.deserializarClientes(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'cliente.pkl')))
+        Funcion.deserializarFunciones(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'funcion.pkl')))
+        Pelicula.deserializarPeliculas(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'pelicula.pkl')))
+        Sala.deserializarSalas(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'sala.pkl')))
+        ZonaDeJuegos.deserializarZonasDeJuegos(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'zonaDeJuegos.pkl')))
+        Bodega.deserializarBodegas(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'bodega.pkl')))
+        Maquina.deserializarMaquinas(os.path.abspath(os.path.join(base_path, '..', 'baseDatos', 'temp', 'maquina.pkl')))
 
     
 
