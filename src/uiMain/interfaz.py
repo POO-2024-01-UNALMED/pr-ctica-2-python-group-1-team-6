@@ -602,7 +602,7 @@ class Interfaz:
                 
                 try:
                     # Validar el género
-                    if genero not in ["Accion", "Drama","+18","Infantil","Terror"]:
+                    if genero not in ["Acción", "Drama","+18","Infantil","Terror"]:
                         raise DatoErroneoExcepcion(["Acción", "Drama","+18","Infantil","Terror"],"genero")
                 except DatoErroneoExcepcion as e:
                     messagebox.showerror("Error de género", f"{str(e)} {e.mensaje}")
